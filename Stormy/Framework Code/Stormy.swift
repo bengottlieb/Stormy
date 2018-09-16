@@ -1,0 +1,150 @@
+//
+//  Stormy.swift
+//  Internal
+//
+//  Created by Ben Gottlieb on 8/6/18.
+//  Copyright © 2018 Stand Alone, Inc. All rights reserved.
+//
+
+import Foundation
+import CloudKit
+
+public class Stormy {
+	public struct Notifications {
+		static public let availabilityChanged = Notification.Name("stormyAvailabilityChanged")
+		static public let didFetchCloudKitUserRecordID = Notification.Name("browsy-didFetchCloudKitUserRecordID")
+	}
+	
+	public static let instance = Stormy()
+	public enum DatabaseType: String { case `public`, `private`, shared }
+	public enum AuthenticationState { case notLoggedIn, signingIn, tokenFailed, denied, authenticated }
+	
+	public var container: CKContainer!
+	public var publicDatabase: CKDatabase!
+	public var privateDatabase: CKDatabase!
+	public var sharedDatabase: CKDatabase?
+	public var containerIdentifer: String!
+	public var authenticationState = AuthenticationState.notLoggedIn { didSet {
+		if (self.authenticationState == .authenticated) != (oldValue == .authenticated) {
+			NotificationCenter.default.post(name: Notifications.availabilityChanged, object: nil)
+		}
+	}}
+	public var available: Bool { return self.authenticationState == .authenticated }
+	public var unavailable: Bool { return self.authenticationState == .denied || self.authenticationState == .tokenFailed }
+	public var enabled = false
+	public var autoFetchZones = true
+	public var recordZones: [CKRecordZone] = []
+	public var userRecordID: CKRecord.ID?
+	let operationSemaphore = DispatchSemaphore(value: 1)
+	var queuedOperations: [(DatabaseType, Operation)] = []
+	
+	public func setup(identifier: String, zones: [String] = []) {
+		self.containerIdentifer = identifier
+
+		self.container = CKContainer(identifier: self.containerIdentifer)
+		self.publicDatabase = self.container.publicCloudDatabase
+		self.privateDatabase = self.container.privateCloudDatabase
+		if #available(OSXApplicationExtension 10.12, iOS 10.0, *) { self.sharedDatabase = self.container.sharedCloudDatabase }
+
+		if self.authenticationState != .notLoggedIn && self.authenticationState != .tokenFailed { return }
+		self.authenticationState = .signingIn
+		self.container.accountStatus { status, error in
+			switch status {
+			case .available:
+				self.setupZones(names: zones) { _ in
+					self.container.fetchUserRecordID() { id, err in
+						if id != self.userRecordID {
+							self.userRecordID = id
+							NotificationCenter.default.post(name: Notifications.didFetchCloudKitUserRecordID, object: nil)
+						}
+						if let error = err { print("Error fetching userRecordID: \(error)") }
+						Stormy.instance.authenticationState = (Stormy.instance.authenticationState == .tokenFailed) ? .tokenFailed : .authenticated
+						self.flushQueue()
+					}
+				}
+				
+			case .couldNotDetermine: fallthrough
+			case .noAccount, .restricted:
+				self.authenticationState = .denied
+				print("No CloudKit Access.")
+			}
+		}
+	}
+	
+	func flushQueue() {
+		self.operationSemaphore.wait()
+		let ops = self.queuedOperations
+		self.queuedOperations = []
+		self.operationSemaphore.signal()
+		
+		ops.forEach {
+			self.queue(operation: $0.1, in: $0.0)
+		}
+	}
+	
+	public func database(_ type: DatabaseType) -> CKDatabase? {
+		switch type {
+		case .public: return self.publicDatabase
+		case .private: return self.privateDatabase
+		case .shared: return self.sharedDatabase
+		}
+	}
+	
+	func setupZones(names: [String], completion: ((Error?) -> Void)? = nil) {
+		if names.count == 0 {
+			completion?(nil)
+			return
+		}
+
+		let completeQueue = DispatchQueue(label: "setupZoneQueue")
+		completeQueue.suspend()
+		
+		var combinedError: Error?
+		
+		completeQueue.async {
+			completion?(combinedError)
+		}
+		
+		completeQueue.suspend()
+		let zones = names.map { CKRecordZone(zoneName: $0) }
+		let op = CKModifyRecordZonesOperation(recordZonesToSave: zones, recordZoneIDsToDelete: nil)
+		op.modifyRecordZonesCompletionBlock = { zones, deleted, error in
+			defer { completeQueue.resume() }
+			if Stormy.shouldReturn(after: error, operation: op, completion: nil) { return }
+			self.recordZones = zones ?? []
+			if let err = error, combinedError == nil { combinedError = err }
+		}
+		self.privateDatabase.add(op)
+		completeQueue.resume()
+	}
+	
+	public func zone(withID id: CKRecordZone.ID) -> CKRecordZone? {
+		for zone in self.recordZones { if zone.zoneID == id { return zone }}
+		return nil
+	}
+	
+	public func zone(named name: String) -> CKRecordZone {
+		return CKRecordZone(zoneName: name)
+	}
+	
+	public func queue(_ block: @escaping () -> Void) {
+		self.queue(operation: BlockOperation(block: block))
+	}
+	
+	public func queue(operation: Operation, in type: DatabaseType = .public) {
+		if self.available {
+			if let ckdOp = operation as? CKDatabaseOperation {
+				self.database(type)?.add(ckdOp)
+			} else if let ckOp = operation as? CKOperation {
+				self.container.add(ckOp)
+			} else {
+				OperationQueue.main.addOperation(operation)
+			}
+		} else {
+			self.operationSemaphore.wait()
+			self.queuedOperations.append((type, operation))
+			self.operationSemaphore.signal()
+		}
+	}
+	
+}

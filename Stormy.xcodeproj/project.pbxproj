@@ -1,0 +1,1096 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		B504E6661A89690C001B414B /* Combined Framework */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = B504E6671A89690C001B414B /* Build configuration list for PBXAggregateTarget "Combined Framework" */;
+			buildPhases = (
+				B504E66B1A89698A001B414B /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Combined Framework";
+			productName = "Combined Framework";
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		B527C28C214DEE6000D250A0 /* Stormy+Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C284214DEE6000D250A0 /* Stormy+Records.swift */; };
+		B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C284214DEE6000D250A0 /* Stormy+Records.swift */; };
+		B527C28E214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */; };
+		B527C28F214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */; };
+		B527C290214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */; };
+		B527C291214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */; };
+		B527C292214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */; };
+		B527C293214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */; };
+		B527C294214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */; };
+		B527C295214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */; };
+		B527C296214DEE6000D250A0 /* Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C289214DEE6000D250A0 /* Stormy.swift */; };
+		B527C297214DEE6000D250A0 /* Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C289214DEE6000D250A0 /* Stormy.swift */; };
+		B527C298214DEE6000D250A0 /* CKError+Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */; };
+		B527C299214DEE6000D250A0 /* CKError+Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */; };
+		B527C29A214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */; };
+		B527C29B214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */; };
+		B54A9B4D2125B417008E646E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B4C2125B417008E646E /* AppDelegate.swift */; };
+		B54A9B4F2125B417008E646E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B4E2125B417008E646E /* ViewController.swift */; };
+		B54A9B522125B417008E646E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B54A9B502125B417008E646E /* Main.storyboard */; };
+		B54A9B542125B418008E646E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B54A9B532125B418008E646E /* Assets.xcassets */; };
+		B54A9B572125B418008E646E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B54A9B552125B418008E646E /* LaunchScreen.storyboard */; };
+		B54A9B622125B418008E646E /* iOSTestingHarnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B612125B418008E646E /* iOSTestingHarnessTests.swift */; };
+		B54A9B6D2125B418008E646E /* iOSTestingHarnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B6C2125B418008E646E /* iOSTestingHarnessUITests.swift */; };
+		B54A9B782125B444008E646E /* Stormy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* Stormy.framework */; };
+		B54A9B7C2125B45B008E646E /* Stormy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* Stormy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B58D64791A898F89005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D64681A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B58D64961A899285005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D646B1A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B54A9B5E2125B418008E646E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B504E60B1A89230F001B414B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B54A9B492125B417008E646E;
+			remoteInfo = iOSTestingHarness;
+		};
+		B54A9B692125B418008E646E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B504E60B1A89230F001B414B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B54A9B492125B417008E646E;
+			remoteInfo = iOSTestingHarness;
+		};
+		B54A9B792125B44E008E646E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B504E60B1A89230F001B414B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B504E6451A8968DC001B414B;
+			remoteInfo = Stormy_iOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B54A9B7B2125B454008E646E /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B54A9B7C2125B45B008E646E /* Stormy.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B5026C8621169714009763F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Stormy/iOS/Info.plist; sourceTree = "<group>"; };
+		B5026C8721169714009763F0 /* Stormy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Stormy.h; path = Stormy/iOS/Stormy.h; sourceTree = "<group>"; };
+		B5026C8821169720009763F0 /* Stormy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Stormy.h; path = Stormy/Mac/Stormy.h; sourceTree = "<group>"; };
+		B5026C8921169720009763F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Stormy/Mac/Info.plist; sourceTree = "<group>"; };
+		B504E6461A8968DC001B414B /* Stormy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Stormy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B504E66A1A896980001B414B /* BuildFramework.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = BuildFramework.sh; path = Stormy/BuildFramework.sh; sourceTree = "<group>"; };
+		B504E6AF1A898110001B414B /* Stormy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Stormy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B527C284214DEE6000D250A0 /* Stormy+Records.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+Records.swift"; sourceTree = "<group>"; };
+		B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKCopyableOperation.swift; sourceTree = "<group>"; };
+		B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKRecord.Cache.swift; sourceTree = "<group>"; };
+		B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+Subscriptions.swift"; sourceTree = "<group>"; };
+		B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKRecord.Cache+Share.swift"; sourceTree = "<group>"; };
+		B527C289214DEE6000D250A0 /* Stormy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stormy.swift; sourceTree = "<group>"; };
+		B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKError+Stormy.swift"; sourceTree = "<group>"; };
+		B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+FetchChanges.swift"; sourceTree = "<group>"; };
+		B54A9B4A2125B417008E646E /* iOSTestingHarness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSTestingHarness.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B54A9B4C2125B417008E646E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B54A9B4E2125B417008E646E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B54A9B512125B417008E646E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B54A9B532125B418008E646E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B54A9B562125B418008E646E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B54A9B582125B418008E646E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B54A9B5D2125B418008E646E /* iOSTestingHarnessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTestingHarnessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B54A9B612125B418008E646E /* iOSTestingHarnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSTestingHarnessTests.swift; sourceTree = "<group>"; };
+		B54A9B632125B418008E646E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B54A9B682125B418008E646E /* iOSTestingHarnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTestingHarnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B54A9B6C2125B418008E646E /* iOSTestingHarnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSTestingHarnessUITests.swift; sourceTree = "<group>"; };
+		B54A9B6E2125B418008E646E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B58D64671A898F81005A0002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B58D64681A898F81005A0002 /* Stormy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stormy.h; sourceTree = "<group>"; };
+		B58D646A1A898F81005A0002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B58D646B1A898F81005A0002 /* Stormy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stormy.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B504E6421A8968DC001B414B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B504E6AB1A898110001B414B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B472125B417008E646E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B54A9B782125B444008E646E /* Stormy.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B5A2125B418008E646E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B652125B418008E646E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B504E60A1A89230F001B414B = {
+			isa = PBXGroup;
+			children = (
+				B5C047821E7C2D9E00A2BE64 /* iOS */,
+				B504E66A1A896980001B414B /* BuildFramework.sh */,
+				B527C283214DEE6000D250A0 /* Framework Code */,
+				B5C047831E7C2DA500A2BE64 /* Mac */,
+				B58D64661A898F81005A0002 /* Stormy_Mac */,
+				B58D64691A898F81005A0002 /* Stormy_iOS */,
+				B54A9B4B2125B417008E646E /* iOSTestingHarness */,
+				B54A9B602125B418008E646E /* iOSTestingHarnessTests */,
+				B54A9B6B2125B418008E646E /* iOSTestingHarnessUITests */,
+				B504E6141A89230F001B414B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B504E6141A89230F001B414B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B504E6461A8968DC001B414B /* Stormy.framework */,
+				B504E6AF1A898110001B414B /* Stormy.framework */,
+				B54A9B4A2125B417008E646E /* iOSTestingHarness.app */,
+				B54A9B5D2125B418008E646E /* iOSTestingHarnessTests.xctest */,
+				B54A9B682125B418008E646E /* iOSTestingHarnessUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B527C283214DEE6000D250A0 /* Framework Code */ = {
+			isa = PBXGroup;
+			children = (
+				B527C289214DEE6000D250A0 /* Stormy.swift */,
+				B527C284214DEE6000D250A0 /* Stormy+Records.swift */,
+				B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */,
+				B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */,
+				B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */,
+				B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */,
+				B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */,
+				B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */,
+			);
+			name = "Framework Code";
+			path = "Stormy/Framework Code";
+			sourceTree = "<group>";
+		};
+		B54A9B4B2125B417008E646E /* iOSTestingHarness */ = {
+			isa = PBXGroup;
+			children = (
+				B54A9B4C2125B417008E646E /* AppDelegate.swift */,
+				B54A9B4E2125B417008E646E /* ViewController.swift */,
+				B54A9B502125B417008E646E /* Main.storyboard */,
+				B54A9B532125B418008E646E /* Assets.xcassets */,
+				B54A9B552125B418008E646E /* LaunchScreen.storyboard */,
+				B54A9B582125B418008E646E /* Info.plist */,
+			);
+			path = iOSTestingHarness;
+			sourceTree = "<group>";
+		};
+		B54A9B602125B418008E646E /* iOSTestingHarnessTests */ = {
+			isa = PBXGroup;
+			children = (
+				B54A9B612125B418008E646E /* iOSTestingHarnessTests.swift */,
+				B54A9B632125B418008E646E /* Info.plist */,
+			);
+			path = iOSTestingHarnessTests;
+			sourceTree = "<group>";
+		};
+		B54A9B6B2125B418008E646E /* iOSTestingHarnessUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B54A9B6C2125B418008E646E /* iOSTestingHarnessUITests.swift */,
+				B54A9B6E2125B418008E646E /* Info.plist */,
+			);
+			path = iOSTestingHarnessUITests;
+			sourceTree = "<group>";
+		};
+		B58D64661A898F81005A0002 /* Stormy_Mac */ = {
+			isa = PBXGroup;
+			children = (
+				B58D64671A898F81005A0002 /* Info.plist */,
+				B58D64681A898F81005A0002 /* Stormy.h */,
+			);
+			name = Stormy_Mac;
+			path = Stormy/Mac;
+			sourceTree = "<group>";
+		};
+		B58D64691A898F81005A0002 /* Stormy_iOS */ = {
+			isa = PBXGroup;
+			children = (
+				B58D646A1A898F81005A0002 /* Info.plist */,
+				B58D646B1A898F81005A0002 /* Stormy.h */,
+			);
+			name = Stormy_iOS;
+			path = Stormy/iOS;
+			sourceTree = "<group>";
+		};
+		B5C047821E7C2D9E00A2BE64 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				B5026C8621169714009763F0 /* Info.plist */,
+				B5026C8721169714009763F0 /* Stormy.h */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		B5C047831E7C2DA500A2BE64 /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				B5026C8921169720009763F0 /* Info.plist */,
+				B5026C8821169720009763F0 /* Stormy.h */,
+			);
+			name = Mac;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B504E6431A8968DC001B414B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B58D64961A899285005A0002 /* Stormy.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B504E6AC1A898110001B414B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B58D64791A898F89005A0002 /* Stormy.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		B504E6451A8968DC001B414B /* Stormy_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B504E65F1A8968DC001B414B /* Build configuration list for PBXNativeTarget "Stormy_iOS" */;
+			buildPhases = (
+				B504E6411A8968DC001B414B /* Sources */,
+				B504E6421A8968DC001B414B /* Frameworks */,
+				B504E6431A8968DC001B414B /* Headers */,
+				B504E6441A8968DC001B414B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Stormy_iOS;
+			productName = Stormy;
+			productReference = B504E6461A8968DC001B414B /* Stormy.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B504E6AE1A898110001B414B /* Stormy_Mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B504E6C21A898111001B414B /* Build configuration list for PBXNativeTarget "Stormy_Mac" */;
+			buildPhases = (
+				B504E6AA1A898110001B414B /* Sources */,
+				B504E6AB1A898110001B414B /* Frameworks */,
+				B504E6AC1A898110001B414B /* Headers */,
+				B504E6AD1A898110001B414B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Stormy_Mac;
+			productName = Stormy_Mac;
+			productReference = B504E6AF1A898110001B414B /* Stormy.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B54A9B492125B417008E646E /* iOSTestingHarness */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B54A9B6F2125B418008E646E /* Build configuration list for PBXNativeTarget "iOSTestingHarness" */;
+			buildPhases = (
+				B54A9B462125B417008E646E /* Sources */,
+				B54A9B472125B417008E646E /* Frameworks */,
+				B54A9B482125B417008E646E /* Resources */,
+				B54A9B7B2125B454008E646E /* Copy Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B54A9B7A2125B44E008E646E /* PBXTargetDependency */,
+			);
+			name = iOSTestingHarness;
+			productName = iOSTestingHarness;
+			productReference = B54A9B4A2125B417008E646E /* iOSTestingHarness.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B54A9B5C2125B418008E646E /* iOSTestingHarnessTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B54A9B722125B418008E646E /* Build configuration list for PBXNativeTarget "iOSTestingHarnessTests" */;
+			buildPhases = (
+				B54A9B592125B418008E646E /* Sources */,
+				B54A9B5A2125B418008E646E /* Frameworks */,
+				B54A9B5B2125B418008E646E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B54A9B5F2125B418008E646E /* PBXTargetDependency */,
+			);
+			name = iOSTestingHarnessTests;
+			productName = iOSTestingHarnessTests;
+			productReference = B54A9B5D2125B418008E646E /* iOSTestingHarnessTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B54A9B672125B418008E646E /* iOSTestingHarnessUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B54A9B752125B418008E646E /* Build configuration list for PBXNativeTarget "iOSTestingHarnessUITests" */;
+			buildPhases = (
+				B54A9B642125B418008E646E /* Sources */,
+				B54A9B652125B418008E646E /* Frameworks */,
+				B54A9B662125B418008E646E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B54A9B6A2125B418008E646E /* PBXTargetDependency */,
+			);
+			name = iOSTestingHarnessUITests;
+			productName = iOSTestingHarnessUITests;
+			productReference = B54A9B682125B418008E646E /* iOSTestingHarnessUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B504E60B1A89230F001B414B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = "Stand Alone, inc.";
+				TargetAttributes = {
+					B504E6451A8968DC001B414B = {
+						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 1000;
+					};
+					B504E6661A89690C001B414B = {
+						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0800;
+					};
+					B504E6AE1A898110001B414B = {
+						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = YY6CWUX533;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
+					};
+					B54A9B492125B417008E646E = {
+						CreatedOnToolsVersion = 10.0;
+						DevelopmentTeam = YY6CWUX533;
+						ProvisioningStyle = Automatic;
+					};
+					B54A9B5C2125B418008E646E = {
+						CreatedOnToolsVersion = 10.0;
+						DevelopmentTeam = YY6CWUX533;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B54A9B492125B417008E646E;
+					};
+					B54A9B672125B418008E646E = {
+						CreatedOnToolsVersion = 10.0;
+						DevelopmentTeam = YY6CWUX533;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B54A9B492125B417008E646E;
+					};
+				};
+			};
+			buildConfigurationList = B504E60E1A89230F001B414B /* Build configuration list for PBXProject "Stormy" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B504E60A1A89230F001B414B;
+			productRefGroup = B504E6141A89230F001B414B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B504E6451A8968DC001B414B /* Stormy_iOS */,
+				B504E6AE1A898110001B414B /* Stormy_Mac */,
+				B504E6661A89690C001B414B /* Combined Framework */,
+				B54A9B492125B417008E646E /* iOSTestingHarness */,
+				B54A9B5C2125B418008E646E /* iOSTestingHarnessTests */,
+				B54A9B672125B418008E646E /* iOSTestingHarnessUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B504E6441A8968DC001B414B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B504E6AD1A898110001B414B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B482125B417008E646E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B54A9B572125B418008E646E /* LaunchScreen.storyboard in Resources */,
+				B54A9B542125B418008E646E /* Assets.xcassets in Resources */,
+				B54A9B522125B417008E646E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B5B2125B418008E646E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B662125B418008E646E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B504E66B1A89698A001B414B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ./Stormy/BuildFramework.sh;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B504E6411A8968DC001B414B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B527C296214DEE6000D250A0 /* Stormy.swift in Sources */,
+				B527C290214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */,
+				B527C29A214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
+				B527C294214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */,
+				B527C28E214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
+				B527C298214DEE6000D250A0 /* CKError+Stormy.swift in Sources */,
+				B527C292214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,
+				B527C28C214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B504E6AA1A898110001B414B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B527C297214DEE6000D250A0 /* Stormy.swift in Sources */,
+				B527C291214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */,
+				B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
+				B527C29B214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
+				B527C28F214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
+				B527C295214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */,
+				B527C299214DEE6000D250A0 /* CKError+Stormy.swift in Sources */,
+				B527C293214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B462125B417008E646E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B54A9B4F2125B417008E646E /* ViewController.swift in Sources */,
+				B54A9B4D2125B417008E646E /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B592125B418008E646E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B54A9B622125B418008E646E /* iOSTestingHarnessTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B54A9B642125B418008E646E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B54A9B6D2125B418008E646E /* iOSTestingHarnessUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B54A9B5F2125B418008E646E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B54A9B492125B417008E646E /* iOSTestingHarness */;
+			targetProxy = B54A9B5E2125B418008E646E /* PBXContainerItemProxy */;
+		};
+		B54A9B6A2125B418008E646E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B54A9B492125B417008E646E /* iOSTestingHarness */;
+			targetProxy = B54A9B692125B418008E646E /* PBXContainerItemProxy */;
+		};
+		B54A9B7A2125B44E008E646E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B504E6451A8968DC001B414B /* Stormy_iOS */;
+			targetProxy = B54A9B792125B44E008E646E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B54A9B502125B417008E646E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B54A9B512125B417008E646E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B54A9B552125B418008E646E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B54A9B562125B418008E646E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B504E6301A89230F001B414B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		B504E6311A89230F001B414B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B504E6601A8968DC001B414B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Stormy/iOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.stormy;
+				PRODUCT_NAME = Stormy;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B504E6611A8968DC001B414B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Stormy/iOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.stormy;
+				PRODUCT_NAME = Stormy;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B504E6681A89690C001B414B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		B504E6691A89690C001B414B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		B504E6C31A898111001B414B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_VERSION = A;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Stormy/Mac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.standalone.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Stormy;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B504E6C41A898111001B414B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Stormy/Mac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.standalone.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Stormy;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B54A9B702125B418008E646E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = iOSTestingHarness/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarness;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B54A9B712125B418008E646E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = iOSTestingHarness/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarness;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B54A9B732125B418008E646E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = iOSTestingHarnessTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarnessTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSTestingHarness.app/iOSTestingHarness";
+			};
+			name = Debug;
+		};
+		B54A9B742125B418008E646E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = iOSTestingHarnessTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarnessTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSTestingHarness.app/iOSTestingHarness";
+			};
+			name = Release;
+		};
+		B54A9B762125B418008E646E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = iOSTestingHarnessUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarnessUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iOSTestingHarness;
+			};
+			name = Debug;
+		};
+		B54A9B772125B418008E646E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YY6CWUX533;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = iOSTestingHarnessUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarnessUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iOSTestingHarness;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B504E60E1A89230F001B414B /* Build configuration list for PBXProject "Stormy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B504E6301A89230F001B414B /* Debug */,
+				B504E6311A89230F001B414B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B504E65F1A8968DC001B414B /* Build configuration list for PBXNativeTarget "Stormy_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B504E6601A8968DC001B414B /* Debug */,
+				B504E6611A8968DC001B414B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B504E6671A89690C001B414B /* Build configuration list for PBXAggregateTarget "Combined Framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B504E6681A89690C001B414B /* Debug */,
+				B504E6691A89690C001B414B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B504E6C21A898111001B414B /* Build configuration list for PBXNativeTarget "Stormy_Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B504E6C31A898111001B414B /* Debug */,
+				B504E6C41A898111001B414B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B54A9B6F2125B418008E646E /* Build configuration list for PBXNativeTarget "iOSTestingHarness" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B54A9B702125B418008E646E /* Debug */,
+				B54A9B712125B418008E646E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B54A9B722125B418008E646E /* Build configuration list for PBXNativeTarget "iOSTestingHarnessTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B54A9B732125B418008E646E /* Debug */,
+				B54A9B742125B418008E646E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B54A9B752125B418008E646E /* Build configuration list for PBXNativeTarget "iOSTestingHarnessUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B54A9B762125B418008E646E /* Debug */,
+				B54A9B772125B418008E646E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B504E60B1A89230F001B414B /* Project object */;
+}
