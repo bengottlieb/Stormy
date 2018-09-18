@@ -43,8 +43,8 @@ extension CKRecord {
 			if #available(OSXApplicationExtension 10.12, iOS 10.0, *) { self.parentReference = record.parent }
 		}
 		
-		open func didSave(to record: CKRecord) {
-			self.originalRecord = record
+		open func didSave(to record: CKRecord? = nil) {
+			if let rec = record { self.originalRecord = rec }
 			self.changedValues = [:]
 			self.changedKeys = []
 		}
@@ -68,6 +68,7 @@ extension CKRecord {
 				if let err = error as NSError?, err.code == 2, err.domain == CKErrorDomain {
 					self.reloadFromServer(andThenSave: true, completion: completion)
 				} else {
+					self.didSave()
 					completion?(error)
 				}
 			}

@@ -46,6 +46,7 @@
 		B54A9B6D2125B418008E646E /* iOSTestingHarnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B6C2125B418008E646E /* iOSTestingHarnessUITests.swift */; };
 		B54A9B782125B444008E646E /* Stormy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* Stormy.framework */; };
 		B54A9B7C2125B45B008E646E /* Stormy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* Stormy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B5897EDA215189D30086B481 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5897ED9215189D30086B481 /* CloudKit.framework */; };
 		B58D64791A898F89005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D64681A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B58D64961A899285005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D646B1A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -117,6 +118,8 @@
 		B54A9B682125B418008E646E /* iOSTestingHarnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTestingHarnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B54A9B6C2125B418008E646E /* iOSTestingHarnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSTestingHarnessUITests.swift; sourceTree = "<group>"; };
 		B54A9B6E2125B418008E646E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5897ED7215189D00086B481 /* iOSTestingHarness.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSTestingHarness.entitlements; sourceTree = "<group>"; };
+		B5897ED9215189D30086B481 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		B58D64671A898F81005A0002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B58D64681A898F81005A0002 /* Stormy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stormy.h; sourceTree = "<group>"; };
 		B58D646A1A898F81005A0002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B54A9B782125B444008E646E /* Stormy.framework in Frameworks */,
+				B5897EDA215189D30086B481 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +180,7 @@
 				B54A9B602125B418008E646E /* iOSTestingHarnessTests */,
 				B54A9B6B2125B418008E646E /* iOSTestingHarnessUITests */,
 				B504E6141A89230F001B414B /* Products */,
+				B5897ED8215189D30086B481 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -210,6 +215,7 @@
 		B54A9B4B2125B417008E646E /* iOSTestingHarness */ = {
 			isa = PBXGroup;
 			children = (
+				B5897ED7215189D00086B481 /* iOSTestingHarness.entitlements */,
 				B54A9B4C2125B417008E646E /* AppDelegate.swift */,
 				B54A9B4E2125B417008E646E /* ViewController.swift */,
 				B54A9B502125B417008E646E /* Main.storyboard */,
@@ -236,6 +242,14 @@
 				B54A9B6E2125B418008E646E /* Info.plist */,
 			);
 			path = iOSTestingHarnessUITests;
+			sourceTree = "<group>";
+		};
+		B5897ED8215189D30086B481 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B5897ED9215189D30086B481 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		B58D64661A898F81005A0002 /* Stormy_Mac */ = {
@@ -417,6 +431,17 @@
 						CreatedOnToolsVersion = 10.0;
 						DevelopmentTeam = YY6CWUX533;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					B54A9B5C2125B418008E646E = {
 						CreatedOnToolsVersion = 10.0;
@@ -868,6 +893,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = iOSTestingHarness/iOSTestingHarness.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = YY6CWUX533;
@@ -877,7 +903,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarness;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.zap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 4.2;
@@ -896,6 +922,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = iOSTestingHarness/iOSTestingHarness.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -905,7 +932,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.iOSTestingHarness;
+				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.zap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
