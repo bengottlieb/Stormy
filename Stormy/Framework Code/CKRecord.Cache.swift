@@ -69,11 +69,11 @@ extension CKRecord {
 			let op = CKModifyRecordsOperation(recordsToSave: [self.updatedRecord()], recordIDsToDelete: nil)
 			op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
 				if Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) { return }
-				if let err = error as NSError?, err.code == 2, err.domain == CKErrorDomain {
+				if let err = error?.rootCKError, err.code == .serverRecordChanged {
 					self.reloadFromServer(andThenSave: true, completion: completion)
 				} else {
 					self.didSave()
-					completion?(error)
+					completion?(error?.rootCKError ?? error)
 				}
 			}
 			Stormy.instance.queue(operation: op, in: self.database)
@@ -95,10 +95,11 @@ extension CKRecord {
 					self.changedKeys = self.changedKeys.filter { key in return !self.areEqual(self.changedValues[key], found[key]) }
 				}
 				
-				if andThenSave, (error == nil || error?.rootCKError?.code == .unknownItem) {
+				let isUnknownItem = error?.rootCKError?.code == .unknownItem
+				if andThenSave, (error == nil || isUnknownItem) {
 					self.save(reloadingFirst: false, completion: completion)
 				} else {
-					completion?(error)
+					completion?(isUnknownItem ? nil : error)
 				}
 			}
 		}
