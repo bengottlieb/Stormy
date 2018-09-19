@@ -142,22 +142,26 @@ extension CKRecord {
 		
 		open subscript(_ key: String) -> Any? {
 			get {
-				if self.changedKeys.contains(key) { return self.changedValues[key] }
-				return self.originalRecord?[key]
+				let value = self.changedKeys.contains(key) ? self.changedValues[key] : self.originalRecord?[key]
+				if let asset = value as? CKAsset { return asset.fileURL }
+				return value
 			}
 			set {
-				if self.areEqual(self.originalRecord?[key], newValue) {		// back to the old value
+				var savedValue = newValue
+				if let url = newValue as? URL, url.isFileURL { savedValue = CKAsset(fileURL: url) }
+				
+				if self.areEqual(self.originalRecord?[key], savedValue) {		// back to the old value
 					self.changedKeys.remove(key)
 					self.changedValues.removeValue(forKey: key)
 					return
 				}
 				
-				if self.areEqual(self.originalRecord?[key], newValue) { return } 			// no changes
+				if self.areEqual(self.originalRecord?[key], savedValue) { return } 			// no changes
 				
-				if let value = newValue as? CKRecordValue {
+				if let value = savedValue as? CKRecordValue {
 					self.changedValues[key] = value
 					self.changedKeys.insert(key)
-				} else if newValue == nil {
+				} else if savedValue == nil {
 					self.changedKeys.insert(key)
 				}
 			}
