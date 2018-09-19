@@ -45,6 +45,10 @@ extension CKRecord {
 		
 		open func didSave(to record: CKRecord? = nil) {
 			if let rec = record { self.originalRecord = rec }
+			self.clearChanges()
+		}
+		
+		open func clearChanges() {
 			self.changedValues = [:]
 			self.changedKeys = []
 		}
