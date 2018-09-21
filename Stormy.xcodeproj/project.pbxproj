@@ -21,6 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		B505965721550046000303B8 /* URL+Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B505965621550046000303B8 /* URL+Stormy.swift */; };
+		B505965821550046000303B8 /* URL+Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B505965621550046000303B8 /* URL+Stormy.swift */; };
+		B505965A215501CB000303B8 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5059659215501CB000303B8 /* MD5.swift */; };
+		B505965B215501CB000303B8 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5059659215501CB000303B8 /* MD5.swift */; };
 		B527C28C214DEE6000D250A0 /* Stormy+Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C284214DEE6000D250A0 /* Stormy+Records.swift */; };
 		B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C284214DEE6000D250A0 /* Stormy+Records.swift */; };
 		B527C28E214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */; };
@@ -97,6 +101,8 @@
 		B504E6461A8968DC001B414B /* Stormy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Stormy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B504E66A1A896980001B414B /* BuildFramework.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = BuildFramework.sh; path = Stormy/BuildFramework.sh; sourceTree = "<group>"; };
 		B504E6AF1A898110001B414B /* Stormy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Stormy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B505965621550046000303B8 /* URL+Stormy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Stormy.swift"; sourceTree = "<group>"; };
+		B5059659215501CB000303B8 /* MD5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD5.swift; sourceTree = "<group>"; };
 		B527C284214DEE6000D250A0 /* Stormy+Records.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+Records.swift"; sourceTree = "<group>"; };
 		B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKCopyableOperation.swift; sourceTree = "<group>"; };
 		B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKRecord.Cache.swift; sourceTree = "<group>"; };
@@ -207,6 +213,8 @@
 				B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */,
 				B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */,
 				B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */,
+				B505965621550046000303B8 /* URL+Stormy.swift */,
+				B5059659215501CB000303B8 /* MD5.swift */,
 			);
 			name = "Framework Code";
 			path = "Stormy/Framework Code";
@@ -546,7 +554,9 @@
 				B527C290214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */,
 				B527C29A214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
 				B527C294214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */,
+				B505965721550046000303B8 /* URL+Stormy.swift in Sources */,
 				B527C28E214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
+				B505965A215501CB000303B8 /* MD5.swift in Sources */,
 				B527C298214DEE6000D250A0 /* CKError+Stormy.swift in Sources */,
 				B527C292214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,
 				B527C28C214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
@@ -561,7 +571,9 @@
 				B527C291214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */,
 				B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
 				B527C29B214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
+				B505965821550046000303B8 /* URL+Stormy.swift in Sources */,
 				B527C28F214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
+				B505965B215501CB000303B8 /* MD5.swift in Sources */,
 				B527C295214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */,
 				B527C299214DEE6000D250A0 /* CKError+Stormy.swift in Sources */,
 				B527C293214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,

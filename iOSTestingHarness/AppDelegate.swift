@@ -20,7 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		application.registerForRemoteNotifications()
 		
 		Stormy.instance.setup(identifier: "iCloud.com.standalone.zap", zones: ["test_zone"])
-
+		
+		
+		
 		let tokenData = UserDefaults.standard.data(forKey: "changeToken")
 		Stormy.instance.fetchChanges(since: tokenData) { changes, error in
 			if let err = error {
