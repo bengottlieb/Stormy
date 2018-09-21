@@ -8,13 +8,12 @@
 
 import Foundation
 
-public typealias Byte = UInt8
 typealias Word = UInt32
 
 public struct Digest {
-	public let digest: [Byte]
+	public let digest: [UInt8]
 	
-	init(_ digest: [Byte]) {
+	init(_ digest: [UInt8]) {
 		assert(digest.count == 16)
 		self.digest = digest
 	}
@@ -44,8 +43,8 @@ private func rotateLeft(_ x: Word, by: Word) -> Word {
 	return ((x << by) & 0xFFFFFFFF) | (x >> (32 - by))
 }
 
-// MARK: - Calculating a MD5 digest of bytes from bytes
-public func generateMD5(_ bytes: [Byte]) -> Digest {
+// MARK: - Calculating a MD5 digest of UInt8s from bytes
+public func generateMD5(_ bytes: [UInt8]) -> Digest {
 	// Initialization
 	let s: [Word] = [
 		7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
@@ -90,14 +89,14 @@ public func generateMD5(_ bytes: [Byte]) -> Digest {
 		message.append(0x0)
 	} while (message.count * 8) % 512 != 448
 	
-	message.append(Byte((bitLength >> 0) & 0xFF))
-	message.append(Byte((bitLength >> 8) & 0xFF))
-	message.append(Byte((bitLength >> 16) & 0xFF))
-	message.append(Byte((bitLength >> 24) & 0xFF))
-	message.append(Byte((bitLength >> 32) & 0xFF))
-	message.append(Byte((bitLength >> 40) & 0xFF))
-	message.append(Byte((bitLength >> 48) & 0xFF))
-	message.append(Byte((bitLength >> 56) & 0xFF))
+	message.append(UInt8((bitLength >> 0) & 0xFF))
+	message.append(UInt8((bitLength >> 8) & 0xFF))
+	message.append(UInt8((bitLength >> 16) & 0xFF))
+	message.append(UInt8((bitLength >> 24) & 0xFF))
+	message.append(UInt8((bitLength >> 32) & 0xFF))
+	message.append(UInt8((bitLength >> 40) & 0xFF))
+	message.append(UInt8((bitLength >> 48) & 0xFF))
+	message.append(UInt8((bitLength >> 56) & 0xFF))
 	
 	let newBitLength = message.count * 8
 	
@@ -113,7 +112,7 @@ public func generateMD5(_ bytes: [Byte]) -> Digest {
 	
 	for chunk in 0..<totalChunks {
 		let index = chunk*chunkLengthInBytes
-		var chunk: [Byte] = Array(message[index..<index+chunkLengthInBytes]) // 512-bit/64-byte chunk
+		var chunk: [UInt8] = Array(message[index..<index+chunkLengthInBytes]) // 512-bit/64-byte chunk
 		
 		// break chunk into sixteen 32-bit words
 		var M: [Word] = []
@@ -174,25 +173,25 @@ public func generateMD5(_ bytes: [Byte]) -> Digest {
 	assert(c0 >= 0)
 	assert(d0 >= 0)
 	
-	let digest0: Byte =   Byte((a0 >> 0) & 0xFF)
-	let digest1: Byte =   Byte((a0 >> 8) & 0xFF)
-	let digest2: Byte =   Byte((a0 >> 16) & 0xFF)
-	let digest3: Byte =   Byte((a0 >> 24) & 0xFF)
+	let digest0: UInt8 =   UInt8((a0 >> 0) & 0xFF)
+	let digest1: UInt8 =   UInt8((a0 >> 8) & 0xFF)
+	let digest2: UInt8 =   UInt8((a0 >> 16) & 0xFF)
+	let digest3: UInt8 =   UInt8((a0 >> 24) & 0xFF)
 	
-	let digest4: Byte =   Byte((b0 >> 0) & 0xFF)
-	let digest5: Byte =   Byte((b0 >> 8) & 0xFF)
-	let digest6: Byte =   Byte((b0 >> 16) & 0xFF)
-	let digest7: Byte =   Byte((b0 >> 24) & 0xFF)
+	let digest4: UInt8 =   UInt8((b0 >> 0) & 0xFF)
+	let digest5: UInt8 =   UInt8((b0 >> 8) & 0xFF)
+	let digest6: UInt8 =   UInt8((b0 >> 16) & 0xFF)
+	let digest7: UInt8 =   UInt8((b0 >> 24) & 0xFF)
 	
-	let digest8: Byte =   Byte((c0 >> 0) & 0xFF)
-	let digest9: Byte =   Byte((c0 >> 8) & 0xFF)
-	let digest10: Byte =  Byte((c0 >> 16) & 0xFF)
-	let digest11: Byte =  Byte((c0 >> 24) & 0xFF)
+	let digest8: UInt8 =   UInt8((c0 >> 0) & 0xFF)
+	let digest9: UInt8 =   UInt8((c0 >> 8) & 0xFF)
+	let digest10: UInt8 =  UInt8((c0 >> 16) & 0xFF)
+	let digest11: UInt8 =  UInt8((c0 >> 24) & 0xFF)
 	
-	let digest12: Byte =  Byte((d0 >> 0) & 0xFF)
-	let digest13: Byte =  Byte((d0 >> 8) & 0xFF)
-	let digest14: Byte =  Byte((d0 >> 16) & 0xFF)
-	let digest15: Byte =  Byte((d0 >> 24) & 0xFF)
+	let digest12: UInt8 =  UInt8((d0 >> 0) & 0xFF)
+	let digest13: UInt8 =  UInt8((d0 >> 8) & 0xFF)
+	let digest14: UInt8 =  UInt8((d0 >> 16) & 0xFF)
+	let digest15: UInt8 =  UInt8((d0 >> 24) & 0xFF)
 	
 	let digest = [
 		digest0, digest1, digest2, digest3, digest4, digest5, digest6, digest7,
@@ -204,15 +203,15 @@ public func generateMD5(_ bytes: [Byte]) -> Digest {
 	return Digest(digest)
 }
 
-// MARK: - Encoding a MD5 digest of bytes to a string
-public func encodeMD5(digest: [Byte]) -> String {
+// MARK: - Encoding a MD5 digest of UInt8s to a string
+public func encodeMD5(digest: [UInt8]) -> String {
 	assert(digest.count == 16)
 	
 	let str = digest.reduce("") { str, byte in
 		let radix = 16
 		let s = String(byte, radix: radix)
 		// Ensure byte values less than 16 are padding with a leading 0
-		let sum = str + (byte < Byte(radix) ? "0" : "") + s
+		let sum = str + (byte < UInt8(radix) ? "0" : "") + s
 		return sum
 	}
 	
@@ -225,8 +224,8 @@ extension String {
 		return encodeMD5(digest: md5Digest)
 	}
 	
-	public var md5Digest: [Byte] {
-		let bytes = [Byte](self.utf8)
+	public var md5Digest: [UInt8] {
+		let bytes = [UInt8](self.utf8)
 		let digest = generateMD5(bytes)
 		return digest.digest
 	}
@@ -238,8 +237,8 @@ extension Data {
 		return encodeMD5(digest: md5Digest)
 	}
 	
-	public var md5Digest: [Byte] {
-		return self.withUnsafeBytes { (pointer: UnsafePointer<Byte>) in
+	public var md5Digest: [UInt8] {
+		return self.withUnsafeBytes { (pointer: UnsafePointer<UInt8>) in
 			let buffer = UnsafeBufferPointer(start: pointer, count: self.count)
 			let digest = generateMD5(Array(buffer))
 			return digest.digest
