@@ -28,12 +28,12 @@ extension Stormy {
 	public func setupSubscription(in dbType: DatabaseType, on recordName: CKRecord.RecordType? = nil, forZone: CKRecordZone? = nil, predicate: NSPredicate = NSPredicate(value: true), options: CKQuerySubscription.Options = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion], completion: ((Error?) -> Void)?) {
 		
 		#if targetEnvironment(simulator)
-			completion?(SubscriptionError.noSubscriptionsOnTheSimulator)
+			completion?(StormyError.noSubscriptionsOnTheSimulator)
 			if recordName == nil || recordName != nil { return }
 		#endif
 		
 		guard let id = self.subscriptionID(in: dbType, on: recordName, forZone: forZone) else {
-			completion?(Stormy.StorymError.needAZoneOrRecordType)
+			completion?(Stormy.StormyError.needAZoneOrRecordType)
 			return
 		}
 		

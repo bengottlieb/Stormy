@@ -20,5 +20,5 @@ extension Error {
 }
 
 extension Stormy {
-	public enum StorymError: Error { case noSubscriptionsOnTheSimulator, needAZoneOrRecordType, iCloudNotAvailable, shareMissingURL, sharesMustBePrivate, sharesMustHaveNonDefaultZone, shareFailedToFindParticipants }
+	public enum StormyError: Error { case noSubscriptionsOnTheSimulator, needAZoneOrRecordType, iCloudNotAvailable, shareMissingURL, sharesMustBePrivate, sharesMustHaveNonDefaultZone, shareFailedToFindParticipants, notSignedIn }
 }

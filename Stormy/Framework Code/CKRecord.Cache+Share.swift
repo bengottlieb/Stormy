@@ -12,7 +12,7 @@ import CloudKit
 @available(OSXApplicationExtension 10.12, iOS 10.0, *)
 extension Stormy {
 	public func acceptShare(url: URL?, completion: ((Error?) -> Void)?) {
-		guard let url = url else { completion?(Stormy.StorymError.shareMissingURL); return }
+		guard let url = url else { completion?(Stormy.StormyError.shareMissingURL); return }
 		let metadataFetchOp = CKFetchShareMetadataOperation(shareURLs: [url])
 		metadataFetchOp.perShareMetadataBlock = { url, metadata, error in
 			if Stormy.shouldReturn(after: error, operation: metadataFetchOp, completion: completion) { return }
@@ -40,8 +40,8 @@ extension Stormy {
 @available(OSXApplicationExtension 10.12, iOS 10.0, *)
 extension CKRecord.Cache {
 	public func share(with userID: CKRecord.ID, completion: ((URL?, Error?) -> Void)? = nil) {
-		if self.database != .private { completion?(nil, Stormy.StorymError.sharesMustBePrivate); return }
-		if self.recordZone == nil { completion?(nil, Stormy.StorymError.sharesMustHaveNonDefaultZone); return }
+		if self.database != .private { completion?(nil, Stormy.StormyError.sharesMustBePrivate); return }
+		if self.recordZone == nil { completion?(nil, Stormy.StormyError.sharesMustHaveNonDefaultZone); return }
 		
 		guard let record = self.originalRecord else {
 			self.save() { error in
@@ -61,7 +61,7 @@ extension CKRecord.Cache {
 		fetchParticipantOp.fetchShareParticipantsCompletionBlock = { error in
 			if Stormy.shouldReturn(after: error, operation: fetchParticipantOp, completion: { err in completion?(nil, err) }) { return }
 			if error != nil || share.participants.count == 0 {
-				completion?(nil, error ?? Stormy.StorymError.shareFailedToFindParticipants)
+				completion?(nil, error ?? Stormy.StormyError.shareFailedToFindParticipants)
 				return
 			}
 			
@@ -98,7 +98,7 @@ extension CKRecord.Cache {
 		fetchParticipantOp.fetchShareParticipantsCompletionBlock = { error in
 			if Stormy.shouldReturn(after: error, operation: fetchParticipantOp, completion: { err in completion?(err) }) { return }
 			if error != nil || share.participants.count == 0 {
-				completion?(error ?? Stormy.StorymError.shareFailedToFindParticipants)
+				completion?(error ?? Stormy.StormyError.shareFailedToFindParticipants)
 				return
 			}
 			
