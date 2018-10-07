@@ -12,7 +12,6 @@ import CloudKit
 
 @available(OSXApplicationExtension 10.12, iOSApplicationExtension 10.0, *)
 extension Stormy {
-	public enum SubscriptionError: Error { case noSubscriptionsOnTheSimulator, needAZoneOrRecordType }
 	
 	func subscriptionID(in dbType: DatabaseType, on recordName: CKRecord.RecordType?, forZone: CKRecordZone? = nil) -> String? {
 		if dbType == .shared {
@@ -34,7 +33,7 @@ extension Stormy {
 		#endif
 		
 		guard let id = self.subscriptionID(in: dbType, on: recordName, forZone: forZone) else {
-			completion?(SubscriptionError.needAZoneOrRecordType)
+			completion?(Stormy.StorymError.needAZoneOrRecordType)
 			return
 		}
 		

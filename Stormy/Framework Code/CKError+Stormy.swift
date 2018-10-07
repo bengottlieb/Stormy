@@ -18,3 +18,7 @@ extension Error {
 		return ckError
 	}
 }
+
+extension Stormy {
+	public enum StorymError: Error { case noSubscriptionsOnTheSimulator, needAZoneOrRecordType, iCloudNotAvailable, shareMissingURL, sharesMustBePrivate, sharesMustHaveNonDefaultZone, shareFailedToFindParticipants }
+}
