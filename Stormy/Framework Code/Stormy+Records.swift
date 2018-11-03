@@ -12,10 +12,10 @@ import CloudKit
 protocol CloudKitIdentifiable { }
 
 extension Stormy {
-	public func fetchAll(_ recordType: CKRecord.RecordType, in database: DatabaseType = .private, matching predicate: NSPredicate = NSPredicate(value: true), limit: Int? = nil, completion: (([CKRecord.Cache], Error?) -> Void)? = nil) {
+	public func fetchAll(_ recordType: CKRecord.RecordType, in database: DatabaseType = .private, matching predicate: NSPredicate = NSPredicate(value: true), limit: Int? = nil, completion: (([CKLocalCache], Error?) -> Void)? = nil) {
 		let query = CKQuery(recordType: recordType, predicate: predicate)
 		let op = CKQueryOperation(query: query)
-		var results: [CKRecord.Cache] = []
+		var results: [CKLocalCache] = []
 		
 		if let resultsLimit = limit { op.resultsLimit = resultsLimit }
 		op.recordFetchedBlock = { record in
@@ -32,11 +32,11 @@ extension Stormy {
 		self.queue(operation: op, in: database)
 	}
 	
-	public func fetchOne(_ recordType: CKRecord.RecordType, in database: DatabaseType = .private, matching predicate: NSPredicate = NSPredicate(value: true), completion: (([CKRecord.Cache], Error?) -> Void)? = nil) {
+	public func fetchOne(_ recordType: CKRecord.RecordType, in database: DatabaseType = .private, matching predicate: NSPredicate = NSPredicate(value: true), completion: (([CKLocalCache], Error?) -> Void)? = nil) {
 		self.fetchAll(recordType, in: database, matching: predicate, limit: 1, completion: completion)
 	}
 	
-	public func fetch(_ id: CKRecord.ID? = nil, _ ids: [CKRecord.ID] = [], in database: DatabaseType = .private, completion: (([CKRecord.Cache], Error?) -> Void)? = nil) {
+	public func fetch(_ id: CKRecord.ID? = nil, _ ids: [CKRecord.ID] = [], in database: DatabaseType = .private, completion: (([CKLocalCache], Error?) -> Void)? = nil) {
 		if id == nil && ids.count == 0 { completion?([], nil); return }
 		var idsToFetch = ids
 		if let id = id { idsToFetch.append(id) }

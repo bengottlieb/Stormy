@@ -1,5 +1,5 @@
 //
-//  CKRecord.Cache+Share.swift
+//  CKLocalCache+Share.swift
 //  Internal
 //
 //  Created by Ben Gottlieb on 8/19/18.
@@ -38,7 +38,7 @@ extension Stormy {
 }
 
 @available(OSXApplicationExtension 10.12, iOS 10.0, *)
-extension CKRecord.Cache {
+extension CKLocalCache {
 	public func share(with userID: CKRecord.ID, completion: ((URL?, Error?) -> Void)? = nil) {
 		if self.database != .private { completion?(nil, Stormy.StormyError.sharesMustBePrivate); return }
 		if self.recordZone == nil { completion?(nil, Stormy.StormyError.sharesMustHaveNonDefaultZone); return }

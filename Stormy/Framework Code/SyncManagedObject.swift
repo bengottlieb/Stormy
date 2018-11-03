@@ -75,7 +75,7 @@ extension SyncManagedObject where Self: NSManagedObject {
 		return CKRecord.ID(recordName: self.value(forKey: type(of: self).recordIDField) as! String)
 	}
 	
-	public func generateCacheRecord() -> CKRecord.Cache {
+	public func generateCacheRecord() -> CKLocalCache {
 		let cache = DatabaseType.private.cache.fetch(type: self.entity.name!, id: self.recordID)
 		self.populate(cacheRecord: cache)
 		return cache
@@ -97,7 +97,7 @@ extension CloudLoadableManagedObject where Self: NSManagedObject {
 		return NSEntityDescription.insertNewObject(forEntityName: entityName, into: moc) as? Self
 	}
 	
-	public func load(from cachedRecord: CKRecord.Cache) {
+	public func load(from cachedRecord: CKLocalCache) {
 		for (name, attribute) in self.entity.attributesByName {
 			if let value = cachedRecord[name] {
 				self.setCloudValue(value, forAttribute: attribute)
@@ -105,7 +105,7 @@ extension CloudLoadableManagedObject where Self: NSManagedObject {
 		}
 	}
 	
-	public func populate(cacheRecord: CKRecord.Cache) {
+	public func populate(cacheRecord: CKLocalCache) {
 		let idField = type(of: self).recordIDField
 		for (name, _) in self.entity.attributesByName {
 			if name != idField, let value = self.value(forKey: name) {

@@ -59,14 +59,14 @@ extension Stormy {
 	
 	public struct FetchedChanges {
 		let semaphore = DispatchSemaphore(value: 1)
-		public var records: [CKRecord.Cache] = []
+		public var records: [CKLocalCache] = []
 		public var deletedIDs: [CKRecord.ID] = []
 		public var tokenData: Data?
 		
 		init() { }
 		
 		
-		mutating func add(_ record: CKRecord.Cache?) {
+		mutating func add(_ record: CKLocalCache?) {
 			if let record = record { self.serialize({ self.records.append(record) }) }
 		}
 		

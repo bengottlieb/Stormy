@@ -29,12 +29,12 @@
 		B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C284214DEE6000D250A0 /* Stormy+Records.swift */; };
 		B527C28E214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */; };
 		B527C28F214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */; };
-		B527C290214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */; };
-		B527C291214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */; };
+		B527C290214DEE6000D250A0 /* CKLocalCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C286214DEE6000D250A0 /* CKLocalCache.swift */; };
+		B527C291214DEE6000D250A0 /* CKLocalCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C286214DEE6000D250A0 /* CKLocalCache.swift */; };
 		B527C292214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */; };
 		B527C293214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */; };
-		B527C294214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */; };
-		B527C295214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */; };
+		B527C294214DEE6000D250A0 /* CKLocalCache+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C288214DEE6000D250A0 /* CKLocalCache+Share.swift */; };
+		B527C295214DEE6000D250A0 /* CKLocalCache+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C288214DEE6000D250A0 /* CKLocalCache+Share.swift */; };
 		B527C296214DEE6000D250A0 /* Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C289214DEE6000D250A0 /* Stormy.swift */; };
 		B527C297214DEE6000D250A0 /* Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C289214DEE6000D250A0 /* Stormy.swift */; };
 		B527C298214DEE6000D250A0 /* CKError+Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */; };
@@ -109,9 +109,9 @@
 		B5059659215501CB000303B8 /* MD5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MD5.swift; sourceTree = "<group>"; };
 		B527C284214DEE6000D250A0 /* Stormy+Records.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+Records.swift"; sourceTree = "<group>"; };
 		B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKCopyableOperation.swift; sourceTree = "<group>"; };
-		B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKRecord.Cache.swift; sourceTree = "<group>"; };
+		B527C286214DEE6000D250A0 /* CKLocalCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKLocalCache.swift; sourceTree = "<group>"; };
 		B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+Subscriptions.swift"; sourceTree = "<group>"; };
-		B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKRecord.Cache+Share.swift"; sourceTree = "<group>"; };
+		B527C288214DEE6000D250A0 /* CKLocalCache+Share.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKLocalCache+Share.swift"; sourceTree = "<group>"; };
 		B527C289214DEE6000D250A0 /* Stormy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stormy.swift; sourceTree = "<group>"; };
 		B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKError+Stormy.swift"; sourceTree = "<group>"; };
 		B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+FetchChanges.swift"; sourceTree = "<group>"; };
@@ -214,10 +214,10 @@
 				B527C289214DEE6000D250A0 /* Stormy.swift */,
 				B527C284214DEE6000D250A0 /* Stormy+Records.swift */,
 				B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */,
-				B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */,
+				B527C286214DEE6000D250A0 /* CKLocalCache.swift */,
 				B5B25CAE218CF00C00498FCB /* DatabaseType.swift */,
 				B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */,
-				B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */,
+				B527C288214DEE6000D250A0 /* CKLocalCache+Share.swift */,
 				B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */,
 				B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */,
 				B505965621550046000303B8 /* URL+Stormy.swift */,
@@ -559,9 +559,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B527C296214DEE6000D250A0 /* Stormy.swift in Sources */,
-				B527C290214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */,
+				B527C290214DEE6000D250A0 /* CKLocalCache.swift in Sources */,
 				B527C29A214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
-				B527C294214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */,
+				B527C294214DEE6000D250A0 /* CKLocalCache+Share.swift in Sources */,
 				B505965721550046000303B8 /* URL+Stormy.swift in Sources */,
 				B527C28E214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
 				B505965A215501CB000303B8 /* MD5.swift in Sources */,
@@ -578,14 +578,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B527C297214DEE6000D250A0 /* Stormy.swift in Sources */,
-				B527C291214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */,
+				B527C291214DEE6000D250A0 /* CKLocalCache.swift in Sources */,
 				B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
 				B527C29B214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
 				B5B25CB0218CF00C00498FCB /* DatabaseType.swift in Sources */,
 				B505965821550046000303B8 /* URL+Stormy.swift in Sources */,
 				B527C28F214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
 				B505965B215501CB000303B8 /* MD5.swift in Sources */,
-				B527C295214DEE6000D250A0 /* CKRecord.Cache+Share.swift in Sources */,
+				B527C295214DEE6000D250A0 /* CKLocalCache+Share.swift in Sources */,
 				B527C299214DEE6000D250A0 /* CKError+Stormy.swift in Sources */,
 				B527C293214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,
 				B5F0AD1F2169921C00A25B05 /* SyncManagedObject.swift in Sources */,
