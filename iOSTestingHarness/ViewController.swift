@@ -25,7 +25,7 @@ class ViewController: UIViewController {
 		}
 	}
 
-	var record = CKRecord.Cache(type: "TEST_RECORD", id: CKRecord.ID(recordName: "EDITING RECORD"), in: .public)
+	var record = DatabaseType.public.cache.fetch(type: "TEST_RECORD", id: CKRecord.ID(recordName: "EDITING RECORD"))
 	
 	@IBAction func editRecord() {
 		self.record.reloadFromServer(andThenSave: true) { err in
@@ -46,19 +46,26 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func addRecord() {
-		let recordID = CKRecord.ID(recordName: Date().description, zoneID: Stormy.instance.recordZones.first!.zoneID)
-		let record = CKRecord.Cache(type: "TEST_RECORD", id: recordID, in: .private)
+		let recordID = CKRecord.ID(recordName: "PARENT - RECORD", zoneID: Stormy.instance.recordZones.first!.zoneID)
+		let record = DatabaseType.private.cache.fetch(type: "PARENT_RECORD", id: recordID)
+
+		record.reloadFromServer { error in
+			let childID = CKRecord.ID(recordName: "CHILD - \(Int(Date().timeIntervalSinceReferenceDate) % 100000)", zoneID: Stormy.instance.recordZones.first!.zoneID)
+			let child = DatabaseType.private.cache.fetch(type: "CHILD_RECORD", id: childID)
+			child["c_value"] = Int16.random(in: 0...1000)
+			child.setParent(record)
 		
-		record["value"] = Int16.random(in: 0...1000)
-		record.save() { error in
-			if let err = error {
-				print("Error: \(err)")
-			} else {
-//				let userID = CKRecord.ID(recordName: "_e99701a62ea25fe2cdabc3e914563b6f")
-//				record.share(with: userID, completion: { url, error in
-//					if let error = error { print("Error while saving: \(error)") }
-//					print("URL: \(url?.absoluteString ?? "--")")
-//				})
+			record["p_value"] = Int16.random(in: 0...1000)
+			record.save(reloadingFirst: false) { error in
+				if let err = error {
+					print("Error: \(err)")
+				} else {
+	//				let userID = CKRecord.ID(recordName: "_e99701a62ea25fe2cdabc3e914563b6f")
+	//				record.share(with: userID, completion: { url, error in
+	//					if let error = error { print("Error while saving: \(error)") }
+	//					print("URL: \(url?.absoluteString ?? "--")")
+	//				})
+				}
 			}
 		}
 	}

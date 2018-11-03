@@ -22,7 +22,7 @@ extension Stormy {
 			return true
 		}
 		
-		if ckError.code == .partialFailure, let root = error.rootCKError { ckError = root }
+		if ckError.code == .partialFailure, let root = error.rootCKError() { ckError = root }
 		
 		if ckError.code == .notAuthenticated {
 			Stormy.instance.authenticationState = (Stormy.instance.authenticationState == .signingIn) ? .tokenFailed : .notLoggedIn

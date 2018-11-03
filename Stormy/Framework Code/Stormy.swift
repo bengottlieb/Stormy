@@ -16,7 +16,6 @@ public class Stormy {
 	}
 	
 	public static let instance = Stormy()
-	public enum DatabaseType: String { case `public`, `private`, shared }
 	public enum AuthenticationState { case notLoggedIn, signingIn, tokenFailed, denied, authenticated }
 	
 	public var container: CKContainer!
@@ -35,6 +34,8 @@ public class Stormy {
 	public var autoFetchZones = true
 	public var recordZones: [CKRecordZone] = []
 	public var userRecordID: CKRecord.ID?
+	static public var childReferencesFieldName = "child_refs"
+	
 	let operationSemaphore = DispatchSemaphore(value: 1)
 	var queuedOperations: [(DatabaseType, Operation)] = []
 	

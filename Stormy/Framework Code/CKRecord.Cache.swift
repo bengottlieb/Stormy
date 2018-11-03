@@ -9,38 +9,96 @@
 import Foundation
 import CloudKit
 
+extension DatabaseType {
+	public class Cache {
+		var type: DatabaseType
+		init(type: DatabaseType) {
+			self.type = type
+		}
+		
+		public func fetch(type: String, id: CKRecord.ID) -> CKRecord.Cache {
+			if let existing = self.cache[id]?.cache { return existing }
+			
+			let recordCache = CKRecord.Cache(type: type, id: id, in: self.type)
+			self.cache[id] = Shared(cache: recordCache)
+			return recordCache
+		}
+		
+		public func fetch(record: CKRecord?) -> CKRecord.Cache? {
+			guard let record = record else { return nil }
+			if let existing = self.cache[record.recordID]?.cache {
+				existing.originalRecord = record
+				existing.updateFromOriginal()
+				return existing
+			}
+			
+			let recordCache = CKRecord.Cache(record: record, in: self.type)
+			self.cache[record.recordID] = Shared(cache: recordCache)
+			return recordCache
+		}
+		
+		public func fetch(reference: CKRecord.Reference) -> CKRecord.Cache {
+			if let existing = self.cache[reference.recordID]?.cache { return existing }
+			
+			let recordCache = CKRecord.Cache(reference: reference, in: self.type)
+			self.cache[reference.recordID] = Shared(cache: recordCache)
+			return recordCache
+		}
+		
+		var cache: [CKRecord.ID: Shared] = [:]
+		
+		struct Shared {
+			weak var cache: CKRecord.Cache?
+		}
+	}
+}
+
+
 extension CKRecord {
-	open class Cache: CustomStringConvertible {
-		open var typeName: CKRecord.RecordType
+	
+	open class Cache: CustomStringConvertible, Equatable {
+		open var typeName: CKRecord.RecordType!
 		open var recordID: CKRecord.ID
-		open var database: Stormy.DatabaseType
+		open var database: DatabaseType
 		open var changedKeys: Set<String> = []
 		open var changedValues: [String: CKRecordValue] = [:]
 		open var originalRecord: CKRecord?
 		open var recordZone: CKRecordZone? { return Stormy.instance.zone(withID: self.recordID.zoneID) }
-		open var isDirty: Bool { return self.changedKeys.count > 0 }
+		open var isDirty: Bool { return self.changedKeys.count > 0 || childrenChanged }
 		open var existsOnServer: Bool { return self.originalRecord != nil }
 		
-		public private(set) var parentReference: CKRecord.Reference?
 		
-		public init(type: String, id: CKRecord.ID, in database: Stormy.DatabaseType = .private) {
+		private var childrenChanged = false
+		private var parent: CKRecord.Cache?
+		private var children: [CKRecord.Cache] = []
+		private func reference(action: CKRecord_Reference_Action = .none) -> CKRecord.Reference { return CKRecord.Reference(recordID: self.recordID, action: action) }
+		
+		fileprivate init(reference: CKRecord.Reference, in database: DatabaseType) {
+			self.recordID = reference.recordID
+			self.database = database
+		}
+		
+		fileprivate init(type: String, id: CKRecord.ID, in database: DatabaseType = .private) {
 			self.originalRecord = nil
 			self.typeName = type
 			self.recordID = id
 			self.database = database
 		}
 		
-		public init?(record: CKRecord?, in database: Stormy.DatabaseType) {
+		fileprivate init(record: CKRecord, in database: DatabaseType) {
 			self.originalRecord = record
 			self.database = database
-			guard let record = record else {
-				self.typeName = ""
-				self.recordID = CKRecord.ID(recordName: "-")
-				return nil
-			}
 			self.typeName = record.recordType
 			self.recordID = record.recordID
-			if #available(OSXApplicationExtension 10.12, iOS 10.0, *) { self.parentReference = record.parent }
+			self.updateFromOriginal()
+		}
+		
+		func updateFromOriginal() {
+			guard let original = self.originalRecord else { return }
+			if #available(OSXApplicationExtension 10.12, iOS 10.0, *), let ref = original.parent { self.parent = database.cache.fetch(reference: ref) }
+			if let kids = original[Stormy.childReferencesFieldName] as? [CKRecord.Reference] {
+				self.children = kids.map { self.database.cache.fetch(reference: $0) }
+			}
 		}
 		
 		open func didSave(to record: CKRecord? = nil) {
@@ -51,12 +109,21 @@ extension CKRecord {
 		open func clearChanges() {
 			self.changedValues = [:]
 			self.changedKeys = []
+			self.childrenChanged = false
 		}
 		
 		open var allKeys: [String] {
 			var base = Set(self.originalRecord?.allKeys() ?? [])
 			base.formUnion(self.changedKeys)
 			return Array(base).sorted()
+		}
+		
+		var decendents: [CKRecord.Cache] {
+			var decendents = self.children
+			for child in self.children {
+				decendents += child.decendents
+			}
+			return decendents
 		}
 		
 		open func save(reloadingFirst: Bool = true, completion: ((Error?) -> Void)? = nil) {
@@ -66,14 +133,18 @@ extension CKRecord {
 			}
 			
 			if !self.isDirty { completion?(nil); return }
-			let op = CKModifyRecordsOperation(recordsToSave: [self.updatedRecord()], recordIDsToDelete: nil)
+			
+			let caches = [self] + self.decendents
+			let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { $0.isDirty ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
 			op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
 				if Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) { return }
-				if let err = error?.rootCKError, err.code == .serverRecordChanged {
+				if let err = error?.rootCKError(for: self.recordID), err.code == .serverRecordChanged {
 					self.reloadFromServer(andThenSave: true, completion: completion)
 				} else {
-					self.didSave()
-					completion?(error?.rootCKError ?? error)
+					for record in caches {
+						record.didSave()
+					}
+					completion?(error?.rootCKError(for: self.recordID) ?? error)
 				}
 			}
 			Stormy.instance.queue(operation: op, in: self.database)
@@ -81,9 +152,15 @@ extension CKRecord {
 		
 		open func setParent(_ parent: CKRecord.Cache?) {
 			if let record = parent {
-				self.parentReference = CKRecord.Reference(recordID: record.recordID, action: .none)
+				//self.parentReference = CKRecord.Reference(recordID: record.recordID, action: .none)
+				self.parent = parent
+				record.children.append(self)
+				record.childrenChanged = true
 			} else {
-				self.parentReference = nil
+				if let index = self.parent?.children.index(of: self) {
+					self.parent?.children.remove(at: index)
+				}
+				self.parent = nil
 			}
 		}
 		
@@ -95,13 +172,18 @@ extension CKRecord {
 					self.changedKeys = self.changedKeys.filter { key in return !self.areEqual(self.changedValues[key], found[key]) }
 				}
 				
-				let isUnknownItem = error?.rootCKError?.code == .unknownItem
+				let isUnknownItem = error?.rootCKError(for: self.recordID)?.code == .unknownItem
 				if andThenSave, (error == nil || isUnknownItem) {
 					self.save(reloadingFirst: false, completion: completion)
 				} else {
 					completion?(isUnknownItem ? nil : error)
 				}
 			}
+		}
+		
+		var childReferences: [CKRecord.Reference]? {
+			let refs = self.children.map { $0.reference() }
+			return refs.isEmpty ? nil : refs
 		}
 		
 		open var description: String {
@@ -133,14 +215,18 @@ extension CKRecord {
 		}
 		
 		
-		open func updatedRecord() -> CKRecord {
+		open func updatedRecord() -> CKRecord? {
+			if self.typeName == nil { return nil }
 			let newRecord = self.originalRecord ?? CKRecord(recordType: self.typeName, recordID: self.recordID)
 			
 			for key in self.changedKeys {
 				newRecord[key] = self.changedValues[key]
 			}
 			
-			if #available(OSXApplicationExtension 10.12, iOS 10.0, *) { newRecord.parent = self.parentReference }
+			if #available(OSXApplicationExtension 10.12, iOS 10.0, *) {
+				newRecord.parent = self.parent?.reference(action: .none)
+				newRecord[Stormy.childReferencesFieldName] = self.childReferences
+			}
 
 			return newRecord
 		}
@@ -189,6 +275,10 @@ extension CKRecord {
 				return true
 			}
 			return false
+		}
+		
+		public static func ==(lhs: Cache, rhs: Cache) -> Bool {
+			return lhs.recordID == rhs.recordID
 		}
 	}
 }

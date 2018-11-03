@@ -53,6 +53,8 @@
 		B5897EDA215189D30086B481 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5897ED9215189D30086B481 /* CloudKit.framework */; };
 		B58D64791A898F89005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D64681A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B58D64961A899285005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D646B1A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5B25CAF218CF00C00498FCB /* DatabaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B25CAE218CF00C00498FCB /* DatabaseType.swift */; };
+		B5B25CB0218CF00C00498FCB /* DatabaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B25CAE218CF00C00498FCB /* DatabaseType.swift */; };
 		B5F0AD1E2169921C00A25B05 /* SyncManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */; };
 		B5F0AD1F2169921C00A25B05 /* SyncManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */; };
 /* End PBXBuildFile section */
@@ -132,6 +134,7 @@
 		B58D64681A898F81005A0002 /* Stormy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stormy.h; sourceTree = "<group>"; };
 		B58D646A1A898F81005A0002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B58D646B1A898F81005A0002 /* Stormy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stormy.h; sourceTree = "<group>"; };
+		B5B25CAE218CF00C00498FCB /* DatabaseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseType.swift; sourceTree = "<group>"; };
 		B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManagedObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -212,6 +215,7 @@
 				B527C284214DEE6000D250A0 /* Stormy+Records.swift */,
 				B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */,
 				B527C286214DEE6000D250A0 /* CKRecord.Cache.swift */,
+				B5B25CAE218CF00C00498FCB /* DatabaseType.swift */,
 				B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */,
 				B527C288214DEE6000D250A0 /* CKRecord.Cache+Share.swift */,
 				B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */,
@@ -565,6 +569,7 @@
 				B527C292214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,
 				B527C28C214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
 				B5F0AD1E2169921C00A25B05 /* SyncManagedObject.swift in Sources */,
+				B5B25CAF218CF00C00498FCB /* DatabaseType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,6 +581,7 @@
 				B527C291214DEE6000D250A0 /* CKRecord.Cache.swift in Sources */,
 				B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
 				B527C29B214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
+				B5B25CB0218CF00C00498FCB /* DatabaseType.swift in Sources */,
 				B505965821550046000303B8 /* URL+Stormy.swift in Sources */,
 				B527C28F214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
 				B505965B215501CB000303B8 /* MD5.swift in Sources */,

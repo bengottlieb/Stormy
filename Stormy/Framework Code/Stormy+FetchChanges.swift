@@ -32,7 +32,7 @@ extension Stormy {
 			var changes = FetchedChanges()
 			
 			op.recordChangedBlock = { record in
-				changes.add(CKRecord.Cache(record: record, in: database))
+				changes.add(database.cache.fetch(record: record))
 			}
 			
 			op.recordWithIDWasDeletedBlock = { id, type in

@@ -19,7 +19,7 @@ extension Stormy {
 		
 		if let resultsLimit = limit { op.resultsLimit = resultsLimit }
 		op.recordFetchedBlock = { record in
-			if let cache = CKRecord.Cache(record: record, in: database) { results.append(cache) }
+			if let cache = database.cache.fetch(record: record) { results.append(cache) }
 		}
 		op.queryCompletionBlock = { cursor, error in
 			if Stormy.shouldReturn(after: error, operation: op, in: database, completion: { err in completion?([], err) }) { return }
@@ -45,7 +45,7 @@ extension Stormy {
 		op.fetchRecordsCompletionBlock = { results, error in
 			if Stormy.shouldReturn(after: error, operation: op, in: database, completion: { err in completion?([], err) }) { return }
 			if let values = results?.values {
-				let found = Array(values).compactMap { CKRecord.Cache(record: $0, in: database) }
+				let found = Array(values).compactMap { database.cache.fetch(record: $0) }
 				completion?(found, error)
 			} else {
 				completion?([], error)

@@ -10,10 +10,11 @@ import Foundation
 import CloudKit
 
 extension Error {
-	public var rootCKError: CKError? {
+	public func rootCKError(for id: CKRecord.ID? = nil) -> CKError? {
 		guard let ckError = self as? CKError else { return nil }
-		if ckError.code == .partialFailure, let byID = ckError.partialErrorsByItemID?.values, let first = byID.first as? CKError {
-			return first
+		if ckError.code == .partialFailure {
+			if let actual = id, let err = ckError.partialErrorsByItemID?[actual] as? CKError { return err }
+			if let byID = ckError.partialErrorsByItemID?.values, let first = byID.first as? CKError { return first }
 		}
 		return ckError
 	}
