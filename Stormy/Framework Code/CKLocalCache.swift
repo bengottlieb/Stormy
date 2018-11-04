@@ -199,8 +199,8 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		return result
 	}
 	
-	public func delete(completion: ((Error?) -> Void)? = nil) {
-		if !self.existsOnServer {
+	public func delete(ignoreOnServerState: Bool = true, completion: ((Error?) -> Void)? = nil) {
+		if !self.existsOnServer, !ignoreOnServerState {
 			completion?(nil)
 			return
 		}
