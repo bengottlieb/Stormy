@@ -191,7 +191,11 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		for key in self.allKeys {
 			result += "\t\(key): \t"
 			if let value = self[key] {
-				result += "\(value)"
+				if let data = value as? Data {
+					result += "<\(data.count) bytes>"
+				} else {
+					result += "\(value)"
+				}
 			} else {
 				result += "nil"
 			}
