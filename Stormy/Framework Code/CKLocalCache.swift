@@ -61,11 +61,11 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	open var database: DatabaseType
 	open var changedKeys: Set<String> = []
 	open var changedValues: [String: CKRecordValue] = [:]
-	open var originalRecord: CKRecord?
+	open var originalRecord: CKRecord? { didSet { if let type = self.originalRecord?.recordType { self.typeName = type }}}
 	open var recordZone: CKRecordZone? { return Stormy.instance.zone(withID: self.recordID.zoneID) }
 	open var isDirty: Bool { return self.changedKeys.count > 0 || childrenChanged }
 	open var existsOnServer: Bool { return self.originalRecord != nil }
-	
+	public var isLoaded = false
 	
 	private var childrenChanged = false
 	private var parent: CKLocalCache?
