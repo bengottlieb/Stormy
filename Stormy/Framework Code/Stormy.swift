@@ -34,6 +34,7 @@ public class Stormy {
 	public var autoFetchZones = true
 	public var recordZones: [CKRecordZone] = []
 	public var userRecordID: CKRecord.ID?
+	public var recordIDTypeSeparator: String?		// if this is set, a record ID consists of the record name + recordIDTypeSeparator + a unique ID- ex: Book/12356
 	static public var childReferencesFieldName = "child_refs"
 	
 	let operationSemaphore = DispatchSemaphore(value: 1)

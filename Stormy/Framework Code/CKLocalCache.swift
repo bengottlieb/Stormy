@@ -75,6 +75,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	fileprivate init(reference: CKRecord.Reference, in database: DatabaseType) {
 		self.recordID = reference.recordID
 		self.database = database
+		self.typeName = reference.recordID.typeName
 	}
 	
 	fileprivate init(type: String, id: CKRecord.ID, in database: DatabaseType = .private) {
