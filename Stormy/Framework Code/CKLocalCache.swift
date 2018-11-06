@@ -96,7 +96,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	func updateFromOriginal() {
 		guard let original = self.originalRecord else { return }
 		if #available(OSXApplicationExtension 10.12, iOS 10.0, *), let ref = original.parent { self.parent = database.cache.fetch(reference: ref) }
-		if let kids = original[Stormy.childReferencesFieldName] as? [CKRecord.Reference] {
+		if !self.childrenChanged, let kids = original[Stormy.childReferencesFieldName] as? [CKRecord.Reference] {
 			self.children = kids.map { self.database.cache.fetch(reference: $0) }
 		}
 	}
