@@ -41,6 +41,15 @@
 		B527C299214DEE6000D250A0 /* CKError+Stormy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */; };
 		B527C29A214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */; };
 		B527C29B214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */; };
+		B5446E8921A3813A002D9379 /* SyncableManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8421A3813A002D9379 /* SyncableManagedObject.swift */; };
+		B5446E8A21A3813A002D9379 /* SyncableManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8421A3813A002D9379 /* SyncableManagedObject.swift */; };
+		B5446E8B21A3813A002D9379 /* SyncedContainer+RecordStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8521A3813A002D9379 /* SyncedContainer+RecordStatus.swift */; };
+		B5446E8C21A3813A002D9379 /* SyncedContainer+RecordStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8521A3813A002D9379 /* SyncedContainer+RecordStatus.swift */; };
+		B5446E8D21A3813A002D9379 /* SyncedContainer+Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8621A3813A002D9379 /* SyncedContainer+Subscriptions.swift */; };
+		B5446E8F21A3813A002D9379 /* SyncedContainer+Resync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8721A3813A002D9379 /* SyncedContainer+Resync.swift */; };
+		B5446E9021A3813A002D9379 /* SyncedContainer+Resync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8721A3813A002D9379 /* SyncedContainer+Resync.swift */; };
+		B5446E9121A3813A002D9379 /* SyncedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8821A3813A002D9379 /* SyncedContainer.swift */; };
+		B5446E9221A3813A002D9379 /* SyncedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8821A3813A002D9379 /* SyncedContainer.swift */; };
 		B54A9B4D2125B417008E646E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B4C2125B417008E646E /* AppDelegate.swift */; };
 		B54A9B4F2125B417008E646E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B4E2125B417008E646E /* ViewController.swift */; };
 		B54A9B522125B417008E646E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B54A9B502125B417008E646E /* Main.storyboard */; };
@@ -117,6 +126,11 @@
 		B527C289214DEE6000D250A0 /* Stormy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stormy.swift; sourceTree = "<group>"; };
 		B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CKError+Stormy.swift"; sourceTree = "<group>"; };
 		B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Stormy+FetchChanges.swift"; sourceTree = "<group>"; };
+		B5446E8421A3813A002D9379 /* SyncableManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncableManagedObject.swift; sourceTree = "<group>"; };
+		B5446E8521A3813A002D9379 /* SyncedContainer+RecordStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SyncedContainer+RecordStatus.swift"; sourceTree = "<group>"; };
+		B5446E8621A3813A002D9379 /* SyncedContainer+Subscriptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SyncedContainer+Subscriptions.swift"; sourceTree = "<group>"; };
+		B5446E8721A3813A002D9379 /* SyncedContainer+Resync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SyncedContainer+Resync.swift"; sourceTree = "<group>"; };
+		B5446E8821A3813A002D9379 /* SyncedContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncedContainer.swift; sourceTree = "<group>"; };
 		B54A9B4A2125B417008E646E /* iOSTestingHarness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSTestingHarness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B54A9B4C2125B417008E646E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B54A9B4E2125B417008E646E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -214,6 +228,7 @@
 		B527C283214DEE6000D250A0 /* Framework Code */ = {
 			isa = PBXGroup;
 			children = (
+				B5446E8321A3813A002D9379 /* ContextSync */,
 				B527C289214DEE6000D250A0 /* Stormy.swift */,
 				B527C284214DEE6000D250A0 /* Stormy+Records.swift */,
 				B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */,
@@ -230,6 +245,18 @@
 			);
 			name = "Framework Code";
 			path = "Stormy/Framework Code";
+			sourceTree = "<group>";
+		};
+		B5446E8321A3813A002D9379 /* ContextSync */ = {
+			isa = PBXGroup;
+			children = (
+				B5446E8421A3813A002D9379 /* SyncableManagedObject.swift */,
+				B5446E8521A3813A002D9379 /* SyncedContainer+RecordStatus.swift */,
+				B5446E8621A3813A002D9379 /* SyncedContainer+Subscriptions.swift */,
+				B5446E8721A3813A002D9379 /* SyncedContainer+Resync.swift */,
+				B5446E8821A3813A002D9379 /* SyncedContainer.swift */,
+			);
+			path = ContextSync;
 			sourceTree = "<group>";
 		};
 		B54A9B4B2125B417008E646E /* iOSTestingHarness */ = {
@@ -563,13 +590,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				B527C296214DEE6000D250A0 /* Stormy.swift in Sources */,
+				B5446E9121A3813A002D9379 /* SyncedContainer.swift in Sources */,
 				B527C290214DEE6000D250A0 /* CKLocalCache.swift in Sources */,
 				B527C29A214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
 				B527C294214DEE6000D250A0 /* CKLocalCache+Share.swift in Sources */,
 				B505965721550046000303B8 /* URL+Stormy.swift in Sources */,
+				B5446E8921A3813A002D9379 /* SyncableManagedObject.swift in Sources */,
+				B5446E8B21A3813A002D9379 /* SyncedContainer+RecordStatus.swift in Sources */,
 				B527C28E214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
+				B5446E8F21A3813A002D9379 /* SyncedContainer+Resync.swift in Sources */,
 				B505965A215501CB000303B8 /* MD5.swift in Sources */,
 				B5AE384421905F1B005DE2FA /* CKRecord.ID+Stormy.swift in Sources */,
+				B5446E8D21A3813A002D9379 /* SyncedContainer+Subscriptions.swift in Sources */,
 				B527C298214DEE6000D250A0 /* CKError+Stormy.swift in Sources */,
 				B527C292214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,
 				B527C28C214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
@@ -583,11 +615,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				B527C297214DEE6000D250A0 /* Stormy.swift in Sources */,
+				B5446E9221A3813A002D9379 /* SyncedContainer.swift in Sources */,
 				B527C291214DEE6000D250A0 /* CKLocalCache.swift in Sources */,
 				B527C28D214DEE6000D250A0 /* Stormy+Records.swift in Sources */,
 				B527C29B214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
 				B5B25CB0218CF00C00498FCB /* DatabaseType.swift in Sources */,
+				B5446E8A21A3813A002D9379 /* SyncableManagedObject.swift in Sources */,
+				B5446E8C21A3813A002D9379 /* SyncedContainer+RecordStatus.swift in Sources */,
 				B505965821550046000303B8 /* URL+Stormy.swift in Sources */,
+				B5446E9021A3813A002D9379 /* SyncedContainer+Resync.swift in Sources */,
 				B527C28F214DEE6000D250A0 /* CKCopyableOperation.swift in Sources */,
 				B5AE384521905F1B005DE2FA /* CKRecord.ID+Stormy.swift in Sources */,
 				B505965B215501CB000303B8 /* MD5.swift in Sources */,
