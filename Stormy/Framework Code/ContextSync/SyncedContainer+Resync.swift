@@ -19,6 +19,7 @@ extension SyncedContainer {
 		let batchSize = 300
 		var first = 0
 		var fetchedRecords: [CKLocalCache] = []
+		Stormy.instance.startLongRunningTask()
 
 		while true {
 			let last = min(ids.count, first + batchSize)
@@ -54,6 +55,7 @@ extension SyncedContainer {
 					}
 					if moc.hasChanges { try? moc.save() }
 					queue.resume()
+					Stormy.instance.completeLongRunningTask()
 					print("Sync Complete")
 				}
 			}
@@ -70,7 +72,7 @@ extension SyncedContainer {
 		let queue = DispatchQueue(label: "syncAll")
 		var finalError: Error?
 		
-		
+		Stormy.instance.startLongRunningTask()
 		for type in types {
 			guard let typeInfo = self.syncedObjects[type] else { continue }
 			queue.suspend()
@@ -116,6 +118,7 @@ extension SyncedContainer {
 		
 		queue.async {
 			completion(finalError)
+			Stormy.instance.completeLongRunningTask()
 		}
 	}
 	
@@ -128,6 +131,7 @@ extension SyncedContainer {
 		let op = cursor == nil ? CKQueryOperation(query: query) : CKQueryOperation(cursor: cursor!)
 		var ids: [CKRecord.ID] = currentIDs
 		
+		if cursor == nil { Stormy.instance.startLongRunningTask() }
 		op.desiredKeys = []
 		op.recordFetchedBlock = { record in
 			ids.append(record.recordID)
@@ -138,6 +142,7 @@ extension SyncedContainer {
 				self.fetchIDs(forRecordType: type, in: database, continuing: curs, currentIDs: ids, completion: completion)
 			} else {
 				completion(ids, error)
+				Stormy.instance.startLongRunningTask()
 			}
 		}
 		

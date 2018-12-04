@@ -136,8 +136,12 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		
 		let caches = [self] + self.decendents
 		let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { $0.isDirty ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
+		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
-			if Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) { return }
+			if Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) {
+				Stormy.instance.completeLongRunningTask()
+				return
+			}
 			if let err = error?.rootCKError(for: self.recordID), err.code == .serverRecordChanged {
 				self.reloadFromServer(andThenSave: true, completion: completion)
 			} else {
@@ -145,6 +149,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 					record.didSave()
 				}
 				completion?(error?.rootCKError(for: self.recordID) ?? error)
+				Stormy.instance.completeLongRunningTask()
 			}
 		}
 		Stormy.instance.queue(operation: op, in: self.database)
@@ -211,9 +216,10 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		}
 		
 		let op = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: [self.recordID])
+		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
-			if Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) { return }
-			completion?(error)
+			if !Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) { completion?(error) }
+			Stormy.instance.completeLongRunningTask()
 		}
 		Stormy.instance.queue(operation: op, in: self.database)
 	}

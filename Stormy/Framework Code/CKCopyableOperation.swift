@@ -30,12 +30,14 @@ extension Stormy {
 		}
 		
 		if let retry = ckError.retryAfterSeconds, let dupeOp = operation.copy() {
+			Stormy.instance.startLongRunningTask()
 			DispatchQueue.main.asyncAfter(deadline: .now() + retry) {
 				if let op = dupeOp as? CKDatabaseOperation, let db = db {
 					Stormy.instance.queue(operation: op, in: db)
 				} else {
 					Stormy.instance.queue(operation: dupeOp)
 				}
+				Stormy.instance.completeLongRunningTask()
 			}
 			return true
 		}

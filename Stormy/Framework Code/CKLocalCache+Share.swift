@@ -58,10 +58,12 @@ extension CKLocalCache {
 			share.addParticipant(participant)
 		}
 		
+		Stormy.instance.startLongRunningTask()
 		fetchParticipantOp.fetchShareParticipantsCompletionBlock = { error in
 			if Stormy.shouldReturn(after: error, operation: fetchParticipantOp, completion: { err in completion?(nil, err) }) { return }
 			if error != nil || share.participants.count == 0 {
 				completion?(nil, error ?? Stormy.StormyError.shareFailedToFindParticipants)
+				Stormy.instance.completeLongRunningTask()
 				return
 			}
 			
@@ -69,6 +71,7 @@ extension CKLocalCache {
 			op.modifyRecordsCompletionBlock = { records, ids, error in
 				if Stormy.shouldReturn(after: error, operation: op, completion: { err in completion?(nil, err) }) { return }
 				completion?(share.url, error)
+				Stormy.instance.completeLongRunningTask()
 			}
 			Stormy.instance.queue(operation: op, in: .private)
 		}
@@ -89,6 +92,7 @@ extension CKLocalCache {
 		
 		let share = CKShare(rootRecord: record)
 		
+		Stormy.instance.startLongRunningTask()
 		let fetchParticipantOp = CKFetchShareParticipantsOperation(userIdentityLookupInfos: [CKUserIdentity.LookupInfo(userRecordID: userID)])
 		fetchParticipantOp.shareParticipantFetchedBlock = { participant in
 			participant.permission = .readWrite
@@ -99,13 +103,16 @@ extension CKLocalCache {
 			if Stormy.shouldReturn(after: error, operation: fetchParticipantOp, completion: { err in completion?(err) }) { return }
 			if error != nil || share.participants.count == 0 {
 				completion?(error ?? Stormy.StormyError.shareFailedToFindParticipants)
+				Stormy.instance.completeLongRunningTask()
 				return
 			}
 			
 			let op = CKModifyRecordsOperation(recordsToSave: [share, record], recordIDsToDelete: nil)
 			op.modifyRecordsCompletionBlock = { records, ids, error in
-				if Stormy.shouldReturn(after: error, operation: op, completion: { err in completion?(err) }) { return }
-				completion?(error)
+				if !Stormy.shouldReturn(after: error, operation: op, completion: { err in completion?(err) }) {
+					completion?(error)
+				}
+				Stormy.instance.completeLongRunningTask()
 			}
 			Stormy.instance.queue(operation: op, in: .private)
 		}

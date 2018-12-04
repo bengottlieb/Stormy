@@ -13,6 +13,7 @@ protocol CloudKitIdentifiable { }
 
 extension Stormy {
 	public func fetchAll(_ recordType: CKRecord.RecordType, in database: DatabaseType = .private, matching predicate: NSPredicate = NSPredicate(value: true), limit: Int? = nil, completion: (([CKLocalCache], Error?) -> Void)? = nil) {
+		self.startLongRunningTask()
 		let query = CKQuery(recordType: recordType, predicate: predicate)
 		let op = CKQueryOperation(query: query)
 		var results: [CKLocalCache] = []
@@ -28,6 +29,7 @@ extension Stormy {
 			} else {
 				completion?(results, error)
 			}
+			self.completeLongRunningTask()
 		}
 		self.queue(operation: op, in: database)
 	}
@@ -38,6 +40,7 @@ extension Stormy {
 	
 	public func fetch(_ id: CKRecord.ID? = nil, _ ids: [CKRecord.ID] = [], in database: DatabaseType = .private, completion: (([CKLocalCache], Error?) -> Void)? = nil) {
 		if id == nil && ids.count == 0 { completion?([], nil); return }
+		self.startLongRunningTask()
 		var idsToFetch = ids
 		if let id = id { idsToFetch.append(id) }
 		
@@ -50,6 +53,7 @@ extension Stormy {
 			} else {
 				completion?([], error)
 			}
+			self.completeLongRunningTask()
 		}
 		Stormy.instance.queue(operation: op, in: database)
 

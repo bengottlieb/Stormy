@@ -18,6 +18,10 @@ public class Stormy {
 	public static let instance = Stormy()
 	public enum AuthenticationState { case notLoggedIn, signingIn, tokenFailed, denied, authenticated }
 	
+	#if os(iOS)
+		public var application: UIApplication?
+		var currentBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
+	#endif
 	public var container: CKContainer!
 	public var publicDatabase: CKDatabase!
 	public var privateDatabase: CKDatabase!
@@ -39,6 +43,30 @@ public class Stormy {
 	
 	let operationSemaphore = DispatchSemaphore(value: 1)
 	var queuedOperations: [(DatabaseType, Operation)] = []
+	var longRunningTaskCount = 0
+	
+	func startLongRunningTask() {
+		self.longRunningTaskCount += 1
+		#if os(iOS)
+			if self.longRunningTaskCount == 1, let app = self.application {
+				self.currentBackgroundTaskID = app.beginBackgroundTask(withName: "Stormy") {
+					DispatchQueue.main.async { self.currentBackgroundTaskID = .invalid }
+				}
+			}
+		#endif
+	}
+	
+	func completeLongRunningTask() {
+		if self.longRunningTaskCount == 0 { return }
+		self.longRunningTaskCount -= 1
+		#if os(iOS)
+			if self.longRunningTaskCount == 0, self.currentBackgroundTaskID != .invalid {
+				let taskID = self.currentBackgroundTaskID
+				self.currentBackgroundTaskID = .invalid
+				self.application?.endBackgroundTask(taskID)
+			}
+		#endif
+	}
 	
 	public func setup(identifier: String, zones: [String] = []) {
 		self.containerIdentifer = identifier

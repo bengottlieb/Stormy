@@ -14,9 +14,11 @@ import CloudKit
 extension Stormy {
 	public func fetchChanges(in zone: CKRecordZone? = nil, database: DatabaseType = .private, since tokenData: Data? = nil, fetching fields: [CKRecord.FieldKey]? = nil, completion: @escaping (FetchedChanges?, Error?) -> Void) {
 		
+		Stormy.instance.startLongRunningTask()
 		Stormy.instance.queue {
 			guard let zone = zone ?? Stormy.instance.recordZones.first else {
 				completion(nil, nil)
+				Stormy.instance.completeLongRunningTask()
 				return
 			}
 			let token: CKServerChangeToken? = (tokenData != nil) ? NSKeyedUnarchiver.unarchiveObject(with: tokenData!) as? CKServerChangeToken : nil
@@ -44,9 +46,10 @@ extension Stormy {
 			}
 			
 			op.fetchRecordZoneChangesCompletionBlock = { err in
-				if Stormy.shouldReturn(after: err, operation: op, in: database, completion: { err in completion(nil, err) }) { return }
-				
-				completion(changes, nil)
+				if !Stormy.shouldReturn(after: err, operation: op, in: database, completion: { err in completion(nil, err) }) {
+					completion(changes, nil)
+				}
+				Stormy.instance.completeLongRunningTask()
 			}
 			
 			op.recordZoneChangeTokensUpdatedBlock = { zoneID, token, context in
