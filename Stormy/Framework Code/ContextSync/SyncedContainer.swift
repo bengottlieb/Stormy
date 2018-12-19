@@ -45,8 +45,8 @@ open class SyncedContainer {
 	
 	var queue = DispatchQueue(label: "SyncedContainerQueue")
 	
-	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil) {
-		self.container = NSPersistentContainer(name: name, managedObjectModel: model ?? NSManagedObjectModel(contentsOf: Bundle.main.url(forResource: name, withExtension: "momd")!)!)
+	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main) {
+		self.container = NSPersistentContainer(name: name, managedObjectModel: model ?? NSManagedObjectModel(contentsOf: bundle.url(forResource: name, withExtension: "momd")!)!)
 		Stormy.instance.recordIDTypeSeparator = "/"
 		self.queue.suspend()
 		self.container.loadPersistentStores { desc, error in
