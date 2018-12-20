@@ -38,11 +38,11 @@ extension Stormy {
 		}
 		
 		let fetchOp = CKFetchSubscriptionsOperation.fetchAllSubscriptionsOperation()
-		fetchOp.fetchSubscriptionCompletionBlock = { subs, error in
+		fetchOp.fetchSubscriptionCompletionBlock = { subscriptions, error in
 			if Stormy.shouldReturn(after: error, operation: fetchOp, in: dbType, completion: completion) { return }
 			
-			if subs?[id] != nil {	//already created
-				print(subs!)
+			if subscriptions?[id] != nil {	//already created
+				print(subscriptions!)
 				completion?(nil)
 				return
 			}
