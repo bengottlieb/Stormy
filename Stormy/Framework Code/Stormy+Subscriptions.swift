@@ -8,6 +8,9 @@
 
 import Foundation
 import CloudKit
+#if canImport(UIKit)
+	import UIKit
+#endif
 
 
 @available(OSXApplicationExtension 10.12, iOSApplicationExtension 10.0, *)
@@ -27,9 +30,16 @@ extension Stormy {
 	}
 	public func setupSubscription(in dbType: DatabaseType, on recordName: CKRecord.RecordType? = nil, forZone: CKRecordZone? = nil, predicate: NSPredicate = NSPredicate(value: true), options: CKQuerySubscription.Options = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion], completion: ((Error?) -> Void)?) {
 		
+		
 		#if targetEnvironment(simulator)
 			completion?(StormyError.noSubscriptionsOnTheSimulator)
 			if recordName == nil || recordName != nil { return }
+		#else
+			#if os(iOS)
+			if Bundle.main.bundleURL.pathExtension == "app", let app = UIApplication.value(forKey: "sharedApplication") as? UIApplication, !app.isRegisteredForRemoteNotifications {
+				print("**************************** Remember to register for Remote Notifications before setting up a subscription ****************************")
+			}
+			#endif
 		#endif
 		
 		guard let id = self.subscriptionID(in: dbType, on: recordName, forZone: forZone) else {
