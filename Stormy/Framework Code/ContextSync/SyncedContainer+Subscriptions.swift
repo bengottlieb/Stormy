@@ -11,16 +11,6 @@ import CloudKit
 
 @available(iOSApplicationExtension 10.0, *)
 @available(OSXApplicationExtension 10.12, *)
-extension DatabaseType {
-	var subscriptionDefaultsKey: String {
-		let subscriptionsCreatedDefaultsKey = SyncedContainer.defaultsPrefix + "subscriptions-created-on-" + self.rawValue
-		return subscriptionsCreatedDefaultsKey
-	}
-
-	var subscriptionID: String {
-		return self.rawValue + "-subscription"
-	}
-}
 
 @available(iOSApplicationExtension 10.0, *)
 extension SyncedContainer {
@@ -37,32 +27,11 @@ extension SyncedContainer {
 		let completionQueue = DispatchQueue(label: "subscription setup")
 		
 		for db in dbs {
-			if SyncedContainer.userDefaults.bool(forKey: db.subscriptionDefaultsKey) {
-				continue
-			}
-
-			let sub = CKDatabaseSubscription(subscriptionID: db.subscriptionID)
-			let noteInfo = CKSubscription.NotificationInfo()
-			
-			noteInfo.shouldSendContentAvailable = true
-			sub.notificationInfo = noteInfo
-			
 			completionQueue.suspend()
-			
-			let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [sub], subscriptionIDsToDelete: nil)
-			operation.modifySubscriptionsCompletionBlock = { created, deleted, error in
-				if created?.first != nil {
-					SyncedContainer.userDefaults.set(true, forKey: db.subscriptionDefaultsKey)
-					print("Created subscription on \(db): \(sub.subscriptionID)")
-				} else if let err = error, err._code == 2, err._domain == "CKErrorDomain" {	// already exists
-					SyncedContainer.userDefaults.set(true, forKey: db.subscriptionDefaultsKey)
-				} else if let err = error {
-					finalError = err
-				}
+			Stormy.instance.setupSubscription(in: db) { error in
+				if error != nil { finalError = error }
 				completionQueue.resume()
 			}
-		
-			Stormy.instance.queue(operation: operation, in: db)
 		}
 		
 		completionQueue.async {
