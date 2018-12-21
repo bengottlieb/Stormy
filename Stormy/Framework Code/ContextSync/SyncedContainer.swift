@@ -12,6 +12,22 @@ import CloudKit
 
 @available(OSXApplicationExtension 10.12, *)
 @available(iOSApplicationExtension 10.0, *)
+
+open class AppGroupPersistentContainer: NSPersistentContainer {
+	static var applicationGroupIdentifier: String?
+
+	override open class func defaultDirectoryURL() -> URL {
+		if let identifier = AppGroupPersistentContainer.applicationGroupIdentifier, let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: identifier) {
+			return url
+		}
+		
+		return super.defaultDirectoryURL()
+	}
+}
+
+@available(OSXApplicationExtension 10.12, *)
+@available(iOSApplicationExtension 10.0, *)
+
 open class SyncedContainer {
 	public enum State: Int { case offline, ready, synchronizing }
 	
@@ -45,8 +61,9 @@ open class SyncedContainer {
 	
 	var queue = DispatchQueue(label: "SyncedContainerQueue")
 	
-	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main) {
-		self.container = NSPersistentContainer(name: name, managedObjectModel: model ?? NSManagedObjectModel(contentsOf: bundle.url(forResource: name, withExtension: "momd")!)!)
+	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil) {
+		AppGroupPersistentContainer.applicationGroupIdentifier = appGroupIdentifier
+		self.container = AppGroupPersistentContainer(name: name, managedObjectModel: model ?? NSManagedObjectModel(contentsOf: bundle.url(forResource: name, withExtension: "momd")!)!)
 		Stormy.instance.recordIDTypeSeparator = "/"
 		self.queue.suspend()
 		self.container.loadPersistentStores { desc, error in
@@ -63,7 +80,7 @@ open class SyncedContainer {
 		self.syncedObjects[entityName] = EntityInfo(entity: entity, zoneName: zoneName, database: database)
 	}
 	
-	public func setupCloud(identifier: String, includingSubscriptions: Bool = true, completion: (() -> Void)? = nil) {
+	public func setupCloud(identifier: String, includingSubscriptions: Bool = true, andConnect: Bool = true, completion: (() -> Void)? = nil) {
 		assert(self.syncedObjects.count > 0, "Please register entities before setting up the cloud identifier.")
 
 		let syncCompletion = {
@@ -78,7 +95,7 @@ open class SyncedContainer {
 		self.queue.async {
 			self.zoneNames = Array(Set(self.syncedObjects.values.compactMap({ $0.zoneName })))
 			
-			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames)
+			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames, andConnect: andConnect)
 			Stormy.instance.queue {
 				if includingSubscriptions {
 					#if os(iOS)

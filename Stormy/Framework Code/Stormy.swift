@@ -68,7 +68,7 @@ public class Stormy {
 		#endif
 	}
 	
-	public func setup(identifier: String, zones: [String] = []) {
+	public func setup(identifier: String, zones: [String] = [], andConnect connectNow: Bool = true) {
 		self.containerIdentifer = identifier
 
 		self.container = CKContainer(identifier: self.containerIdentifer)
@@ -81,6 +81,11 @@ public class Stormy {
 		self.container.accountStatus { status, error in
 			switch status {
 			case .available:
+				if !connectNow {
+					Stormy.instance.authenticationState = .authenticated
+					self.flushQueue()
+					return
+				}
 				self.setupZones(names: zones) { _ in
 					self.container.fetchUserRecordID() { id, err in
 						if id != self.userRecordID {
