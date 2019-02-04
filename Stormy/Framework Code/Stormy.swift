@@ -28,7 +28,7 @@ public class Stormy {
 	public var sharedDatabase: CKDatabase?
 	public var containerIdentifer: String!
 	public var authenticationState = AuthenticationState.notLoggedIn { didSet {
-		if (self.authenticationState == .authenticated) != (oldValue == .authenticated) {
+		if self.authenticationState != oldValue, (self.authenticationState == .authenticated || self.authenticationState == .denied) {
 			NotificationCenter.default.post(name: Notifications.availabilityChanged, object: nil)
 		}
 	}}
