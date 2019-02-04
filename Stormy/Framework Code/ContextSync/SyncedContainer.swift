@@ -95,7 +95,7 @@ open class SyncedContainer {
 		self.queue.async {
 			self.zoneNames = Array(Set(self.syncedObjects.values.compactMap({ $0.zoneName })))
 			
-			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames, andConnect: andConnect)
+			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames, andConnect: andConnect) 
 			Stormy.instance.queue {
 				if includingSubscriptions {
 					#if os(iOS)

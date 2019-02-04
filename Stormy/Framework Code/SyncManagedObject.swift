@@ -23,7 +23,7 @@ public protocol CloudLoadableManagedObject: class {
 @available(OSXApplicationExtension 10.12, *)
 extension SyncManagedObject where Self: NSManagedObject {
 	static public func syncChanges(zone: CKRecordZone?, database: DatabaseType, in container: NSPersistentContainer, completion: ((Error?) -> Void)? = nil) {
-		if !Stormy.instance.available { completion?(Stormy.StormyError.notSignedIn); return }
+		if !Stormy.instance.isAvailable { completion?(Stormy.StormyError.notSignedIn); return }
 		let tokenData = UserDefaults.standard.data(forKey: self.changeTokenSettingsKey)
 		Stormy.instance.fetchChanges(in: zone, database: database, since: tokenData, fetching: nil) { changes, error in
 			UserDefaults.standard.set(changes?.tokenData, forKey: self.changeTokenSettingsKey)
@@ -82,7 +82,7 @@ extension SyncManagedObject where Self: NSManagedObject {
 	}
 	
 	public func saveToCloud(completion: ((Error?) -> Void)?) {
-		if !Stormy.instance.available { completion?(Stormy.StormyError.notSignedIn); return }
+		if !Stormy.instance.isAvailable { completion?(Stormy.StormyError.notSignedIn); return }
 		let cache = DatabaseType.private.cache.fetch(type: self.entity.name!, id: self.recordID)
 		self.populate(cacheRecord: cache)
 		cache.reloadFromServer(andThenSave: true, completion: completion)

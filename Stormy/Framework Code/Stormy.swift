@@ -32,8 +32,8 @@ public class Stormy {
 			NotificationCenter.default.post(name: Notifications.availabilityChanged, object: nil)
 		}
 	}}
-	public var available: Bool { return self.authenticationState == .authenticated }
-	public var unavailable: Bool { return self.authenticationState == .denied || self.authenticationState == .tokenFailed }
+	public var isAvailable: Bool { return self.authenticationState == .authenticated }
+	public var isUnavailable: Bool { return self.authenticationState == .denied || self.authenticationState == .tokenFailed }
 	public var enabled = false
 	public var autoFetchZones = true
 	public var recordZones: [CKRecordZone] = []
@@ -102,6 +102,7 @@ public class Stormy {
 			case .noAccount, .restricted:
 				self.authenticationState = .denied
 				print("No CloudKit Access.")
+				self.flushQueue()
 			}
 		}
 	}
@@ -167,7 +168,7 @@ public class Stormy {
 	}
 	
 	public func queue(operation: Operation, in type: DatabaseType = .public) {
-		if self.available {
+		if self.isAvailable {
 			if let ckdOp = operation as? CKDatabaseOperation {
 				self.database(type)?.add(ckdOp)
 			} else if let ckOp = operation as? CKOperation {
@@ -175,6 +176,8 @@ public class Stormy {
 			} else {
 				OperationQueue.main.addOperation(operation)
 			}
+		} else if self.isUnavailable {
+			operation.start()
 		} else {
 			self.operationSemaphore.wait()
 			self.queuedOperations.append((type, operation))
