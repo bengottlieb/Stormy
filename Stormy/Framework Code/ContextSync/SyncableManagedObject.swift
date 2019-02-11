@@ -98,14 +98,16 @@ extension SyncableManagedObject {
 		self.willSync(withCache: cache)
 
 		cache.reloadFromServer { error in
-			self.load(into: cache)
-			cache.save() { error in
-				if let err = error {
-					print("Error: \(err)")
-				} else {
-					SyncedContainer.instance.markRecordID(id, inProgress: false)
+			self.managedObjectContext?.perform {
+				self.load(into: cache)
+				cache.save() { error in
+					if let err = error {
+						print("Error: \(err)")
+					} else {
+						SyncedContainer.instance.markRecordID(id, inProgress: false)
+					}
+					completion?(error)
 				}
-				completion?(error)
 			}
 		}
 	}
