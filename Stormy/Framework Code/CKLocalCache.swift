@@ -66,6 +66,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	open var isDirty: Bool { return self.changedKeys.count > 0 || childrenChanged }
 	open var existsOnServer: Bool { return self.originalRecord != nil }
 	public var isLoaded = false
+	public var syncState = CKLocalCache.SyncState.upToDate
 	
 	private var childrenChanged = false
 	public private(set) var parent: CKLocalCache?
@@ -134,7 +135,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		
 		if !self.isDirty { completion?(nil); return }
 		
-		let caches = [self] + self.decendents
+		let caches = [self] + self.decendents.filter { $0.syncState != .upToDate }
 		let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { $0.isDirty ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
 		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in

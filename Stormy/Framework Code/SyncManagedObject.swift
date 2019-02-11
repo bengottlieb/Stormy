@@ -10,9 +10,17 @@ import Foundation
 import CoreData
 import CloudKit
 
+extension CKLocalCache {
+	public enum SyncState: Int { case upToDate, dirty, syncing }
+	public static var syncStateAttributeName = "syncState_"
+}
+
+@available(iOSApplicationExtension 10.0, *)
+@available(OSXApplicationExtension 10.12, *)
 public protocol SyncManagedObject: CloudLoadableManagedObject {
 	static var changeTokenSettingsKey: String { get }				// we'll store our server change token here
 	static var zone: CKRecordZone? { get }
+	static var syncState: CKLocalCache.SyncState { get set }
 }
 
 public protocol CloudLoadableManagedObject: class {
@@ -22,6 +30,7 @@ public protocol CloudLoadableManagedObject: class {
 @available(iOSApplicationExtension 10.0, *)
 @available(OSXApplicationExtension 10.12, *)
 extension SyncManagedObject where Self: NSManagedObject {
+	
 	static public func syncChanges(zone: CKRecordZone?, database: DatabaseType, in container: NSPersistentContainer, completion: ((Error?) -> Void)? = nil) {
 		if !Stormy.instance.isAvailable { completion?(Stormy.StormyError.notSignedIn); return }
 		let tokenData = UserDefaults.standard.data(forKey: self.changeTokenSettingsKey)

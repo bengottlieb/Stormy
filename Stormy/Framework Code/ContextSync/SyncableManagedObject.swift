@@ -53,7 +53,17 @@ open class SyncableManagedObject: NSManagedObject {
 @available(iOSApplicationExtension 10.0, *)
 @available(OSXApplicationExtension 10.12, *)
 extension SyncableManagedObject {
-	
+	var syncState: CKLocalCache.SyncState {
+		get {
+			let raw = self.value(forKey: CKLocalCache.syncStateAttributeName) as? Int ?? 0
+			return CKLocalCache.SyncState(rawValue: raw) ?? .upToDate
+		}
+		
+		set {
+			self.setValue(newValue.rawValue, forKey: CKLocalCache.syncStateAttributeName)
+		}
+	}
+
 	class RelationshipGraph {
 		var consideredObjects: [SyncableManagedObject] = []
 		
@@ -89,6 +99,7 @@ extension SyncableManagedObject {
 	public func sync(completion: ((Error?) -> Void)? = nil) {
 		let id = self.recordID
 		SyncedContainer.instance.markRecordID(id, inProgress: true)
+		self.syncState = .syncing
 		try? self.managedObjectContext?.save()
 		let cache = self.localCache
 		
@@ -101,12 +112,19 @@ extension SyncableManagedObject {
 			self.managedObjectContext?.perform {
 				self.load(into: cache)
 				cache.save() { error in
-					if let err = error {
-						print("Error: \(err)")
-					} else {
-						SyncedContainer.instance.markRecordID(id, inProgress: false)
+					self.managedObjectContext?.perform {
+						if let err = error {
+							print("Error: \(err)")
+						} else {
+							for record in graph.consideredObjects {
+								record.syncState = .upToDate
+							}
+							self.syncState = .upToDate
+							try? self.managedObjectContext?.save()
+							SyncedContainer.instance.markRecordID(id, inProgress: false)
+						}
+						completion?(error)
 					}
-					completion?(error)
 				}
 			}
 		}
@@ -157,6 +175,8 @@ extension SyncableManagedObject {
 				record[field] = self.value(forKey: field) as? CKRecordValue
 			}
 		}
+		
+		record.syncState = self.syncState
 		record.isLoaded = true
 	}
 	
