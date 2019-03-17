@@ -47,6 +47,33 @@ open class SyncableManagedObject: NSManagedObject {
 	
 	open func isDeviceOnlyAttribute(_ attr: NSAttributeDescription) -> Bool { return attr.name.hasPrefix(SyncableManagedObject.devicePrefix) }
 
+	open func read(from record: CKLocalCache) {
+		for field in self.syncableFieldNames {
+			let value = record[field]
+
+			if let url = value as? URL {
+				do {
+					let data = try Data(contentsOf: url)
+					self.setValue(data, forKey: field)
+				} catch {
+					print("Problem reading a \(field) from a temporary file: \(error)")
+				}
+			} else {
+				self.setValue(value, forKey: field)
+			}
+		}
+		self.uniqueID = record.recordID.recordID ?? record.recordID.recordName
+		if let parent = record.parent { self.loadParent(from: parent) }
+	}
+
+	open func loadParent(from record: CKLocalCache) {
+		guard let moc = self.managedObjectContext, let existing = record.object(in: moc) else { return }
+		for (_, relationship) in self.entity.relationshipsByName {
+			if relationship.destinationEntity == existing.entity, !relationship.isToMany  {
+				self.setValue(existing, forKey: relationship.name)
+			}
+		}
+	}
 }
 
 
@@ -178,23 +205,5 @@ extension SyncableManagedObject {
 		
 		record.syncState = self.syncState
 		record.isLoaded = true
-	}
-	
-	open func read(from record: CKLocalCache) {
-		for field in self.syncableFieldNames {
-			let value = record[field]
-			
-			if let url = value as? URL {
-				do {
-					let data = try Data(contentsOf: url)
-					self.setValue(data, forKey: field)
-				} catch {
-					print("Problem reading a \(field) from a temporary file: \(error)")
-				}
-			} else {
-				self.setValue(value, forKey: field)
-			}
-		}
-		self.uniqueID = record.recordID.recordID ?? record.recordID.recordName
 	}
 }
