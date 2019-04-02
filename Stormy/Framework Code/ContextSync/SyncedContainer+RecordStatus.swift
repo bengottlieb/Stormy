@@ -78,7 +78,7 @@ extension SyncedContainer {
 			if current.contains(id) { return }
 			current.append(id)
 			self.syncPendingRecordNames = current
-		} else if let index = current.index(of: id) {
+		} else if let index = current.firstIndex(of: id) {
 			current.remove(at: index)
 			self.syncPendingRecordNames = current
 		}

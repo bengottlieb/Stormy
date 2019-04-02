@@ -13,7 +13,7 @@ import CloudKit
 
 @available(iOSApplicationExtension 10.0, *)
 @available(OSXApplicationExtension 10.12, *)
-open class SyncableManagedObject: NSManagedObject {
+@objc open class SyncableManagedObject: NSManagedObject {
 	public static var cloudRecordIDField = "cloudRecordID"
 	public static let devicePrefix = "device_"							// fields prefixed with this will not be synced to iCloud
 

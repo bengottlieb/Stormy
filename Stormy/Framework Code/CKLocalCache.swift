@@ -163,7 +163,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 			record.children.append(self)
 			record.childrenChanged = true
 		} else {
-			if let index = self.parent?.children.index(of: self) {
+			if let index = self.parent?.children.firstIndex(of: self) {
 				self.parent?.children.remove(at: index)
 			}
 			self.parent = nil
@@ -278,7 +278,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		if let left = lhs as? Int, let right = rhs as? Int { return left == right }
 		if let left = lhs as? Double, let right = rhs as? Double { return left == right }
 		if let left = lhs as? CKRecord.Reference, let right = rhs as? CKRecord.Reference { return left == right }
-		if let left = lhs as? CKAsset, let right = rhs as? CKAsset { return left.fileURL.isSameFile(as: right.fileURL) }
+		if let left = lhs as? CKAsset, let leftURL = left.fileURL, let right = rhs as? CKAsset, let rightURL = right.fileURL { return leftURL.isSameFile(as: rightURL) }
 		if let left = lhs as? CLLocation, let right = rhs as? CLLocation { return left == right }
 		if let left = lhs as? [CKRecordValue], let right = rhs as? [CKRecordValue] {
 			if left.count != right.count { return false }

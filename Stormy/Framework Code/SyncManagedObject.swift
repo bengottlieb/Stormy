@@ -139,6 +139,7 @@ extension CloudLoadableManagedObject where Self: NSManagedObject {
 		case .URIAttributeType: if let val = value as? URL { self.setValue(val, forKey: attr.name) }
 		case .transformableAttributeType: self.setValue(value, forKey: attr.name)
 		case .objectIDAttributeType: break
+		default: break
 		}
 	}
 }

@@ -99,7 +99,8 @@ public class Stormy {
 				}
 				
 			case .couldNotDetermine: fallthrough
-			case .noAccount, .restricted:
+			case .noAccount, .restricted: fallthrough
+			default:
 				self.authenticationState = .denied
 				print("No CloudKit Access.")
 				self.flushQueue()
