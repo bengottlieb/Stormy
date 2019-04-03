@@ -138,7 +138,7 @@ extension SyncableManagedObject {
 		cache.reloadFromServer { error in
 			self.managedObjectContext?.perform {
 				self.load(into: cache)
-				cache.save() { error in
+                cache.save(reloadingFirst: false) { error in
 					self.managedObjectContext?.perform {
 						if let err = error {
 							print("Error: \(err)")
@@ -186,7 +186,7 @@ extension SyncableManagedObject {
 		return baseURL.appendingPathComponent(filename)
 	}
 	
-	open func load(into record: CKLocalCache) {
+	@discardableResult open func load(into record: CKLocalCache) -> CKLocalCache {
 		let attributes = self.entity.attributesByName
 		
 		for field in self.syncableFieldNames {
@@ -205,5 +205,6 @@ extension SyncableManagedObject {
 		
 		record.syncState = self.syncState
 		record.isLoaded = true
+        return record
 	}
 }
