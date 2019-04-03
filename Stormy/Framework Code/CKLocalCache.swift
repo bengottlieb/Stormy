@@ -135,7 +135,9 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		
 		if !self.isDirty { completion?(nil); return }
 		
-		let caches = [self] + self.decendents.filter { $0.syncState != .upToDate }
+		let allCaches = [self] + self.decendents.filter { $0.syncState != .upToDate }
+        let caches = allCaches.byRemovingDuplicates()
+        
 		let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { $0.isDirty ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
 		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
@@ -293,3 +295,14 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	}
 }
 
+extension Array where Element: Equatable {
+    func byRemovingDuplicates() -> [Element] {
+        var results: [Element] = []
+        
+        for item in self {
+            if !results.contains(item) { results.append(item) }
+        }
+        
+        return results
+    }
+}
