@@ -15,6 +15,7 @@ import CloudKit
 @available(OSXApplicationExtension 10.12, *)
 @objc open class SyncableManagedObject: NSManagedObject {
 	public static var cloudRecordIDField = "cloudRecordID"
+	public static var syncStateAttributeName = "syncState_"
 	public static let devicePrefix = "device_"							// fields prefixed with this will not be synced to iCloud
 
 	open var cloudRecordType: String { return self.entity.name! }
@@ -82,12 +83,12 @@ import CloudKit
 extension SyncableManagedObject {
 	var syncState: CKLocalCache.SyncState {
 		get {
-			let raw = self.value(forKey: CKLocalCache.syncStateAttributeName) as? Int ?? 0
+			let raw = self.value(forKey: SyncableManagedObject.syncStateAttributeName) as? Int ?? 0
 			return CKLocalCache.SyncState(rawValue: raw) ?? .upToDate
 		}
 		
 		set {
-			self.setValue(newValue.rawValue, forKey: CKLocalCache.syncStateAttributeName)
+			self.setValue(newValue.rawValue, forKey: SyncableManagedObject.syncStateAttributeName)
 		}
 	}
 
@@ -97,6 +98,12 @@ extension SyncableManagedObject {
 		func append(_ object: SyncableManagedObject) {
 			self.consideredObjects.append(object)
 		}
+
+		func prune() {
+			self.consideredObjects = self.consideredObjects.filter { $0.syncState == .dirty }
+		}
+
+		var count: Int { return self.consideredObjects.count }
 	}
 
 	public var recordID: CKRecord.ID {
@@ -126,12 +133,18 @@ extension SyncableManagedObject {
 	public func sync(completion: ((Error?) -> Void)? = nil) {
 		let id = self.recordID
 		SyncedContainer.instance.markRecordID(id, inProgress: true)
-		self.syncState = .syncing
+		self.syncState = .dirty
 		try? self.managedObjectContext?.save()
 		let cache = self.localCache
 		
 		let graph = RelationshipGraph()
 		self.connectCachedRelationships(withGraph: graph)
+		graph.prune()
+
+		if graph.count == 0 {
+			completion?(nil)
+			return
+		}
 		
 		self.willSync(withCache: cache)
 
@@ -141,7 +154,7 @@ extension SyncableManagedObject {
                 cache.save(reloadingFirst: false) { error in
 					self.managedObjectContext?.perform {
 						if let err = error {
-							print("Error: \(err)")
+							print("Error when syncing a record (\(self): \(err)")
 						} else {
 							for record in graph.consideredObjects {
 								record.syncState = .upToDate
@@ -175,7 +188,7 @@ extension SyncableManagedObject {
 	
 	open var syncableFieldNames: [String] {
 		return self.entity.attributesByName.values.compactMap { attr in
-			if self.isDeviceOnlyAttribute(attr) || attr.name == SyncableManagedObject.cloudRecordIDField { return nil }
+			if self.isDeviceOnlyAttribute(attr) || attr.name == SyncableManagedObject.cloudRecordIDField || attr.name == SyncableManagedObject.syncStateAttributeName { return nil }
 			return attr.name
 		}
 	}

@@ -12,7 +12,6 @@ import CloudKit
 
 extension CKLocalCache {
 	public enum SyncState: Int { case upToDate, dirty, syncing }
-	public static var syncStateAttributeName = "syncState_"
 }
 
 @available(iOSApplicationExtension 10.0, *)
