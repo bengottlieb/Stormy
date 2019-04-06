@@ -15,9 +15,8 @@ import CloudKit
 @available(iOSApplicationExtension 10.0, *)
 extension SyncedContainer {
 	public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
-		if let note = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo) {
-			print("Received note: \(note)")
-		}
+		print("Received note: \(CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo).description)")
+
 		self.pullChanges()
 		completionHandler(.newData)
 		return true
