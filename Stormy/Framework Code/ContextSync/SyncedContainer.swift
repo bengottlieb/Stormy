@@ -206,6 +206,7 @@ extension NSManagedObjectContext {
 
 		let new = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self) as! SyncableManagedObject
 		
+        if let uniqueID = id.recordID { new.uniqueID = uniqueID }
 		return new
 	}
 }
