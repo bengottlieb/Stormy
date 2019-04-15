@@ -134,7 +134,7 @@ extension SyncableManagedObject {
 		let id = self.recordID
 		SyncedContainer.instance.markRecordID(id, inProgress: true)
 		self.syncState = .dirty
-		try? self.managedObjectContext?.save()
+		((try? self.managedObjectContext?.save()) as ()??)
 		let cache = self.localCache
 		
 		let graph = RelationshipGraph()
@@ -160,7 +160,7 @@ extension SyncableManagedObject {
 								record.syncState = .upToDate
 							}
 							self.syncState = .upToDate
-							try? self.managedObjectContext?.save()
+							((try? self.managedObjectContext?.save()) as ()??)
 							SyncedContainer.instance.markRecordID(id, inProgress: false)
 						}
 						completion?(error)
