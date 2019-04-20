@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		Stormy.instance.queue {
-			print("Stormy.instance.userRecordID: \(Stormy.instance.userRecordID!)")
+			print("Stormy.instance.userRecordID: \(Stormy.instance.userRecordID?.description ?? "--")")
 		}
 		
 		//		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in

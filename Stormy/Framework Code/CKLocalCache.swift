@@ -127,18 +127,18 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		return decendents
 	}
 	
-	open func save(reloadingFirst: Bool = true, completion: ((Error?) -> Void)? = nil) {
+	open func save(reloadingFirst: Bool = true, evenIfNotDirty: Bool = false, completion: ((Error?) -> Void)? = nil) {
 		if reloadingFirst, self.existsOnServer {
 			self.reloadFromServer(andThenSave: true, completion: completion)
 			return
 		}
 		
-		if !self.isDirty { completion?(nil); return }
+		if !self.isDirty, !evenIfNotDirty { completion?(nil); return }
 		
 		let allCaches = [self] + self.decendents.filter { $0.syncState != .upToDate }
         let caches = allCaches.byRemovingDuplicates()
         
-		let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { $0.isDirty ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
+		let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { ($0.isDirty || evenIfNotDirty) ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
 		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
 			if Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) {
@@ -149,7 +149,8 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 				self.reloadFromServer(andThenSave: true, completion: completion)
 			} else {
 				for record in caches {
-					record.didSave()
+					let remote = saved?.first(where: { $0.recordID == record.recordID })
+					record.didSave(to: remote)
 				}
 				completion?(error?.rootCKError(for: self.recordID) ?? error)
 				Stormy.instance.completeLongRunningTask()

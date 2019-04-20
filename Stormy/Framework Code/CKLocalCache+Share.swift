@@ -39,6 +39,36 @@ extension Stormy {
 
 @available(OSXApplicationExtension 10.12, iOS 10.0, *)
 extension CKLocalCache {
+	public func fetchShareURL(with completion: @escaping (URL?, Error?) -> Void) {
+		if self.database != .private { completion(nil, Stormy.StormyError.sharesMustBePrivate); return }
+		if self.recordZone == nil { completion(nil, Stormy.StormyError.sharesMustHaveNonDefaultZone); return }
+
+		guard let record = self.originalRecord else {
+			self.save(evenIfNotDirty: true) { error in
+				if error != nil || !self.existsOnServer {
+					completion(nil, error)
+				} else {
+					self.fetchShareURL(with: completion)
+				}
+			}
+			return
+		}
+
+		let share = CKShare(rootRecord: record)
+
+		Stormy.instance.startLongRunningTask()
+
+		let op = CKModifyRecordsOperation(recordsToSave: [share, record], recordIDsToDelete: nil)
+		op.modifyRecordsCompletionBlock = { records, ids, error in
+			if Stormy.shouldReturn(after: error, operation: op, completion: { err in completion(nil, err) }) { return }
+			completion(share.url, error)
+			Stormy.instance.completeLongRunningTask()
+		}
+		Stormy.instance.queue(operation: op, in: .private)
+
+
+	}
+
 	public func share(with userID: CKRecord.ID, completion: ((URL?, Error?) -> Void)? = nil) {
 		if self.database != .private { completion?(nil, Stormy.StormyError.sharesMustBePrivate); return }
 		if self.recordZone == nil { completion?(nil, Stormy.StormyError.sharesMustHaveNonDefaultZone); return }

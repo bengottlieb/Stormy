@@ -26,11 +26,22 @@ class ViewController: UIViewController {
 	}
 
 	var record = DatabaseType.public.cache.fetch(type: "TEST_RECORD", id: CKRecord.ID(recordName: "EDITING RECORD"))
-	
+	lazy var privateRecord: CKLocalCache = { DatabaseType.private.cache.fetch(type: "TEST_PRIVATE_RECORD", id: CKRecord.ID(recordName: "EDITING_PRIVATE RECORD", zoneID: Stormy.instance.recordZones.first!.zoneID)) }()
+
 	@IBAction func editRecord() {
 		self.record.reloadFromServer(andThenSave: true) { err in
 			if let error = err {
 				print("Error when fetching record: \(error)")
+			}
+		}
+	}
+
+	@IBAction func shareRecord() {
+		self.privateRecord.fetchShareURL { url, error in
+			if let url = url {
+				print("Fetched share URL: \(url)")
+			} else if let err = error {
+				print("Error when fetching share URL: \(err)")
 			}
 		}
 	}
