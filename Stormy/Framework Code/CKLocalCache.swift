@@ -248,7 +248,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	open subscript(_ key: String) -> Any? {
 		get {
 			let value = self.changedKeys.contains(key) ? self.changedValues[key] : self.originalRecord?[key]
-			if let asset = value as? CKAsset { return asset.fileURL! }
+			if let asset = value as? CKAsset { return asset.fileURL }
 			return value
 		}
 		set {
@@ -281,7 +281,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		if let left = lhs as? Int, let right = rhs as? Int { return left == right }
 		if let left = lhs as? Double, let right = rhs as? Double { return left == right }
 		if let left = lhs as? CKRecord.Reference, let right = rhs as? CKRecord.Reference { return left == right }
-		if let left = (lhs as? CKAsset)?.fileURL!, let right = (rhs as? CKAsset)?.fileURL! { return left.isSameFile(as: right) }
+		if let left = (lhs as? CKAsset)?.fileURL, let right = (rhs as? CKAsset)?.fileURL { return left.isSameFile(as: right) }
 		if let left = lhs as? CLLocation, let right = rhs as? CLLocation { return left == right }
 		if let left = lhs as? [CKRecordValue], let right = rhs as? [CKRecordValue] {
 			if left.count != right.count { return false }
