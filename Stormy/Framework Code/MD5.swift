@@ -239,7 +239,9 @@ extension Data {
 	
 	public var md5Digest: [UInt8] {
 		return self.withUnsafeBytes { raw in
-			let pointer = raw.load(as: UnsafePointer<UInt8>.self)
+			guard let pointer = raw.baseAddress?.assumingMemoryBound(to: UInt8.self) else { return [] }
+
+			//let pointer = raw.load(as: UnsafePointer<UInt8>.self)
 			let buffer = UnsafeBufferPointer(start: pointer, count: self.count)
 			let digest = generateMD5(Array(buffer))
 			return digest.digest
