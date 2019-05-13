@@ -42,6 +42,11 @@ open class SyncedContainer {
 	public var syncedObjects: [String: EntityInfo] = [:]
 	public var defaultDatabaseType = DatabaseType.private
 
+	public var isInExtension: Bool {
+		let extensionDictionary = Bundle.main.infoDictionary?["NSExtension"]
+		return extensionDictionary is NSDictionary
+	}
+
 	public struct EntityInfo {
 		let type: SyncableManagedObject.Type
 		var zoneName: String?
@@ -88,6 +93,12 @@ open class SyncedContainer {
 			self.pullChanges() {
 				self.checkForUnsyncedObjects()
 				completion?()
+			if !self.isInExtension {
+				self.pullChanges() {
+					DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerInitialSyncComplete, object: self) }
+					self.checkForUnsyncedObjects()
+					completion?()
+				}
 			}
 		}
 		
