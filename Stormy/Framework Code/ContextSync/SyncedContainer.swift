@@ -62,6 +62,8 @@ open class SyncedContainer {
 	
 	public struct Notifications {
 		public static let containerStateChanged = Notification.Name("containerStateChanged")
+		public static let containerInitialSetupComplete = Notification.Name("initialSetupComplete")
+		public static let containerInitialSyncComplete = Notification.Name("initialSyncComplete")
 	}
 	
 	var queue = DispatchQueue(label: "SyncedContainerQueue")
@@ -90,9 +92,7 @@ open class SyncedContainer {
 
 		let syncCompletion = {
 			self.state = .ready
-			self.pullChanges() {
-				self.checkForUnsyncedObjects()
-				completion?()
+			DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerInitialSetupComplete, object: self) }
 			if !self.isInExtension {
 				self.pullChanges() {
 					DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerInitialSyncComplete, object: self) }
@@ -112,7 +112,9 @@ open class SyncedContainer {
 					#if os(iOS)
 						var dbs: Set<DatabaseType> = []
 						for obj in self.syncedObjects.values { dbs.insert(obj.database) }
-						self.setupSubscriptions(on: Array(dbs)) { error in syncCompletion() }
+						self.setupSubscriptions(on: Array(dbs)) { error in
+							syncCompletion()
+					}
 					#endif
 				} else {
 					syncCompletion()
@@ -122,7 +124,7 @@ open class SyncedContainer {
 	}
 	
 	func notifyAboutStateChange() {
-		NotificationCenter.default.post(name: Notifications.containerStateChanged, object: self)
+		DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerStateChanged, object: self) }
 	}
 	
 	func pullChanges(completion: (() -> Void)? = nil) {
