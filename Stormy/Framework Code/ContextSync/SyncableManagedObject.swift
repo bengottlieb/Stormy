@@ -54,7 +54,7 @@ import CloudKit
 
 			if let url = value as? URL {
 				do {
-					let data = try Data(contentsOf: url)
+					let data = try Data(contentsOf: url, options: [.mappedRead])
 					self.setValue(data, forKey: field)
 				} catch {
 					print("Problem reading a \(field) from a temporary file: \(error)")
