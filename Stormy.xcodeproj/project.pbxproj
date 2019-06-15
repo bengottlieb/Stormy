@@ -59,6 +59,7 @@
 		B54A9B6D2125B418008E646E /* iOSTestingHarnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54A9B6C2125B418008E646E /* iOSTestingHarnessUITests.swift */; };
 		B54A9B782125B444008E646E /* Stormy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* Stormy.framework */; };
 		B54A9B7C2125B45B008E646E /* Stormy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* Stormy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B54B229222B563D900D44FD7 /* SyncedContainer+Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5446E8621A3813A002D9379 /* SyncedContainer+Subscriptions.swift */; };
 		B5897EDA215189D30086B481 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5897ED9215189D30086B481 /* CloudKit.framework */; };
 		B58D64791A898F89005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D64681A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B58D64961A899285005A0002 /* Stormy.h in Headers */ = {isa = PBXBuildFile; fileRef = B58D646B1A898F81005A0002 /* Stormy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -489,7 +490,7 @@
 					B504E6AE1A898110001B414B = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = YY6CWUX533;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					B54A9B492125B417008E646E = {
@@ -648,6 +649,7 @@
 				B527C295214DEE6000D250A0 /* CKLocalCache+Share.swift in Sources */,
 				B527C299214DEE6000D250A0 /* CKError+Stormy.swift in Sources */,
 				B527C293214DEE6000D250A0 /* Stormy+Subscriptions.swift in Sources */,
+				B54B229222B563D900D44FD7 /* SyncedContainer+Subscriptions.swift in Sources */,
 				B5F0AD1F2169921C00A25B05 /* SyncManagedObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -929,6 +931,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -959,6 +962,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

@@ -9,6 +9,10 @@
 import Foundation
 import CloudKit
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public class Stormy {
 	public struct Notifications {
 		static public let availabilityChanged = Notification.Name("stormyAvailabilityChanged")
