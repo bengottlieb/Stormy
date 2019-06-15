@@ -9,8 +9,7 @@
 import Foundation
 import CloudKit
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension CKRecord.ID {
 	var databaseType: DatabaseType? {
 		guard let name = self.typeName else { return nil }
@@ -33,8 +32,7 @@ extension CKRecord.ID {
 	}
 }
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension SyncedContainer {
 	static let pendingRecordNamesKey = "syncPendingRecordNames"
 	

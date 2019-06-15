@@ -74,7 +74,7 @@ public class Stormy {
 		self.container = CKContainer(identifier: self.containerIdentifer)
 		self.publicDatabase = self.container.publicCloudDatabase
 		self.privateDatabase = self.container.privateCloudDatabase
-		if #available(OSXApplicationExtension 10.12, iOS 10.0, *) { self.sharedDatabase = self.container.sharedCloudDatabase }
+		if #available(OSX 10.12, iOS 10.0, *) { self.sharedDatabase = self.container.sharedCloudDatabase }
 
 		if self.authenticationState != .notLoggedIn && self.authenticationState != .tokenFailed { return }
 		self.authenticationState = .signingIn

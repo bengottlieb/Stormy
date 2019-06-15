@@ -9,7 +9,7 @@
 import Foundation
 import CloudKit
 
-@available(OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
 extension Stormy {
 	public func acceptShare(url: URL?, completion: ((Error?) -> Void)?) {
 		guard let url = url else { completion?(Stormy.StormyError.shareMissingURL); return }
@@ -37,7 +37,7 @@ extension Stormy {
 	}
 }
 
-@available(OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
 extension CKLocalCache {
 	public func fetchShareURL(with completion: @escaping (URL?, Error?) -> Void) {
 		if self.database != .private { completion(nil, Stormy.StormyError.sharesMustBePrivate); return }

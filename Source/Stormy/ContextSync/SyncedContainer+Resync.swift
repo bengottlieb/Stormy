@@ -10,8 +10,7 @@ import Foundation
 import CloudKit
 import CoreData
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension SyncedContainer {
 	public func syncRecords(with ids: [CKRecord.ID], in database: DatabaseType, completion: @escaping (Error?) -> Void) {
 		let queue = DispatchQueue(label: "fetchGroup")

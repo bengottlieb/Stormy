@@ -10,9 +10,7 @@ import Foundation
 import CoreData
 import CloudKit
 
-@available(OSXApplicationExtension 10.12, *)
-@available(iOSApplicationExtension 10.0, *)
-
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 open class AppGroupPersistentContainer: NSPersistentContainer {
 	static var applicationGroupIdentifier: String?
 
@@ -25,9 +23,7 @@ open class AppGroupPersistentContainer: NSPersistentContainer {
 	}
 }
 
-@available(OSXApplicationExtension 10.12, *)
-@available(iOSApplicationExtension 10.0, *)
-
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 open class SyncedContainer {
 	public enum State: Int { case offline, ready, synchronizing }
 	
@@ -182,8 +178,7 @@ open class SyncedContainer {
 	}
 }
 
-@available(OSXApplicationExtension 10.12, *)
-@available(iOSApplicationExtension 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension CKLocalCache {
 	public func object(in moc: NSManagedObjectContext) -> SyncableManagedObject? {
 		if let type = self.typeName { return moc.object(ofType: type, withID: self.recordID) }
@@ -196,8 +191,7 @@ extension CKLocalCache {
 	}
 }
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension NSManagedObjectContext {
 	public func lookupObject(ofType entityName: String, withID id: CKRecord.ID) -> SyncableManagedObject? {
 		let entity = SyncedContainer.instance.syncedObjects[entityName]?.type
@@ -224,8 +218,7 @@ extension NSManagedObjectContext {
 	}
 }
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension String {
 	var zoneChangeToken: String {
 		return SyncedContainer.defaultsPrefix + "changeToken-\(self)"

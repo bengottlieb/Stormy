@@ -14,8 +14,7 @@ extension CKLocalCache {
 	public enum SyncState: Int { case upToDate, dirty, syncing }
 }
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 public protocol SyncManagedObject: CloudLoadableManagedObject {
 	static var changeTokenSettingsKey: String { get }				// we'll store our server change token here
 	static var zone: CKRecordZone? { get }
@@ -26,8 +25,7 @@ public protocol CloudLoadableManagedObject: class {
 	static var recordIDField: String { get }						// we'll use this value to echo a record's recordID
 }
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension SyncManagedObject where Self: NSManagedObject {
 	
 	static public func syncChanges(zone: CKRecordZone?, database: DatabaseType, in container: NSPersistentContainer, completion: ((Error?) -> Void)? = nil) {
@@ -97,8 +95,7 @@ extension SyncManagedObject where Self: NSManagedObject {
 	}
 }
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension CloudLoadableManagedObject where Self: NSManagedObject {
 	public static func insert(into moc: NSManagedObjectContext) -> Self? {
 		let entityName = self.entity().name!

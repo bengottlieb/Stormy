@@ -13,7 +13,7 @@ import CloudKit
 #endif
 
 
-@available(OSXApplicationExtension 10.12, iOSApplicationExtension 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOSApplicationExtension 10.0, *)
 extension Stormy {
 	
 	func subscriptionID(in dbType: DatabaseType, on recordName: CKRecord.RecordType?, forZone: CKRecordZone? = nil) -> String? {

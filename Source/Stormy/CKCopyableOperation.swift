@@ -55,10 +55,10 @@ extension CKModifyRecordZonesOperation: CKCopyableOperation {
 	}
 }
 
-@available(OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
 extension CKFetchRecordZoneChangesOperation: CKCopyableOperation {
 	func copy() -> CKOperation? {
-		if #available(OSXApplicationExtension 10.14, iOS 12.0, *) {
+		if #available(OSX 10.14, iOS 12.0, *) {
 			let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: self.recordZoneIDs ?? [], configurationsByRecordZoneID:  self.configurationsByRecordZoneID)
 			
 			op.fetchRecordZoneChangesCompletionBlock = self.fetchRecordZoneChangesCompletionBlock
@@ -130,7 +130,7 @@ extension CKModifyRecordsOperation: CKCopyableOperation {
 	}
 }
 
-@available(OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
 extension CKFetchShareMetadataOperation: CKCopyableOperation {
 	func copy() -> CKOperation? {
 		guard let urls = self.shareURLs else { return nil }
@@ -145,7 +145,7 @@ extension CKFetchShareMetadataOperation: CKCopyableOperation {
 	}
 }
 
-@available(OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
 extension CKAcceptSharesOperation: CKCopyableOperation {
 	func copy() -> CKOperation? {
 		guard let metadatas = self.shareMetadatas else { return nil }
@@ -157,7 +157,7 @@ extension CKAcceptSharesOperation: CKCopyableOperation {
 	}
 }
 
-@available(OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
 extension CKFetchShareParticipantsOperation: CKCopyableOperation {
 	func copy() -> CKOperation? {
 		guard let infos = self.userIdentityLookupInfos else { return nil }

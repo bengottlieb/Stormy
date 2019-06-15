@@ -11,8 +11,7 @@ import CoreData
 import CloudKit
 
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 @objc open class SyncableManagedObject: NSManagedObject {
 	public static var cloudRecordIDField = "cloudRecordID"
 	public static var syncStateAttributeName = "syncState_"
@@ -78,8 +77,7 @@ import CloudKit
 }
 
 
-@available(iOSApplicationExtension 10.0, *)
-@available(OSXApplicationExtension 10.12, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension SyncableManagedObject {
 	var syncState: CKLocalCache.SyncState {
 		get {
