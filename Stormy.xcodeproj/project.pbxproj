@@ -144,6 +144,7 @@
 		B54A9B682125B418008E646E /* iOSTestingHarnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTestingHarnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B54A9B6C2125B418008E646E /* iOSTestingHarnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSTestingHarnessUITests.swift; sourceTree = "<group>"; };
 		B54A9B6E2125B418008E646E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B54B229122B561B300D44FD7 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		B5897ED7215189D00086B481 /* iOSTestingHarness.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSTestingHarness.entitlements; sourceTree = "<group>"; };
 		B5897ED9215189D30086B481 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		B58D64671A898F81005A0002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -199,6 +200,8 @@
 		B504E60A1A89230F001B414B = {
 			isa = PBXGroup;
 			children = (
+				B54B229122B561B300D44FD7 /* Package.swift */,
+				B54B228F22B5615F00D44FD7 /* Source */,
 				B5C047821E7C2D9E00A2BE64 /* iOS */,
 				B504E66A1A896980001B414B /* BuildFramework.sh */,
 				B527C283214DEE6000D250A0 /* Framework Code */,
@@ -228,20 +231,6 @@
 		B527C283214DEE6000D250A0 /* Framework Code */ = {
 			isa = PBXGroup;
 			children = (
-				B5446E8321A3813A002D9379 /* ContextSync */,
-				B527C289214DEE6000D250A0 /* Stormy.swift */,
-				B527C284214DEE6000D250A0 /* Stormy+Records.swift */,
-				B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */,
-				B527C286214DEE6000D250A0 /* CKLocalCache.swift */,
-				B5B25CAE218CF00C00498FCB /* DatabaseType.swift */,
-				B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */,
-				B527C288214DEE6000D250A0 /* CKLocalCache+Share.swift */,
-				B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */,
-				B5AE384321905F1B005DE2FA /* CKRecord.ID+Stormy.swift */,
-				B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */,
-				B505965621550046000303B8 /* URL+Stormy.swift */,
-				B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */,
-				B5059659215501CB000303B8 /* MD5.swift */,
 			);
 			name = "Framework Code";
 			path = "Stormy/Framework Code";
@@ -289,6 +278,35 @@
 				B54A9B6E2125B418008E646E /* Info.plist */,
 			);
 			path = iOSTestingHarnessUITests;
+			sourceTree = "<group>";
+		};
+		B54B228F22B5615F00D44FD7 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				B54B229022B561A600D44FD7 /* Stormy */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		B54B229022B561A600D44FD7 /* Stormy */ = {
+			isa = PBXGroup;
+			children = (
+				B527C289214DEE6000D250A0 /* Stormy.swift */,
+				B527C284214DEE6000D250A0 /* Stormy+Records.swift */,
+				B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */,
+				B527C286214DEE6000D250A0 /* CKLocalCache.swift */,
+				B5B25CAE218CF00C00498FCB /* DatabaseType.swift */,
+				B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */,
+				B527C288214DEE6000D250A0 /* CKLocalCache+Share.swift */,
+				B527C28A214DEE6000D250A0 /* CKError+Stormy.swift */,
+				B5AE384321905F1B005DE2FA /* CKRecord.ID+Stormy.swift */,
+				B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */,
+				B505965621550046000303B8 /* URL+Stormy.swift */,
+				B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */,
+				B5059659215501CB000303B8 /* MD5.swift */,
+				B5446E8321A3813A002D9379 /* ContextSync */,
+			);
+			path = Stormy;
 			sourceTree = "<group>";
 		};
 		B5897ED8215189D30086B481 /* Frameworks */ = {
