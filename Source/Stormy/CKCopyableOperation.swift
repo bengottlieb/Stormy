@@ -55,22 +55,22 @@ extension CKModifyRecordZonesOperation: CKCopyableOperation {
 	}
 }
 
-@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension CKFetchRecordZoneChangesOperation: CKCopyableOperation {
 	func copy() -> CKOperation? {
-		if #available(OSX 10.14, iOS 12.0, *) {
-			let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: self.recordZoneIDs ?? [], configurationsByRecordZoneID:  self.configurationsByRecordZoneID)
-			
-			op.fetchRecordZoneChangesCompletionBlock = self.fetchRecordZoneChangesCompletionBlock
-			op.recordChangedBlock = self.recordChangedBlock
-			op.recordWithIDWasDeletedBlock = self.recordWithIDWasDeletedBlock
-			op.recordZoneChangeTokensUpdatedBlock = self.recordZoneChangeTokensUpdatedBlock
-			
-			return op
-		} else {
-			return nil
-		}
-	}
+        if #available(OSX 10.12, OSXApplicationExtension 10.12, iOS 12.0, iOSApplicationExtension 12.0, *) {
+            let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: self.recordZoneIDs ?? [], configurationsByRecordZoneID:  self.configurationsByRecordZoneID)
+            
+            op.fetchRecordZoneChangesCompletionBlock = self.fetchRecordZoneChangesCompletionBlock
+            op.recordChangedBlock = self.recordChangedBlock
+            op.recordWithIDWasDeletedBlock = self.recordWithIDWasDeletedBlock
+            op.recordZoneChangeTokensUpdatedBlock = self.recordZoneChangeTokensUpdatedBlock
+            
+            return op
+        } else {
+            return nil
+        }
+    }
 }
 
 extension CKModifySubscriptionsOperation: CKCopyableOperation {
