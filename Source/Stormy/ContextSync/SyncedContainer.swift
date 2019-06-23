@@ -123,7 +123,7 @@ open class SyncedContainer {
 		DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerStateChanged, object: self) }
 	}
 	
-	func pullChanges(completion: (() -> Void)? = nil) {
+	public func pullChanges(completion: (() -> Void)? = nil) {
 		DispatchQueue.global(qos: .userInitiated).async {
 			self.state = .synchronizing
 			
