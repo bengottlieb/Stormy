@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 
 
-@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, *)
+@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension Stormy {
 	public func fetchChanges(in zone: CKRecordZone? = nil, database: DatabaseType = .private, since tokenData: Data? = nil, fetching fields: [CKRecord.FieldKey]? = nil, completion: @escaping (FetchedChanges?, Error?) -> Void) {
 		
@@ -21,7 +21,16 @@ extension Stormy {
 				Stormy.instance.completeLongRunningTask()
 				return
 			}
-			let token: CKServerChangeToken? = (tokenData != nil) ? NSKeyedUnarchiver.unarchiveObject(with: tokenData!) as? CKServerChangeToken : nil
+            
+            var token: CKServerChangeToken?
+            
+            if let data = tokenData {
+                if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
+                    token = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data)
+                } else {
+                    token = NSKeyedUnarchiver.unarchiveObject(with: data) as? CKServerChangeToken
+                }
+            }
 			let op: CKFetchRecordZoneChangesOperation
 			
 			if #available(OSX 10.14, iOS 12.0, *) {
