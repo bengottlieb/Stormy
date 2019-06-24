@@ -58,7 +58,7 @@ extension CKModifyRecordZonesOperation: CKCopyableOperation {
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension CKFetchRecordZoneChangesOperation: CKCopyableOperation {
 	func copy() -> CKOperation? {
-        if #available(OSX 10.12, OSXApplicationExtension 10.12, iOS 12.0, iOSApplicationExtension 12.0, *) {
+        if #available(OSX 10.14, OSXApplicationExtension 10.14, iOS 12.0, iOSApplicationExtension 12.0, *) {
             let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: self.recordZoneIDs ?? [], configurationsByRecordZoneID:  self.configurationsByRecordZoneID)
             
             op.fetchRecordZoneChangesCompletionBlock = self.fetchRecordZoneChangesCompletionBlock

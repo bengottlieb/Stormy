@@ -25,7 +25,7 @@ extension Stormy {
             var token: CKServerChangeToken?
             
             if let data = tokenData {
-                if #available(iOS 13.0, iOSApplicationExtension 13.0, *) {
+                if #available(OSX 10.13, OSXApplicationExtension 10.13, iOS 13.0, iOSApplicationExtension 13.0, *) {
                     token = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data)
                 } else {
                     token = NSKeyedUnarchiver.unarchiveObject(with: data) as? CKServerChangeToken
@@ -33,7 +33,7 @@ extension Stormy {
             }
 			let op: CKFetchRecordZoneChangesOperation
 			
-			if #available(OSX 10.14, iOS 12.0, *) {
+			if #available(OSX 10.14, OSXApplicationExtension 10.14, iOS 12.0, iOSApplicationExtension 12.0, *) {
 				let config = [zone.zoneID: CKFetchRecordZoneChangesOperation.ZoneConfiguration(previousServerChangeToken: token, resultsLimit: nil, desiredKeys: fields)]
 				op = CKFetchRecordZoneChangesOperation(recordZoneIDs: [zone.zoneID], configurationsByRecordZoneID: config)
 			} else {
