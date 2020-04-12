@@ -12,7 +12,7 @@ import CoreData
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension SyncedContainer {
-	public func syncRecords(with ids: [CKRecord.ID], in database: DatabaseType, completion: @escaping (Error?) -> Void) {
+	public func syncRecords(with ids: [CKRecord.ID], in database: CKDatabase.Scope, completion: @escaping (Error?) -> Void) {
 		let queue = DispatchQueue(label: "fetchGroup")
 		var finalError: Error?
 		let batchSize = 300
@@ -121,11 +121,11 @@ extension SyncedContainer {
 		}
 	}
 	
-	func fetchAllIDs(forRecordType type: String, in database: DatabaseType, completion: @escaping ([CKRecord.ID], Error?) -> Void) {
+	func fetchAllIDs(forRecordType type: String, in database: CKDatabase.Scope, completion: @escaping ([CKRecord.ID], Error?) -> Void) {
 		self.fetchIDs(forRecordType: type, in: database, continuing: nil, currentIDs: [], completion: completion)
 	}
 	
-	func fetchIDs(forRecordType type: String, in database: DatabaseType, continuing cursor: CKQueryOperation.Cursor?, currentIDs: [CKRecord.ID], completion: @escaping ([CKRecord.ID], Error?) -> Void) {
+	func fetchIDs(forRecordType type: String, in database: CKDatabase.Scope, continuing cursor: CKQueryOperation.Cursor?, currentIDs: [CKRecord.ID], completion: @escaping ([CKRecord.ID], Error?) -> Void) {
 		let query = CKQuery(recordType: type, predicate: NSPredicate(value: true))
 		let op = cursor == nil ? CKQueryOperation(query: query) : CKQueryOperation(cursor: cursor!)
 		var ids: [CKRecord.ID] = currentIDs

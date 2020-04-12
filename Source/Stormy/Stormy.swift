@@ -46,7 +46,7 @@ public class Stormy {
 	static public var childReferencesFieldName = "child_refs"
 	
 	let operationSemaphore = DispatchSemaphore(value: 1)
-	var queuedOperations: [(DatabaseType, Operation)] = []
+	var queuedOperations: [(CKDatabase.Scope, Operation)] = []
 	var longRunningTaskCount = 0
 	
 	func startLongRunningTask() {
@@ -123,11 +123,12 @@ public class Stormy {
 		}
 	}
 	
-	public func database(_ type: DatabaseType) -> CKDatabase? {
+	public func database(_ type: CKDatabase.Scope) -> CKDatabase? {
 		switch type {
 		case .public: return self.publicDatabase
 		case .private: return self.privateDatabase
 		case .shared: return self.sharedDatabase
+		@unknown default: return self.publicDatabase
 		}
 	}
 	
@@ -172,7 +173,7 @@ public class Stormy {
 		self.queue(operation: BlockOperation(block: block))
 	}
 	
-	public func queue(operation: Operation, in type: DatabaseType = .public) {
+	public func queue(operation: Operation, in type: CKDatabase.Scope = .public) {
 		if self.isAvailable {
 			if let ckdOp = operation as? CKDatabaseOperation {
 				self.database(type)?.add(ckdOp)

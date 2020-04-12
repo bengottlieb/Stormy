@@ -58,10 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 		
-		let note = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo)
-		print("Note: \(note)")
+		if Stormy.instance.received(remoteNotification: userInfo, completion: completionHandler) { return }
 		
-		completionHandler(.newData)
+		completionHandler(.noData)
 	}
 
 }

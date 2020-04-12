@@ -22,7 +22,7 @@ extension SyncedContainer {
 		return true
 	}
 	
-	func setupSubscriptions(on dbs: [DatabaseType], completion: @escaping (Error?) -> Void) {
+	func setupSubscriptions(on dbs: [CKDatabase.Scope], completion: @escaping (Error?) -> Void) {
 		var finalError: Error?
 		let completionQueue = DispatchQueue(label: "subscription setup")
 		

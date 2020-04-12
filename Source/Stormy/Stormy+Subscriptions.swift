@@ -16,7 +16,7 @@ import CloudKit
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension Stormy {
 	
-	func subscriptionID(in dbType: DatabaseType, on recordName: CKRecord.RecordType?, forZone: CKRecordZone? = nil) -> String? {
+	func subscriptionID(in dbType: CKDatabase.Scope, on recordName: CKRecord.RecordType?, forZone: CKRecordZone? = nil) -> String? {
 		if dbType == .shared {
 			return "shared-subscription"
 		}
@@ -28,7 +28,8 @@ extension Stormy {
 			return "\(dbType.rawValue)-(all)-subscription"
 		}
 	}
-	public func setupSubscription(in dbType: DatabaseType, on recordName: CKRecord.RecordType? = nil, forZone: CKRecordZone? = nil, predicate: NSPredicate = NSPredicate(value: true), options: CKQuerySubscription.Options = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion], completion: ((Error?) -> Void)?) {
+	
+	public func setupSubscription(in dbType: CKDatabase.Scope, on recordName: CKRecord.RecordType? = nil, forZone: CKRecordZone? = nil, predicate: NSPredicate = NSPredicate(value: true), options: CKQuerySubscription.Options = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion], completion: ((Error?) -> Void)?) {
 		
 		#if targetEnvironment(simulator)
 			completion?(StormyError.noSubscriptionsOnTheSimulator)

@@ -9,10 +9,23 @@
 import Foundation
 import CloudKit
 
-extension DatabaseType {
+
+extension CKDatabase.Scope {
+	static var caches: [CKDatabase.Scope: Cache] = [:]
+	
+	public var cache: Cache {
+		if let cache = CKDatabase.Scope.caches[self] { return cache }
+		
+		let cache = Cache(type: self)
+		CKDatabase.Scope.caches[self] = cache
+		return cache
+	}
+}
+
+extension CKDatabase.Scope {
 	public class Cache {
-		var type: DatabaseType
-		init(type: DatabaseType) {
+		var type: CKDatabase.Scope
+		init(type: CKDatabase.Scope) {
 			self.type = type
 		}
 		
@@ -58,7 +71,7 @@ extension DatabaseType {
 open class CKLocalCache: CustomStringConvertible, Equatable {
 	open var typeName: CKRecord.RecordType!
 	open var recordID: CKRecord.ID
-	open var database: DatabaseType
+	open var database: CKDatabase.Scope
 	open var changedKeys: Set<String> = []
 	open var changedValues: [String: CKRecordValue] = [:]
 	open var originalRecord: CKRecord? { didSet { if let type = self.originalRecord?.recordType { self.typeName = type }}}
@@ -73,20 +86,20 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	private var children: [CKLocalCache] = []
 	private func reference(action: CKRecord_Reference_Action = .none) -> CKRecord.Reference { return CKRecord.Reference(recordID: self.recordID, action: action) }
 	
-	fileprivate init(reference: CKRecord.Reference, in database: DatabaseType) {
+	fileprivate init(reference: CKRecord.Reference, in database: CKDatabase.Scope) {
 		self.recordID = reference.recordID
 		self.database = database
 		self.typeName = reference.recordID.typeName
 	}
 	
-	fileprivate init(type: String, id: CKRecord.ID, in database: DatabaseType = .private) {
+	fileprivate init(type: String, id: CKRecord.ID, in database: CKDatabase.Scope = .private) {
 		self.originalRecord = nil
 		self.typeName = type
 		self.recordID = id
 		self.database = database
 	}
 	
-	fileprivate init(record: CKRecord, in database: DatabaseType) {
+	fileprivate init(record: CKRecord, in database: CKDatabase.Scope) {
 		self.originalRecord = record
 		self.database = database
 		self.typeName = record.recordType

@@ -25,8 +25,8 @@ class ViewController: UIViewController {
 		}
 	}
 
-	var record = DatabaseType.public.cache.fetch(type: "TEST_RECORD", id: CKRecord.ID(recordName: "EDITING RECORD"))
-	lazy var privateRecord: CKLocalCache = { DatabaseType.private.cache.fetch(type: "TEST_PRIVATE_RECORD", id: CKRecord.ID(recordName: "EDITING_PRIVATE RECORD", zoneID: Stormy.instance.recordZones.first!.zoneID)) }()
+	var record = CKDatabase.Scope.public.cache.fetch(type: "TEST_RECORD", id: CKRecord.ID(recordName: "EDITING RECORD"))
+	lazy var privateRecord: CKLocalCache = { CKDatabase.Scope.private.cache.fetch(type: "TEST_PRIVATE_RECORD", id: CKRecord.ID(recordName: "EDITING_PRIVATE RECORD", zoneID: Stormy.instance.recordZones.first!.zoneID)) }()
 
 	@IBAction func editRecord() {
 		self.record.reloadFromServer(andThenSave: true) { err in
@@ -58,11 +58,11 @@ class ViewController: UIViewController {
 	
 	@IBAction func addRecord() {
 		let recordID = CKRecord.ID(recordName: "PARENT - RECORD", zoneID: Stormy.instance.recordZones.first!.zoneID)
-		let record = DatabaseType.private.cache.fetch(type: "PARENT_RECORD", id: recordID)
+		let record = CKDatabase.Scope.private.cache.fetch(type: "PARENT_RECORD", id: recordID)
 
 		record.reloadFromServer { error in
 			let childID = CKRecord.ID(recordName: "CHILD - \(Int(Date().timeIntervalSinceReferenceDate) % 100000)", zoneID: Stormy.instance.recordZones.first!.zoneID)
-			let child = DatabaseType.private.cache.fetch(type: "CHILD_RECORD", id: childID)
+			let child = CKDatabase.Scope.private.cache.fetch(type: "CHILD_RECORD", id: childID)
 			child["c_value"] = Int16.random(in: 0...1000)
 			child.setParent(record)
 		

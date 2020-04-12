@@ -28,7 +28,7 @@ public protocol CloudLoadableManagedObject: class {
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension SyncManagedObject where Self: NSManagedObject {
 	
-	static public func syncChanges(zone: CKRecordZone?, database: DatabaseType, in container: NSPersistentContainer, completion: ((Error?) -> Void)? = nil) {
+	static public func syncChanges(zone: CKRecordZone?, database: CKDatabase.Scope, in container: NSPersistentContainer, completion: ((Error?) -> Void)? = nil) {
 		if !Stormy.instance.isAvailable { completion?(Stormy.StormyError.notSignedIn); return }
 		let tokenData = UserDefaults.standard.data(forKey: self.changeTokenSettingsKey)
 		Stormy.instance.fetchChanges(in: zone, database: database, since: tokenData, fetching: nil) { changes, error in
@@ -82,14 +82,14 @@ extension SyncManagedObject where Self: NSManagedObject {
 	}
 	
 	public func generateCacheRecord() -> CKLocalCache {
-		let cache = DatabaseType.private.cache.fetch(type: self.entity.name!, id: self.recordID)
+		let cache = CKDatabase.Scope.private.cache.fetch(type: self.entity.name!, id: self.recordID)
 		self.populate(cacheRecord: cache)
 		return cache
 	}
 	
 	public func saveToCloud(completion: ((Error?) -> Void)?) {
 		if !Stormy.instance.isAvailable { completion?(Stormy.StormyError.notSignedIn); return }
-		let cache = DatabaseType.private.cache.fetch(type: self.entity.name!, id: self.recordID)
+		let cache = CKDatabase.Scope.private.cache.fetch(type: self.entity.name!, id: self.recordID)
 		self.populate(cacheRecord: cache)
 		cache.reloadFromServer(andThenSave: true, completion: completion)
 	}

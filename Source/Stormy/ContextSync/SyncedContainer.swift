@@ -36,7 +36,7 @@ open class SyncedContainer {
 	public var viewContext: NSManagedObjectContext { return self.container.viewContext }
 	public var zoneNames: [String] = []
 	public var syncedObjects: [String: EntityInfo] = [:]
-	public var defaultDatabaseType = DatabaseType.private
+	public var defaultDatabaseType = CKDatabase.Scope.private
 
 	public var isInExtension: Bool {
 		let extensionDictionary = Bundle.main.infoDictionary?["NSExtension"]
@@ -47,9 +47,9 @@ open class SyncedContainer {
 		let type: SyncableManagedObject.Type
 		var zoneName: String?
 		var zoneID: CKRecordZone.ID?
-		var database: DatabaseType
+		var database: CKDatabase.Scope
 		
-		init(entity: SyncableManagedObject.Type, zoneName: String? = nil, database: DatabaseType = .private) {
+		init(entity: SyncableManagedObject.Type, zoneName: String? = nil, database: CKDatabase.Scope = .private) {
 			self.type = entity
 			self.zoneName = zoneName
 			self.database = database
@@ -75,7 +75,7 @@ open class SyncedContainer {
 		}
 	}
 	
-	public func register(entity: SyncableManagedObject.Type, zoneName: String? = nil, database: DatabaseType = .private) {
+	public func register(entity: SyncableManagedObject.Type, zoneName: String? = nil, database: CKDatabase.Scope = .private) {
 		guard let entityName = entity.entity().name else {
 			assert(false, "Entity name required for \(entity)")
 			return
@@ -106,7 +106,7 @@ open class SyncedContainer {
 			Stormy.instance.queue {
 				if includingSubscriptions {
 					#if os(iOS)
-						var dbs: Set<DatabaseType> = []
+						var dbs: Set<CKDatabase.Scope> = []
 						for obj in self.syncedObjects.values { dbs.insert(obj.database) }
 						self.setupSubscriptions(on: Array(dbs)) { error in
 							syncCompletion()

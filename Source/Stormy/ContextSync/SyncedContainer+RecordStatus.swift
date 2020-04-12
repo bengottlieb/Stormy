@@ -11,7 +11,7 @@ import CloudKit
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension CKRecord.ID {
-	var databaseType: DatabaseType? {
+	var databaseType: CKDatabase.Scope? {
 		guard let name = self.typeName else { return nil }
 		return SyncedContainer.instance.syncedObjects[name]?.database
 	}

@@ -14,7 +14,7 @@ protocol CKCopyableOperation {
 }
 
 extension Stormy {
-	static func shouldReturn(after: Error?, operation: CKCopyableOperation, in db: DatabaseType? = nil, completion: ((Error?) -> Void)? = nil) -> Bool {
+	static func shouldReturn(after: Error?, operation: CKCopyableOperation, in db: CKDatabase.Scope? = nil, completion: ((Error?) -> Void)? = nil) -> Bool {
 		guard let error = after else { return false }			// no error
 		
 		guard var ckError = error as? CKError else {

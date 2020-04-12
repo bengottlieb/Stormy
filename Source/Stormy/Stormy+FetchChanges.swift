@@ -12,7 +12,7 @@ import CloudKit
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension Stormy {
-	public func fetchChanges(in zone: CKRecordZone? = nil, database: DatabaseType = .private, since tokenData: Data? = nil, fetching fields: [CKRecord.FieldKey]? = nil, completion: @escaping (FetchedChanges?, Error?) -> Void) {
+	public func fetchChanges(in zone: CKRecordZone? = nil, database: CKDatabase.Scope = .private, since tokenData: Data? = nil, fetching fields: [CKRecord.FieldKey]? = nil, completion: @escaping (FetchedChanges?, Error?) -> Void) {
 		
 		Stormy.instance.startLongRunningTask()
 		Stormy.instance.queue {
