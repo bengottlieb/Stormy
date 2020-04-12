@@ -24,7 +24,7 @@ extension Stormy {
 			
 			var token: CKServerChangeToken?
 			
-			if let data = tokenData ?? Stormy.instance.getServerFetchToken() {
+			if let data = tokenData ?? Stormy.instance.serverFetchTokens[zone.zoneID] {
 				if #available(OSX 10.13, OSXApplicationExtension 10.13, iOS 13.0, iOSApplicationExtension 13.0, *) {
 					token = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data)
 				} else {
@@ -52,7 +52,7 @@ extension Stormy {
 			
 			op.recordZoneFetchCompletionBlock = { id, token, data, _, error in
 				changes.token = token
-				if let data = token?.data { Stormy.instance.setServerFetchToken(data) }
+				if let data = token?.data { Stormy.instance.serverFetchTokens[zone.zoneID] = data }
 			}
 			
 			op.fetchRecordZoneChangesCompletionBlock = { err in
@@ -67,31 +67,6 @@ extension Stormy {
 			}
 			
 			Stormy.instance.queue(operation: op, in: database)
-		}
-	}
-	
-	public struct FetchedChanges {
-		let semaphore = DispatchSemaphore(value: 1)
-		public var records: [CKLocalCache] = []
-		public var deletedIDs: [CKRecord.ID] = []
-		public var tokenData: Data?
-		
-		init() { }
-		
-		
-		mutating func add(_ record: CKLocalCache?) {
-			if let record = record { self.serialize({ self.records.append(record) }) }
-		}
-		
-		func serialize(_ block: () -> Void) {
-			self.semaphore.wait()
-			block()
-			self.semaphore.signal()
-		}
-		
-		var token: CKServerChangeToken? {
-			get { return nil }
-			set { self.tokenData = newValue?.data }
 		}
 	}
 }

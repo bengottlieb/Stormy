@@ -13,7 +13,7 @@ import CloudKit
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 open class AppGroupPersistentContainer: NSPersistentContainer {
 	static var applicationGroupIdentifier: String?
-
+	
 	override open class func defaultDirectoryURL() -> URL {
 		if let identifier = AppGroupPersistentContainer.applicationGroupIdentifier, let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: identifier) {
 			return url
@@ -29,7 +29,6 @@ open class SyncedContainer {
 	
 	public static var instance: SyncedContainer!
 	public static var defaultsPrefix = "sync-"
-	public static var userDefaults = UserDefaults.standard
 	
 	public var state = State.offline { didSet { if state != oldValue { self.notifyAboutStateChange() }}}
 	public let container: NSPersistentContainer
@@ -37,12 +36,12 @@ open class SyncedContainer {
 	public var zoneNames: [String] = []
 	public var syncedObjects: [String: EntityInfo] = [:]
 	public var defaultDatabaseType = CKDatabase.Scope.private
-
+	
 	public var isInExtension: Bool {
 		let extensionDictionary = Bundle.main.infoDictionary?["NSExtension"]
 		return extensionDictionary is NSDictionary
 	}
-
+	
 	public struct EntityInfo {
 		let type: SyncableManagedObject.Type
 		var zoneName: String?
@@ -85,7 +84,7 @@ open class SyncedContainer {
 	
 	public func setupCloud(identifier: String, includingSubscriptions: Bool = true, andConnect: Bool = true, completion: (() -> Void)? = nil) {
 		assert(self.syncedObjects.count > 0, "Please register entities before setting up the cloud identifier.")
-
+		
 		let syncCompletion = {
 			self.state = .ready
 			DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerInitialSetupComplete, object: self) }
@@ -106,10 +105,10 @@ open class SyncedContainer {
 			Stormy.instance.queue {
 				if includingSubscriptions {
 					#if os(iOS)
-						var dbs: Set<CKDatabase.Scope> = []
-						for obj in self.syncedObjects.values { dbs.insert(obj.database) }
-						self.setupSubscriptions(on: Array(dbs)) { error in
-							syncCompletion()
+					var dbs: Set<CKDatabase.Scope> = []
+					for obj in self.syncedObjects.values { dbs.insert(obj.database) }
+					self.setupSubscriptions(on: Array(dbs)) { error in
+						syncCompletion()
 					}
 					#endif
 				} else {
@@ -129,9 +128,9 @@ open class SyncedContainer {
 			
 			for zoneName in self.zoneNames {
 				let zone = Stormy.instance.zone(named: zoneName)
-				let token = SyncedContainer.userDefaults.value(forKey: zoneName.zoneChangeToken) as? Data
+				let token = Stormy.instance.serverFetchTokens[zone.zoneID]
 				self.queue.suspend()
-
+				
 				Stormy.instance.fetchChanges(in: zone, database: .private, since: token, fetching: nil) { result in
 					switch result {
 					case .failure(let err):
@@ -163,7 +162,7 @@ open class SyncedContainer {
 								}
 							}
 							
-							SyncedContainer.userDefaults.setValue(changes.tokenData, forKey: zoneName.zoneChangeToken)
+							Stormy.instance.serverFetchTokens[zone.zoneID] = changes.tokenData
 							try! moc.save()
 							self.queue.resume()
 						}
@@ -189,7 +188,7 @@ extension CKLocalCache {
 		if let type = self.typeName { return moc.object(ofType: type, withID: self.recordID) }
 		return nil
 	}
-
+	
 	public func lookupObject(in moc: NSManagedObjectContext) -> SyncableManagedObject? {
 		if let type = self.typeName { return moc.lookupObject(ofType: type, withID: self.recordID) }
 		return nil
@@ -212,13 +211,13 @@ extension NSManagedObjectContext {
 			return nil
 		}
 	}
-
+	
 	public func object(ofType entityName: String, withID id: CKRecord.ID) -> SyncableManagedObject {
 		if let object = self.lookupObject(ofType: entityName, withID: id) { return object }
-
+		
 		let new = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self) as! SyncableManagedObject
 		
-        if let uniqueID = id.recordID { new.uniqueID = uniqueID }
+		if let uniqueID = id.recordID { new.uniqueID = uniqueID }
 		return new
 	}
 }

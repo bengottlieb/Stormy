@@ -8,15 +8,23 @@
 
 import Foundation
 import CloudKit
+import Studio
 
 #if canImport(UIKit)
 import UIKit
 #endif
 
+extension CKRecordZone.ID: StringConvertible {
+	public var string: String { return self.zoneName }
+}
+
 public class Stormy {
 	public struct Notifications {
-		static public let availabilityChanged = Notification.Name("stormyAvailabilityChanged")
-		static public let didFetchCloudKitUserRecordID = Notification.Name("browsy-didFetchCloudKitUserRecordID")
+		static public let availabilityChanged = Notification.Name("stormy-availabilityChanged")
+		static public let didFetchCloudKitUserRecordID = Notification.Name("stormy-didFetchCloudKitUserRecordID")
+		static public let recordsCreatedViaPush = Notification.Name("stormy-recordsCreatedViaPush")
+		static public let recordsModifiedViaPush = Notification.Name("stormy-recordsModifiedViaPush")
+		static public let recordsDeletedViaPush = Notification.Name("stormy-recordsDeletedViaPush")
 	}
 	
 	public static let instance = Stormy()
@@ -45,8 +53,7 @@ public class Stormy {
 	public var recordIDTypeSeparator: String?		// if this is set, a record ID consists of the record name + recordIDTypeSeparator + a unique ID- ex: Book/12356
 
 	public static var serverFetchTokenKey = "stormy_serverFetchTokenData"
-	public var setServerFetchToken: (Data) -> Void = { data in UserDefaults.standard.set(data, forKey: Stormy.serverFetchTokenKey) }
-	public var getServerFetchToken: () -> Data? = { UserDefaults.standard.data(forKey: Stormy.serverFetchTokenKey) }
+	public var serverFetchTokens = UserDefaultsBackedDictionary<CKRecordZone.ID, Data>() { id in Stormy.serverFetchTokenKey + id.string }
 
 	static public var childReferencesFieldName = "child_refs"
 	

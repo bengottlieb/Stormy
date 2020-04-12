@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -66,6 +66,8 @@
 		B5F0AD1E2169921C00A25B05 /* SyncManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */; };
 		B5F0AD1F2169921C00A25B05 /* SyncManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */; };
 		B5F5869724439041005034C7 /* Stormy+RemoteNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F5869624439041005034C7 /* Stormy+RemoteNotifications.swift */; };
+		B5F5869A2443BC7C005034C7 /* Studio in Frameworks */ = {isa = PBXBuildFile; productRef = B5F586992443BC7C005034C7 /* Studio */; };
+		B5F5869D2443C7C9005034C7 /* Stormy+FetchedChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F5869C2443C7C9005034C7 /* Stormy+FetchedChanges.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +134,7 @@
 		B5AE384321905F1B005DE2FA /* CKRecord.ID+Stormy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord.ID+Stormy.swift"; sourceTree = "<group>"; };
 		B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManagedObject.swift; sourceTree = "<group>"; };
 		B5F5869624439041005034C7 /* Stormy+RemoteNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stormy+RemoteNotifications.swift"; sourceTree = "<group>"; };
+		B5F5869C2443C7C9005034C7 /* Stormy+FetchedChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stormy+FetchedChanges.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5F5869A2443BC7C005034C7 /* Studio in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +242,7 @@
 				B527C287214DEE6000D250A0 /* Stormy+Subscriptions.swift */,
 				B5F5869624439041005034C7 /* Stormy+RemoteNotifications.swift */,
 				B527C28B214DEE6000D250A0 /* Stormy+FetchChanges.swift */,
+				B5F5869C2443C7C9005034C7 /* Stormy+FetchedChanges.swift */,
 				B527C285214DEE6000D250A0 /* CKCopyableOperation.swift */,
 				B527C286214DEE6000D250A0 /* CKLocalCache.swift */,
 				B527C288214DEE6000D250A0 /* CKLocalCache+Share.swift */,
@@ -333,6 +338,9 @@
 			dependencies = (
 			);
 			name = Stormy_iOS;
+			packageProductDependencies = (
+				B5F586992443BC7C005034C7 /* Studio */,
+			);
 			productName = Stormy;
 			productReference = B504E6461A8968DC001B414B /* Stormy.framework */;
 			productType = "com.apple.product-type.framework";
@@ -426,6 +434,9 @@
 				Base,
 			);
 			mainGroup = B504E60A1A89230F001B414B;
+			packageReferences = (
+				B5F586982443BC7C005034C7 /* XCRemoteSwiftPackageReference "Suite" */,
+			);
 			productRefGroup = B504E6141A89230F001B414B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -489,6 +500,7 @@
 				B527C296214DEE6000D250A0 /* Stormy.swift in Sources */,
 				B5446E9121A3813A002D9379 /* SyncedContainer.swift in Sources */,
 				B527C290214DEE6000D250A0 /* CKLocalCache.swift in Sources */,
+				B5F5869D2443C7C9005034C7 /* Stormy+FetchedChanges.swift in Sources */,
 				B527C29A214DEE6000D250A0 /* Stormy+FetchChanges.swift in Sources */,
 				B527C294214DEE6000D250A0 /* CKLocalCache+Share.swift in Sources */,
 				B505965721550046000303B8 /* URL+Stormy.swift in Sources */,
@@ -673,7 +685,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -699,7 +712,11 @@
 				INFOPLIST_FILE = Stormy/iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.stormy;
 				PRODUCT_NAME = Stormy;
 				SKIP_INSTALL = YES;
@@ -726,11 +743,16 @@
 				INFOPLIST_FILE = Stormy/iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.stormy;
 				PRODUCT_NAME = Stormy;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -772,7 +794,11 @@
 				);
 				INFOPLIST_FILE = Stormy/Mac/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.standalone.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Stormy;
@@ -803,7 +829,11 @@
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Stormy/Mac/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.standalone.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Stormy;
@@ -833,7 +863,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = iOSTestingHarness/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.zap;
@@ -862,7 +895,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = iOSTestingHarness/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.standalone.zap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -919,6 +955,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B5F586982443BC7C005034C7 /* XCRemoteSwiftPackageReference "Suite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bengottlieb/Suite.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.31;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B5F586992443BC7C005034C7 /* Studio */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5F586982443BC7C005034C7 /* XCRemoteSwiftPackageReference "Suite" */;
+			productName = Studio;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B504E60B1A89230F001B414B /* Project object */;
 }
