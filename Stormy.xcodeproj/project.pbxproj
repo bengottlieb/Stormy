@@ -402,6 +402,7 @@
 					B54A9B492125B417008E646E = {
 						CreatedOnToolsVersion = 10.0;
 						DevelopmentTeam = YY6CWUX533;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {

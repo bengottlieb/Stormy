@@ -19,8 +19,18 @@ import CloudKit
 
 	open var cloudRecordType: String { return self.entity.name! }
 	
+	public var isSyncable: Bool {
+		guard let id = self.primitiveValue(forKey: SyncableManagedObject.cloudRecordIDField) as? String else { return false }
+		return !id.isEmpty
+	}
 	open var uniqueID: String {
-		get { return self.primitiveValue(forKey: SyncableManagedObject.cloudRecordIDField) as! String }
+		get {
+			let id = self.primitiveValue(forKey: SyncableManagedObject.cloudRecordIDField) as? String
+			if let realID = id, !realID.isEmpty { return realID }
+			let newID = UUID().uuidString
+			self.setPrimitiveValue(newID, forKey: SyncableManagedObject.cloudRecordIDField)
+			return newID
+		}
 		set { self.setPrimitiveValue(newValue, forKey: SyncableManagedObject.cloudRecordIDField )}
 	}
 	

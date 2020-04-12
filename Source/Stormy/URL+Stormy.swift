@@ -26,7 +26,7 @@ extension URL {
 			
 			
 			while offset < mySize {
-				if !autoreleasepool() { () -> Bool in
+				if !autoreleasepool(invoking: {
 					let thisChunkSize = min(chunkSize, mySize - offset)
 					
 					let myChunk = myData[offset..<(offset + thisChunkSize)]
@@ -37,7 +37,7 @@ extension URL {
 					offset += chunkSize
 
 					return myMD5 == theirMD5
-				} { return false }
+				}) { return false }
 			}
 			
 			return true
