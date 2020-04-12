@@ -12,25 +12,25 @@ import CloudKit
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension Stormy {
-	public func fetchChanges(in zone: CKRecordZone? = nil, database: CKDatabase.Scope = .private, since tokenData: Data? = nil, fetching fields: [CKRecord.FieldKey]? = nil, completion: @escaping (FetchedChanges?, Error?) -> Void) {
+	public func fetchChanges(in zone: CKRecordZone? = nil, database: CKDatabase.Scope = .private, since tokenData: Data? = nil, fetching fields: [CKRecord.FieldKey]? = nil, completion: @escaping (Result<FetchedChanges, Error>) -> Void) {
 		
 		Stormy.instance.startLongRunningTask()
 		Stormy.instance.queue {
 			guard let zone = zone ?? Stormy.instance.recordZones.first else {
-				completion(nil, nil)
+				completion(.failure(StormyError.noAvailableZones))
 				Stormy.instance.completeLongRunningTask()
 				return
 			}
-            
-            var token: CKServerChangeToken?
-            
-            if let data = tokenData {
-                if #available(OSX 10.13, OSXApplicationExtension 10.13, iOS 13.0, iOSApplicationExtension 13.0, *) {
-                    token = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data)
-                } else {
-                    token = NSKeyedUnarchiver.unarchiveObject(with: data) as? CKServerChangeToken
-                }
-            }
+			
+			var token: CKServerChangeToken?
+			
+			if let data = tokenData ?? Stormy.instance.getServerFetchToken() {
+				if #available(OSX 10.13, OSXApplicationExtension 10.13, iOS 13.0, iOSApplicationExtension 13.0, *) {
+					token = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data)
+				} else {
+					token = NSKeyedUnarchiver.unarchiveObject(with: data) as? CKServerChangeToken
+				}
+			}
 			let op: CKFetchRecordZoneChangesOperation
 			
 			if #available(OSX 10.14, OSXApplicationExtension 10.14, iOS 12.0, iOSApplicationExtension 12.0, *) {
@@ -52,11 +52,12 @@ extension Stormy {
 			
 			op.recordZoneFetchCompletionBlock = { id, token, data, _, error in
 				changes.token = token
+				if let data = token?.data { Stormy.instance.setServerFetchToken(data) }
 			}
 			
 			op.fetchRecordZoneChangesCompletionBlock = { err in
-				if !Stormy.shouldReturn(after: err, operation: op, in: database, completion: { err in completion(nil, err) }) {
-					completion(changes, nil)
+				if !Stormy.shouldReturn(after: err, operation: op, in: database, completion: { error in completion(.failure(error ?? err ?? StormyError.unknownError)) }) {
+					completion(Result.success(changes))
 				}
 				Stormy.instance.completeLongRunningTask()
 			}
@@ -90,15 +91,17 @@ extension Stormy {
 		
 		var token: CKServerChangeToken? {
 			get { return nil }
-			set {
-				if let token = newValue {
-					if #available(OSX 10.13, iOS 11.0, *) {
-						self.tokenData = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false)
-					} else {
-						self.tokenData = NSKeyedArchiver.archivedData(withRootObject: token)
-					}
-				}
-			}
+			set { self.tokenData = newValue?.data }
+		}
+	}
+}
+
+extension CKServerChangeToken {
+	var data: Data? {
+		if #available(OSX 10.13, iOS 11.0, *) {
+			return try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+		} else {
+			return NSKeyedArchiver.archivedData(withRootObject: self)
 		}
 	}
 }

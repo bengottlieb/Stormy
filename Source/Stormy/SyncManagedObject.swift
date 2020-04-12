@@ -31,32 +31,38 @@ extension SyncManagedObject where Self: NSManagedObject {
 	static public func syncChanges(zone: CKRecordZone?, database: CKDatabase.Scope, in container: NSPersistentContainer, completion: ((Error?) -> Void)? = nil) {
 		if !Stormy.instance.isAvailable { completion?(Stormy.StormyError.notSignedIn); return }
 		let tokenData = UserDefaults.standard.data(forKey: self.changeTokenSettingsKey)
-		Stormy.instance.fetchChanges(in: zone, database: database, since: tokenData, fetching: nil) { changes, error in
-			UserDefaults.standard.set(changes?.tokenData, forKey: self.changeTokenSettingsKey)
+		Stormy.instance.fetchChanges(in: zone, database: database, since: tokenData, fetching: nil) { result in
 			
-			container.performBackgroundTask { moc in
-				for id in changes?.deletedIDs ?? [] {
-					if let object = self.fetchObject(withID: id, in: moc) { moc.delete(object) }
-				}
+			switch result {
+			case .success(let changes):
+				UserDefaults.standard.set(changes.tokenData, forKey: self.changeTokenSettingsKey)
 				
-				for change in changes?.records ?? [] {
-					if let object = self.fetchObject(withID: change.recordID, in: moc) {
-						object.load(from: change)
-					} else if let object = self.insert(into: moc) {
-						object.setValue(change.recordID.recordName, forKey: self.recordIDField)
-						object.load(from: change)
-					} else {
-						print("Failed to create a record of type \(self.entity().name!) for \(change)")
+				container.performBackgroundTask { moc in
+					for id in changes.deletedIDs {
+						if let object = self.fetchObject(withID: id, in: moc) { moc.delete(object) }
+					}
+					
+					for change in changes.records {
+						if let object = self.fetchObject(withID: change.recordID, in: moc) {
+							object.load(from: change)
+						} else if let object = self.insert(into: moc) {
+							object.setValue(change.recordID.recordName, forKey: self.recordIDField)
+							object.load(from: change)
+						} else {
+							print("Failed to create a record of type \(self.entity().name!) for \(change)")
+						}
+					}
+				
+					do {
+						try moc.save()
+					} catch {
+						print("Error while saving context: \(error)")
+						completion?(error)
 					}
 				}
 				
-				do {
-					try moc.save()
-					completion?(error)
-				} catch {
-					print("Error while saving context: \(error)")
-					completion?(error)
-				}
+			case .failure(let err):
+				completion?(err)
 			}
 		}
 	}

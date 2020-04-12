@@ -132,36 +132,41 @@ open class SyncedContainer {
 				let token = SyncedContainer.userDefaults.value(forKey: zoneName.zoneChangeToken) as? Data
 				self.queue.suspend()
 
-				Stormy.instance.fetchChanges(in: zone, database: .private, since: token, fetching: nil) { changes, error in
-					guard let changes = changes else { return }
-					var changedObjects: [SyncableManagedObject] = []
-					
-					self.container.performBackgroundTask { moc in
-						for record in changes.records {
-							let object = moc.object(ofType: record.typeName, withID: record.recordID)
-							object.read(from: record)
-							changedObjects.append(object)
-						}
+				Stormy.instance.fetchChanges(in: zone, database: .private, since: token, fetching: nil) { result in
+					switch result {
+					case .failure(let err):
+						print("Error while pulling changes: \(err)")
 						
-						for object in changedObjects {
-							guard let parentName = object.parentRelationshipName else { continue }
-							let record = object.localCache
-							if let parent = record.parent?.lookupObject(in: moc) {
-								object.setValue(parent, forKey: parentName)
+					case .success(let changes):
+						var changedObjects: [SyncableManagedObject] = []
+						
+						self.container.performBackgroundTask { moc in
+							for record in changes.records {
+								let object = moc.object(ofType: record.typeName, withID: record.recordID)
+								object.read(from: record)
+								changedObjects.append(object)
 							}
-						}
-						
-						for recordID in changes.deletedIDs {
-							for (entityName, _) in self.syncedObjects {
-								if let object = moc.lookupObject(ofType: entityName, withID: recordID) {
-									moc.delete(object)
+							
+							for object in changedObjects {
+								guard let parentName = object.parentRelationshipName else { continue }
+								let record = object.localCache
+								if let parent = record.parent?.lookupObject(in: moc) {
+									object.setValue(parent, forKey: parentName)
 								}
 							}
+							
+							for recordID in changes.deletedIDs {
+								for (entityName, _) in self.syncedObjects {
+									if let object = moc.lookupObject(ofType: entityName, withID: recordID) {
+										moc.delete(object)
+									}
+								}
+							}
+							
+							SyncedContainer.userDefaults.setValue(changes.tokenData, forKey: zoneName.zoneChangeToken)
+							try! moc.save()
+							self.queue.resume()
 						}
-						
-						SyncedContainer.userDefaults.setValue(changes.tokenData, forKey: zoneName.zoneChangeToken)
-						try! moc.save()
-						self.queue.resume()
 					}
 				}
 			}

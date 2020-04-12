@@ -18,8 +18,14 @@ extension Error {
 		}
 		return ckError
 	}
+	
+	public var isDuplicateSubscriptionError: Bool {
+		let err = self as NSError
+		
+		return err.domain == CKErrorDomain && err.code == 2
+	}
 }
 
 extension Stormy {
-	public enum StormyError: Error { case noSubscriptionsOnTheSimulator, needAZoneOrRecordType, iCloudNotAvailable, shareMissingURL, sharesMustBePrivate, sharesMustHaveNonDefaultZone, shareFailedToFindParticipants, notSignedIn }
+	public enum StormyError: Error { case noSubscriptionsOnTheSimulator, needAZoneOrRecordType, iCloudNotAvailable, shareMissingURL, sharesMustBePrivate, sharesMustHaveNonDefaultZone, shareFailedToFindParticipants, notSignedIn, noAvailableZones, unknownError }
 }

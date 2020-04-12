@@ -15,7 +15,6 @@ import UIKit
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 extension SyncedContainer {
 	public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
-		print("Received note: \(CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo)!.description)")
 		self.pullChanges() {
 			completionHandler(.newData)
 		}

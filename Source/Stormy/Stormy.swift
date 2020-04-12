@@ -43,7 +43,13 @@ public class Stormy {
 	public var recordZones: [CKRecordZone] = []
 	public var userRecordID: CKRecord.ID?
 	public var recordIDTypeSeparator: String?		// if this is set, a record ID consists of the record name + recordIDTypeSeparator + a unique ID- ex: Book/12356
+
+	public static var serverFetchTokenKey = "stormy_serverFetchTokenData"
+	public var setServerFetchToken: (Data) -> Void = { data in UserDefaults.standard.set(data, forKey: Stormy.serverFetchTokenKey) }
+	public var getServerFetchToken: () -> Data? = { UserDefaults.standard.data(forKey: Stormy.serverFetchTokenKey) }
+
 	static public var childReferencesFieldName = "child_refs"
+	
 	
 	let operationSemaphore = DispatchSemaphore(value: 1)
 	var queuedOperations: [(CKDatabase.Scope, Operation)] = []

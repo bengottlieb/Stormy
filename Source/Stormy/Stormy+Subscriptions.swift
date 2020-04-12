@@ -52,7 +52,6 @@ extension Stormy {
 			if Stormy.shouldReturn(after: error, operation: fetchOp, in: dbType, completion: completion) { return }
 			
 			if subscriptions?[id] != nil {	//already created
-				print(subscriptions!)
 				completion?(nil)
 				return
 			}
