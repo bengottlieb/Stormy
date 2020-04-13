@@ -84,8 +84,16 @@ open class SyncedContainer {
 		}
 		
 		assert(entity.entity().attributesByName[SyncableManagedObject.cloudKitRecordIDFieldName]?.attributeType == .stringAttributeType, "Trying to register \(entity), but its \(SyncableManagedObject.cloudKitRecordIDFieldName) ID field is not a string")
-		assert(entity.entity().attributesByName[SyncableManagedObject.syncStateFieldName]?.attributeType == .stringAttributeType, "Trying to register \(entity), but its \(SyncableManagedObject.syncStateFieldName) field is not an integer")
+		let syncStatusType = entity.entity().attributesByName[SyncableManagedObject.syncStateFieldName]?.attributeType
+		assert(syncStatusType == .integer16AttributeType || syncStatusType == .integer32AttributeType || syncStatusType == .integer64AttributeType, "Trying to register \(entity), but its \(SyncableManagedObject.syncStateFieldName) field is not an integer")
 
+		if entity.parentRelationshipName == nil {
+			for relationship in entity.entity().relationshipsByName.values {
+				if !relationship.isToMany, let inverse = relationship.inverseRelationship, inverse.isToMany {
+					print("****** WARNING ********\nAdding an entity (\(entityName)) with no parentRelationshipName that appears to have a parent relationship to \(inverse.entity.name ?? "--")")
+				}
+			}
+		}
 		
 		self.syncedObjects[entityName] = EntityInfo(entity: entity, zoneName: zoneName, database: database)
 	}
@@ -155,7 +163,7 @@ open class SyncedContainer {
 							}
 							
 							for object in changedObjects {
-								guard let parentName = object.parentRelationshipName else { continue }
+								guard let parentName = type(of: object).parentRelationshipName else { continue }
 								let record = object.localCache
 								if let parent = record.parent?.lookupObject(in: moc) {
 									object.setValue(parent, forKey: parentName)

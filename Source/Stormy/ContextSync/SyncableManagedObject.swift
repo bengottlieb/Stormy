@@ -38,7 +38,7 @@ import CloudKit
 		return NSPredicate(format: "%K == %@", SyncableManagedObject.cloudKitRecordIDFieldName, id.recordID ?? id.recordName)
 	}
 	
-	open var parentRelationshipName: String? { return nil }
+	open class var parentRelationshipName: String? { return nil }
 	
 	open func willSync(withCache: CKLocalCache) {}
 	
@@ -125,14 +125,14 @@ extension SyncableManagedObject {
 	func connectCachedRelationships(withGraph graph: SyncableManagedObject.RelationshipGraph) {
 		graph.append(self)
 		
-		if let parentName = self.parentRelationshipName, let parent = self.value(forKey: parentName) as? SyncableManagedObject {
+		if let parentName = Self.parentRelationshipName, let parent = self.value(forKey: parentName) as? SyncableManagedObject {
 			self.localCache.setParent(parent.localCache)
 		}
 		
 		for relationship in self.entity.relationshipsByName.values {
 			guard let kids = self.value(forKey: relationship.name) as? Set<SyncableManagedObject>, let first = kids.first else { continue }
 			
-			if let parent = first.parentRelationshipName, first.entity.relationshipsByName[parent]?.destinationEntity?.managedObjectClassName == NSStringFromClass(type(of: self)) {
+			if let parent = type(of: first).parentRelationshipName, first.entity.relationshipsByName[parent]?.destinationEntity?.managedObjectClassName == NSStringFromClass(type(of: self)) {
 				kids.forEach { kid in kid.connectCachedRelationships(withGraph: graph) }
 			}
 		}

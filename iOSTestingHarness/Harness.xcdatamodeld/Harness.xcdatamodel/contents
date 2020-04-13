@@ -9,7 +9,7 @@
     </entity>
     <entity name="MenuItem" representedClassName=".MenuItem" syncable="YES" codeGenerationType="category">
         <attribute name="cloudKitRecordID_" optional="YES" attributeType="String"/>
-        <attribute name="cloutKitSyncState_" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cloudKitSyncState_" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="menu" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Menu" inverseName="menuItems" inverseEntity="Menu"/>

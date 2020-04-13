@@ -46,7 +46,7 @@ extension SyncedContainer {
 				self.container.performBackgroundTask() { moc in
 					for cached in fetchedRecords {
 						if let object = moc.lookupObject(ofType: cached.typeName, withID: cached.recordID) {
-							guard let parentName = object.parentRelationshipName else { continue }
+							guard let parentName = type(of: object).parentRelationshipName else { continue }
 							if let parent = cached.parent?.lookupObject(in: moc) {
 								object.setValue(parent, forKey: parentName)
 							}
