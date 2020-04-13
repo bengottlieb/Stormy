@@ -36,8 +36,10 @@ extension Stormy {
 			if recordName == nil || recordName != nil { return }
 		#else
 			#if os(iOS)
-			if Bundle.main.bundleURL.pathExtension == "app", let app = UIApplication.value(forKey: "sharedApplication") as? UIApplication, !app.isRegisteredForRemoteNotifications {
-				print("**************************** Remember to register for Remote Notifications before setting up a subscription ****************************")
+			DispatchQueue.main.async {
+				if Bundle.main.bundleURL.pathExtension == "app", let app = UIApplication.value(forKey: "sharedApplication") as? UIApplication, !app.isRegisteredForRemoteNotifications {
+					print("**************************** Remember to register for Remote Notifications before setting up a subscription ****************************")
+				}
 			}
 			#endif
 		#endif
