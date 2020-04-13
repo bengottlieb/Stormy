@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6nY-Qw-oPl">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6nY-Qw-oPl">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,46 +16,111 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEN-N8-reE">
-                                <rect key="frame" x="132" y="122" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEN-N8-reE">
+                                <rect key="frame" x="47" y="548" width="46" height="30"/>
                                 <state key="normal" title="Create"/>
                                 <connections>
                                     <action selector="addRecord" destination="6nY-Qw-oPl" eventType="touchUpInside" id="Qqq-iV-ajS"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6N-Q6-jcy">
-                                <rect key="frame" x="140" y="160" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6N-Q6-jcy">
+                                <rect key="frame" x="55" y="586" width="30" height="30"/>
                                 <state key="normal" title="Edit"/>
                                 <connections>
                                     <action selector="editRecord" destination="6nY-Qw-oPl" eventType="touchUpInside" id="hku-CW-cQE"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YB4-c1-fVI">
-                                <rect key="frame" x="109" y="210" width="92" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YB4-c1-fVI">
+                                <rect key="frame" x="235" y="548" width="92" height="30"/>
                                 <state key="normal" title="Finish Editing"/>
                                 <connections>
                                     <action selector="stopEditingRecord" destination="6nY-Qw-oPl" eventType="touchUpInside" id="v07-Yi-RHC"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UnP-OF-0qM">
-                                <rect key="frame" x="135" y="255" width="40" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UnP-OF-0qM">
+                                <rect key="frame" x="261" y="593" width="40" height="30"/>
                                 <state key="normal" title="Share"/>
                                 <connections>
                                     <action selector="shareRecord" destination="6nY-Qw-oPl" eventType="touchUpInside" id="GDg-8I-rdr"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Restaurant Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6L9-js-6LA">
+                                <rect key="frame" x="101" y="30" width="173" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="173" id="F0l-BT-0cp"/>
+                                    <constraint firstAttribute="height" constant="34" id="yM0-yt-ECz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Menu Item" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qbG-Bd-eYC">
+                                <rect key="frame" x="101" y="110" width="173" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="Jbe-Ia-w6G"/>
+                                    <constraint firstAttribute="width" constant="173" id="hh6-zo-5Mu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Price" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NCi-f8-TeS">
+                                <rect key="frame" x="101" y="152" width="173" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="TLZ-Wh-JHN"/>
+                                    <constraint firstAttribute="width" constant="173" id="ioq-cY-utB"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UnX-Ib-meP">
+                                <rect key="frame" x="282" y="32" width="30" height="30"/>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="createOrFetchRestaurant" destination="6nY-Qw-oPl" eventType="touchUpInside" id="ZKC-ls-6qp"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o3y-6B-JNZ">
+                                <rect key="frame" x="282" y="112" width="30" height="30"/>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="createOrFetchMenuItem" destination="6nY-Qw-oPl" eventType="touchUpInside" id="ePh-bP-i6A"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="UnX-Ib-meP" firstAttribute="leading" secondItem="6L9-js-6LA" secondAttribute="trailing" constant="8" id="0VO-Yg-QPH"/>
+                            <constraint firstItem="6L9-js-6LA" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="3aw-jJ-OL8"/>
+                            <constraint firstItem="YEN-N8-reE" firstAttribute="leading" secondItem="XGJ-Q1-9AX" secondAttribute="leading" constant="47" id="GNU-GY-f0e"/>
+                            <constraint firstItem="6L9-js-6LA" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="GSV-yr-PFt"/>
+                            <constraint firstItem="6L9-js-6LA" firstAttribute="top" secondItem="XGJ-Q1-9AX" secondAttribute="top" constant="30" id="MOu-Z8-qPY"/>
+                            <constraint firstItem="XGJ-Q1-9AX" firstAttribute="trailing" secondItem="YB4-c1-fVI" secondAttribute="trailing" constant="48" id="MTP-VK-Fe0"/>
+                            <constraint firstItem="q6N-Q6-jcy" firstAttribute="leading" secondItem="XGJ-Q1-9AX" secondAttribute="leading" constant="55" id="SH4-Da-vZT"/>
+                            <constraint firstItem="o3y-6B-JNZ" firstAttribute="centerY" secondItem="qbG-Bd-eYC" secondAttribute="centerY" id="SJQ-Vk-Rr3"/>
+                            <constraint firstItem="XGJ-Q1-9AX" firstAttribute="bottom" secondItem="q6N-Q6-jcy" secondAttribute="bottom" constant="51" id="Tlk-aI-9O5"/>
+                            <constraint firstItem="q6N-Q6-jcy" firstAttribute="top" secondItem="YEN-N8-reE" secondAttribute="bottom" constant="8" id="TyP-zn-CSY"/>
+                            <constraint firstItem="qbG-Bd-eYC" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="UbU-Os-h8o"/>
+                            <constraint firstItem="qbG-Bd-eYC" firstAttribute="top" secondItem="6L9-js-6LA" secondAttribute="bottom" constant="46" id="VgU-q7-qrv"/>
+                            <constraint firstItem="NCi-f8-TeS" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="XS1-Sl-CCZ"/>
+                            <constraint firstItem="UnP-OF-0qM" firstAttribute="top" secondItem="YB4-c1-fVI" secondAttribute="bottom" constant="15" id="aLA-rm-1MU"/>
+                            <constraint firstItem="qbG-Bd-eYC" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="cak-yI-GNV"/>
+                            <constraint firstItem="NCi-f8-TeS" firstAttribute="top" secondItem="qbG-Bd-eYC" secondAttribute="bottom" constant="8" id="jYz-mf-Tg6"/>
+                            <constraint firstItem="XGJ-Q1-9AX" firstAttribute="bottom" secondItem="UnP-OF-0qM" secondAttribute="bottom" constant="44" id="mw3-gr-pPT"/>
+                            <constraint firstItem="UnX-Ib-meP" firstAttribute="centerY" secondItem="6L9-js-6LA" secondAttribute="centerY" id="oIO-Z9-zdI"/>
+                            <constraint firstItem="XGJ-Q1-9AX" firstAttribute="trailing" secondItem="UnP-OF-0qM" secondAttribute="trailing" constant="74" id="tz0-PE-P77"/>
+                            <constraint firstItem="NCi-f8-TeS" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="v2F-at-DjX"/>
+                            <constraint firstItem="o3y-6B-JNZ" firstAttribute="leading" secondItem="qbG-Bd-eYC" secondAttribute="trailing" constant="8" id="yfK-aZ-FLv"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="XGJ-Q1-9AX"/>
                     </view>
+                    <connections>
+                        <outlet property="menuItemNameField" destination="qbG-Bd-eYC" id="ghi-v4-wDi"/>
+                        <outlet property="menuItemPriceField" destination="NCi-f8-TeS" id="eC3-uV-KPR"/>
+                        <outlet property="restaurantNameField" destination="6L9-js-6LA" id="kgw-Xe-7cC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wsm-5P-Fbh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-81" y="-219"/>
+            <point key="canvasLocation" x="-82.400000000000006" y="-219.04047976011995"/>
         </scene>
     </scenes>
 </document>

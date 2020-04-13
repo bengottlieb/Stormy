@@ -13,9 +13,9 @@ import CloudKit
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 @objc open class SyncableManagedObject: NSManagedObject {
-	public static var cloudRecordIDField = "cloudRecordID"
-	public static var syncStateAttributeName = "syncState_"
-	public static let devicePrefix = "device_"							// fields prefixed with this will not be synced to iCloud
+	public static var cloudRecordIDField = "cloudRecordID"				/// should be a string
+	public static var syncStateAttributeName = "syncState_"				/// should be an integer
+	public static let devicePrefix = "device_"								/// fields prefixed with this will not be synced to iCloud
 
 	open var cloudRecordType: String { return self.entity.name! }
 	

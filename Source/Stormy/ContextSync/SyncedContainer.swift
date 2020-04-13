@@ -28,7 +28,6 @@ open class SyncedContainer {
 	public enum State: Int { case offline, ready, synchronizing }
 	
 	public static var instance: SyncedContainer!
-	public static var defaultsPrefix = "sync-"
 	
 	public var state = State.offline { didSet { if state != oldValue { self.notifyAboutStateChange() }}}
 	public let container: NSPersistentContainer
@@ -62,6 +61,10 @@ open class SyncedContainer {
 	}
 	
 	var queue = DispatchQueue(label: "SyncedContainerQueue")
+	
+	public static func setup(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil) {
+		self.instance = SyncedContainer(name: name, managedObjectModel: model, bundle: bundle, appGroupIdentifier: appGroupIdentifier)
+	}
 	
 	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil) {
 		AppGroupPersistentContainer.applicationGroupIdentifier = appGroupIdentifier
@@ -219,12 +222,5 @@ extension NSManagedObjectContext {
 		
 		if let uniqueID = id.recordID { new.uniqueID = uniqueID }
 		return new
-	}
-}
-
-@available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
-extension String {
-	var zoneChangeToken: String {
-		return SyncedContainer.defaultsPrefix + "changeToken-\(self)"
 	}
 }

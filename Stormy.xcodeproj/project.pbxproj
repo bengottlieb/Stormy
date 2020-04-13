@@ -68,6 +68,9 @@
 		B5F5869724439041005034C7 /* Stormy+RemoteNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F5869624439041005034C7 /* Stormy+RemoteNotifications.swift */; };
 		B5F5869A2443BC7C005034C7 /* Studio in Frameworks */ = {isa = PBXBuildFile; productRef = B5F586992443BC7C005034C7 /* Studio */; };
 		B5F5869D2443C7C9005034C7 /* Stormy+FetchedChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F5869C2443C7C9005034C7 /* Stormy+FetchedChanges.swift */; };
+		B5F586A02443CDF6005034C7 /* Harness.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B5F5869E2443CDF6005034C7 /* Harness.xcdatamodeld */; };
+		B5F586A22443E6D3005034C7 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F586A12443E6D3005034C7 /* Menu.swift */; };
+		B5F586A42443E6E8005034C7 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F586A32443E6E8005034C7 /* MenuItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +138,9 @@
 		B5F0AD1D2169921C00A25B05 /* SyncManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManagedObject.swift; sourceTree = "<group>"; };
 		B5F5869624439041005034C7 /* Stormy+RemoteNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stormy+RemoteNotifications.swift"; sourceTree = "<group>"; };
 		B5F5869C2443C7C9005034C7 /* Stormy+FetchedChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stormy+FetchedChanges.swift"; sourceTree = "<group>"; };
+		B5F5869F2443CDF6005034C7 /* Harness.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Harness.xcdatamodel; sourceTree = "<group>"; };
+		B5F586A12443E6D3005034C7 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		B5F586A32443E6E8005034C7 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,11 +209,11 @@
 		B5446E8321A3813A002D9379 /* ContextSync */ = {
 			isa = PBXGroup;
 			children = (
+				B5446E8821A3813A002D9379 /* SyncedContainer.swift */,
 				B5446E8421A3813A002D9379 /* SyncableManagedObject.swift */,
 				B5446E8521A3813A002D9379 /* SyncedContainer+RecordStatus.swift */,
 				B5446E8621A3813A002D9379 /* SyncedContainer+Subscriptions.swift */,
 				B5446E8721A3813A002D9379 /* SyncedContainer+Resync.swift */,
-				B5446E8821A3813A002D9379 /* SyncedContainer.swift */,
 			);
 			path = ContextSync;
 			sourceTree = "<group>";
@@ -217,7 +223,10 @@
 			children = (
 				B5897ED7215189D00086B481 /* iOSTestingHarness.entitlements */,
 				B54A9B4C2125B417008E646E /* AppDelegate.swift */,
+				B5F5869E2443CDF6005034C7 /* Harness.xcdatamodeld */,
 				B54A9B4E2125B417008E646E /* ViewController.swift */,
+				B5F586A12443E6D3005034C7 /* Menu.swift */,
+				B5F586A32443E6E8005034C7 /* MenuItem.swift */,
 				B54A9B502125B417008E646E /* Main.storyboard */,
 				B54A9B532125B418008E646E /* Assets.xcassets */,
 				B54A9B552125B418008E646E /* LaunchScreen.storyboard */,
@@ -549,6 +558,9 @@
 			files = (
 				B54A9B4F2125B417008E646E /* ViewController.swift in Sources */,
 				B54A9B4D2125B417008E646E /* AppDelegate.swift in Sources */,
+				B5F586A22443E6D3005034C7 /* Menu.swift in Sources */,
+				B5F586A02443CDF6005034C7 /* Harness.xcdatamodeld in Sources */,
+				B5F586A42443E6E8005034C7 /* MenuItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -974,6 +986,19 @@
 			productName = Studio;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		B5F5869E2443CDF6005034C7 /* Harness.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B5F5869F2443CDF6005034C7 /* Harness.xcdatamodel */,
+			);
+			currentVersion = B5F5869F2443CDF6005034C7 /* Harness.xcdatamodel */;
+			path = Harness.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = B504E60B1A89230F001B414B /* Project object */;
 }

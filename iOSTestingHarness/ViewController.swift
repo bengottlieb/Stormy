@@ -9,14 +9,55 @@
 import UIKit
 import Stormy
 import CloudKit
+import Studio
+import CoreData
 
 class ViewController: UIViewController {
+	@IBOutlet var restaurantNameField: UITextField!
+	@IBOutlet var menuItemNameField: UITextField!
+	@IBOutlet var menuItemPriceField: UITextField!
+
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 	}
 	
+	var context: NSManagedObjectContext { return SyncedContainer.instance.container.viewContext }
 	
+	var menu: Menu? {
+		guard let name = self.restaurantNameField.text, !name.isEmpty else { return nil }
+		if let existing: Menu = context.fetchAny(matching: NSPredicate(format: "restaurantName == %@", name)) { return existing }
+		return nil
+	}
+	
+	@IBAction func createOrFetchRestaurant() {
+		guard self.menu == nil, let name = self.restaurantNameField.text, !name.isEmpty else { return }
+		
+		let menu: Menu = context.insertObject()
+		
+		menu.restaurantName = name
+		menu.sync()
+		
+	}
+	
+	@IBAction func createOrFetchMenuItem() {
+		guard let menu = self.menu, let itemName = self.menuItemNameField.text, !itemName.isEmpty else { return }
+		let price = Double(self.menuItemPriceField.text ?? "") ?? 0
+		
+		if let items = menu.menuItems as? Set<MenuItem>, let existing = items.first(where: { $0.name == itemName }) {
+			existing.price = price
+			existing.sync()
+		} else {
+			let menuItem: MenuItem = context.insertObject()
+
+			menuItem.menu = menu
+			menuItem.name = itemName
+			menuItem.price = price
+			menuItem.sync()
+
+		}
+	}
 	
 	@IBAction func acceptShare() {
 		let url = URL(string: "https://www.icloud.com/share/0ob2iEeP6L-ZRGvLnZPFk8Emg")!

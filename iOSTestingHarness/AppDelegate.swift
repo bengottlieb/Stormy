@@ -19,10 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		application.registerForRemoteNotifications()
 		
-		Stormy.instance.setup(identifier: "iCloud.com.standalone.zap", zones: ["test_zone"])
-		
-		
-		
+		Stormy.instance.setup(identifier: "iCloud.com.standalone.zap", zones: ["test_zone", "menus"])
+		SyncedContainer.setup(name: "Harness", managedObjectModel: nil)
+		SyncedContainer.instance.register(entity: Menu.self, zoneName: "menus", database: .private)
+		SyncedContainer.instance.register(entity: MenuItem.self, zoneName: "menus", database: .private)
+
 		let tokenData = UserDefaults.standard.data(forKey: "changeToken")
 		Stormy.instance.fetchChanges(since: tokenData) { result in
 			switch result {
@@ -40,10 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		Stormy.instance.queue {
 			print("Stormy.instance.userRecordID: \(Stormy.instance.userRecordID?.description ?? "--")")
 		}
-		
-		//		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-		//			if let error = error { print("Error while registering for notifications: \(error)") }
-		//		}
 		
 		Stormy.instance.setupSubscription(in: .private) { error in
 			if let err = error, !err.isDuplicateSubscriptionError { print("Error setting up on private: \(err)") }
