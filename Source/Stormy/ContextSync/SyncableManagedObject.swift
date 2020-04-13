@@ -13,29 +13,29 @@ import CloudKit
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 @objc open class SyncableManagedObject: NSManagedObject {
-	public static var cloudRecordIDField = "cloudRecordID"				/// should be a string
-	public static var syncStateAttributeName = "syncState_"				/// should be an integer
-	public static let devicePrefix = "device_"								/// fields prefixed with this will not be synced to iCloud
+	public static var cloudKitRecordIDFieldName = "cloudKitRecordID_"		/// should be a string
+	public static var syncStateFieldName = "cloudKitSyncState_"						/// should be an integer
+	public static var devicePrefix = "device_"									/// fields prefixed with this will not be synced to iCloud
 
-	open var cloudRecordType: String { return self.entity.name! }
+	open var cloudKitRecordType: String { return self.entity.name! }
 	
 	public var isSyncable: Bool {
-		guard let id = self.primitiveValue(forKey: SyncableManagedObject.cloudRecordIDField) as? String else { return false }
+		guard let id = self.primitiveValue(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String else { return false }
 		return !id.isEmpty
 	}
 	open var uniqueID: String {
 		get {
-			let id = self.primitiveValue(forKey: SyncableManagedObject.cloudRecordIDField) as? String
+			let id = self.primitiveValue(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String
 			if let realID = id, !realID.isEmpty { return realID }
 			let newID = UUID().uuidString
-			self.setPrimitiveValue(newID, forKey: SyncableManagedObject.cloudRecordIDField)
+			self.setPrimitiveValue(newID, forKey: SyncableManagedObject.cloudKitRecordIDFieldName)
 			return newID
 		}
-		set { self.setPrimitiveValue(newValue, forKey: SyncableManagedObject.cloudRecordIDField )}
+		set { self.setPrimitiveValue(newValue, forKey: SyncableManagedObject.cloudKitRecordIDFieldName )}
 	}
 	
 	open class func predicate(for id: CKRecord.ID) -> NSPredicate {
-		return NSPredicate(format: "%K == %@", SyncableManagedObject.cloudRecordIDField, id.recordID ?? id.recordName)
+		return NSPredicate(format: "%K == %@", SyncableManagedObject.cloudKitRecordIDFieldName, id.recordID ?? id.recordName)
 	}
 	
 	open var parentRelationshipName: String? { return nil }
@@ -44,7 +44,7 @@ import CloudKit
 	
 	open var localCache: CKLocalCache {
 		let db = self.recordID.databaseType ?? SyncedContainer.instance.defaultDatabaseType
-		let cache = db.cache.fetch(type: self.cloudRecordType, id: self.recordID)
+		let cache = db.cache.fetch(type: self.cloudKitRecordType, id: self.recordID)
 		if !cache.isLoaded {
 			self.load(into: cache)
 		}
@@ -91,12 +91,12 @@ import CloudKit
 extension SyncableManagedObject {
 	var syncState: CKLocalCache.SyncState {
 		get {
-			let raw = self.value(forKey: SyncableManagedObject.syncStateAttributeName) as? Int ?? 0
+			let raw = self.value(forKey: SyncableManagedObject.syncStateFieldName) as? Int ?? 0
 			return CKLocalCache.SyncState(rawValue: raw) ?? .upToDate
 		}
 		
 		set {
-			self.setValue(newValue.rawValue, forKey: SyncableManagedObject.syncStateAttributeName)
+			self.setValue(newValue.rawValue, forKey: SyncableManagedObject.syncStateFieldName)
 		}
 	}
 
@@ -180,7 +180,7 @@ extension SyncableManagedObject {
 	
 	public func deleteSynced(completion: ((Error?) -> Void)? = nil) {
 		let db = self.recordID.databaseType ?? SyncedContainer.instance.defaultDatabaseType
-		let cache = db.cache.fetch(type: self.cloudRecordType, id: self.recordID)
+		let cache = db.cache.fetch(type: self.cloudKitRecordType, id: self.recordID)
 
 		if let moc = self.managedObjectContext {
 			moc.delete(self)
@@ -196,7 +196,7 @@ extension SyncableManagedObject {
 	
 	open var syncableFieldNames: [String] {
 		return self.entity.attributesByName.values.compactMap { attr in
-			if self.isDeviceOnlyAttribute(attr) || attr.name == SyncableManagedObject.cloudRecordIDField || attr.name == SyncableManagedObject.syncStateAttributeName { return nil }
+			if self.isDeviceOnlyAttribute(attr) || attr.name == SyncableManagedObject.cloudKitRecordIDFieldName || attr.name == SyncableManagedObject.syncStateFieldName { return nil }
 			return attr.name
 		}
 	}

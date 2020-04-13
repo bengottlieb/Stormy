@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F53f" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Menu" representedClassName=".Menu" syncable="YES" codeGenerationType="category">
-        <attribute name="cloudRecordID" optional="YES" attributeType="String"/>
+        <attribute name="cloudKitRecordID_" optional="YES" attributeType="String"/>
+        <attribute name="cloudKitSyncState_" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="restaurantName" optional="YES" attributeType="String"/>
-        <attribute name="syncState_" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="menuItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MenuItem" inverseName="menu" inverseEntity="MenuItem"/>
     </entity>
     <entity name="MenuItem" representedClassName=".MenuItem" syncable="YES" codeGenerationType="category">
-        <attribute name="cloudRecordID" optional="YES" attributeType="String"/>
+        <attribute name="cloudKitRecordID_" optional="YES" attributeType="String"/>
+        <attribute name="cloutKitSyncState_" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="syncState_" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="menu" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Menu" inverseName="menuItems" inverseEntity="Menu"/>
     </entity>
     <elements>

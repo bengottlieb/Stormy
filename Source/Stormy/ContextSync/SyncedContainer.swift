@@ -82,6 +82,11 @@ open class SyncedContainer {
 			assert(false, "Entity name required for \(entity)")
 			return
 		}
+		
+		assert(entity.entity().attributesByName[SyncableManagedObject.cloudKitRecordIDFieldName]?.attributeType == .stringAttributeType, "Trying to register \(entity), but its \(SyncableManagedObject.cloudKitRecordIDFieldName) ID field is not a string")
+		assert(entity.entity().attributesByName[SyncableManagedObject.syncStateFieldName]?.attributeType == .stringAttributeType, "Trying to register \(entity), but its \(SyncableManagedObject.syncStateFieldName) field is not an integer")
+
+		
 		self.syncedObjects[entityName] = EntityInfo(entity: entity, zoneName: zoneName, database: database)
 	}
 	
