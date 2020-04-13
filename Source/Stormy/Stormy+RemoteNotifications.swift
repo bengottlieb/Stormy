@@ -6,6 +6,8 @@
 //  Copyright © 2020 Stand Alone, inc. All rights reserved.
 //
 
+#if canImport(UIKit)
+import UIKit
 import Foundation
 import CloudKit
 
@@ -31,3 +33,4 @@ public extension Stormy {
 		return true
 	}
 }
+#endif
