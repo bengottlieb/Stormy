@@ -16,7 +16,7 @@ import CloudKit
 	public static var cloudKitRecordIDFieldName = "cloudKitRecordID_"		/// should be a string
 	public static var syncStateFieldName = "cloudKitSyncState_"						/// should be an integer
 	public static var devicePrefix = "device_"									/// fields prefixed with this will not be synced to iCloud
-
+	
 	open var cloudKitRecordType: String { return self.entity.name! }
 	
 	public var isSyncable: Bool {
@@ -34,11 +34,15 @@ import CloudKit
 		set { self.setPrimitiveValue(newValue, forKey: SyncableManagedObject.cloudKitRecordIDFieldName )}
 	}
 	
+	open func save() {
+		if self.hasChanges { self.syncState = .dirty }
+	}
+	
 	open class func predicate(for id: CKRecord.ID) -> NSPredicate {
 		return NSPredicate(format: "%K == %@", SyncableManagedObject.cloudKitRecordIDFieldName, id.recordID ?? id.recordName)
 	}
 	
-	open class var parentRelationshipName: String? { return nil }
+	open class var parentRelationshipNames: [String] { return [] }
 	
 	open func willSync(withCache: CKLocalCache) {}
 	
@@ -56,11 +60,11 @@ import CloudKit
 	}
 	
 	open func isDeviceOnlyAttribute(_ attr: NSAttributeDescription) -> Bool { return attr.name.hasPrefix(SyncableManagedObject.devicePrefix) }
-
+	
 	open func read(from record: CKLocalCache) {
 		for field in self.syncableFieldNames {
 			let value = record[field]
-
+			
 			if let url = value as? URL {
 				do {
 					let data = try Data(contentsOf: url, options: [.mappedRead])
@@ -75,7 +79,7 @@ import CloudKit
 		self.uniqueID = record.recordID.recordID ?? record.recordID.recordName
 		if let parent = record.parent { self.loadParent(from: parent) }
 	}
-
+	
 	open func loadParent(from record: CKLocalCache) {
 		guard let moc = self.managedObjectContext, let existing = record.object(in: moc) else { return }
 		for (_, relationship) in self.entity.relationshipsByName {
@@ -99,21 +103,7 @@ extension SyncableManagedObject {
 			self.setValue(newValue.rawValue, forKey: SyncableManagedObject.syncStateFieldName)
 		}
 	}
-
-	class RelationshipGraph {
-		var consideredObjects: [SyncableManagedObject] = []
 		
-		func append(_ object: SyncableManagedObject) {
-			self.consideredObjects.append(object)
-		}
-
-		func prune() {
-			self.consideredObjects = self.consideredObjects.filter { $0.syncState == .dirty }
-		}
-
-		var count: Int { return self.consideredObjects.count }
-	}
-
 	public var recordID: CKRecord.ID {
 		if let name = SyncedContainer.instance.zoneName(for: type(of: self)) {
 			let zone = Stormy.instance.zone(named: name)
@@ -125,63 +115,45 @@ extension SyncableManagedObject {
 	func connectCachedRelationships(withGraph graph: SyncableManagedObject.RelationshipGraph) {
 		graph.append(self)
 		
-		if let parentName = Self.parentRelationshipName, let parent = self.value(forKey: parentName) as? SyncableManagedObject {
-			self.localCache.setParent(parent.localCache)
+		for parentName in Self.parentRelationshipNames {
+			if let parent = self.value(forKey: parentName) as? SyncableManagedObject {
+				self.localCache.setParent(parent.localCache)
+				if parent.syncState == .dirty { graph.append(parent) }
+				break
+			}
 		}
 		
 		for relationship in self.entity.relationshipsByName.values {
 			guard let kids = self.value(forKey: relationship.name) as? Set<SyncableManagedObject>, let first = kids.first else { continue }
 			
-			if let parent = type(of: first).parentRelationshipName, first.entity.relationshipsByName[parent]?.destinationEntity?.managedObjectClassName == NSStringFromClass(type(of: self)) {
-				kids.forEach { kid in kid.connectCachedRelationships(withGraph: graph) }
-			}
-		}
-	}
-	
-	public func sync(completion: ((Error?) -> Void)? = nil) {
-		let id = self.recordID
-		SyncedContainer.instance.markRecordID(id, inProgress: true)
-		self.syncState = .dirty
-		((try? self.managedObjectContext?.save()) as ()??)
-		let cache = self.localCache
-		
-		let graph = RelationshipGraph()
-		self.connectCachedRelationships(withGraph: graph)
-		graph.prune()
-
-		if graph.count == 0 {
-			completion?(nil)
-			return
-		}
-		
-		self.willSync(withCache: cache)
-
-		cache.reloadFromServer { error in
-			self.managedObjectContext?.perform {
-				self.load(into: cache)
-                cache.save(reloadingFirst: false) { error in
-					self.managedObjectContext?.perform {
-						if let err = error {
-							print("Error when syncing a record (\(self): \(err)")
-						} else {
-							for record in graph.consideredObjects {
-								record.syncState = .upToDate
-							}
-							self.syncState = .upToDate
-							((try? self.managedObjectContext?.save()) as ()??)
-							SyncedContainer.instance.markRecordID(id, inProgress: false)
-						}
-						completion?(error)
-					}
+			for parentName in type(of: first).parentRelationshipNames {
+				if first.entity.relationshipsByName[parentName]?.destinationEntity?.managedObjectClassName == NSStringFromClass(type(of: self)) {
+					kids.forEach { kid in kid.connectCachedRelationships(withGraph: graph) }
 				}
 			}
 		}
 	}
 	
+	public func sync(completion: ((Error?) -> Void)? = nil) {
+		self.syncState = .dirty
+		try? self.managedObjectContext?.save()
+		
+		let graph = RelationshipGraph()
+		self.connectCachedRelationships(withGraph: graph)
+		graph.prune()
+		
+		if graph.count == 0 {
+			completion?(nil)
+			return
+		}
+		
+		graph.sync(completion: completion)
+	}
+	
 	public func deleteSynced(completion: ((Error?) -> Void)? = nil) {
 		let db = self.recordID.databaseType ?? SyncedContainer.instance.defaultDatabaseType
 		let cache = db.cache.fetch(type: self.cloudKitRecordType, id: self.recordID)
-
+		
 		if let moc = self.managedObjectContext {
 			moc.delete(self)
 			do {
@@ -226,6 +198,6 @@ extension SyncableManagedObject {
 		
 		record.syncState = self.syncState
 		record.isLoaded = true
-        return record
+		return record
 	}
 }

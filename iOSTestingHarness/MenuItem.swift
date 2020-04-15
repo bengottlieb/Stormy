@@ -11,5 +11,5 @@ import CoreData
 import Stormy
 
 class MenuItem: SyncableManagedObject {
-	override class var parentRelationshipName: String? { return "menu" }
+	override class var parentRelationshipNames: [String] { return ["menu"] }
 }

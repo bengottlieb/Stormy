@@ -38,7 +38,7 @@ extension Stormy {
 		self.fetchAll(recordType, in: database, matching: predicate, limit: 1, completion: completion)
 	}
 	
-	public func fetch(_ id: CKRecord.ID? = nil, _ ids: [CKRecord.ID] = [], in database: CKDatabase.Scope = .private, completion: (([CKLocalCache], Error?) -> Void)? = nil) {
+	public func fetch(_ id: CKRecord.ID? = nil, ids: [CKRecord.ID] = [], in database: CKDatabase.Scope = .private, completion: (([CKLocalCache], Error?) -> Void)? = nil) {
 		if id == nil && ids.count == 0 { completion?([], nil); return }
 		self.startLongRunningTask()
 		var idsToFetch = ids

@@ -87,10 +87,10 @@ open class SyncedContainer {
 		let syncStatusType = entity.entity().attributesByName[SyncableManagedObject.syncStateFieldName]?.attributeType
 		assert(syncStatusType == .integer16AttributeType || syncStatusType == .integer32AttributeType || syncStatusType == .integer64AttributeType, "Trying to register \(entity), but its \(SyncableManagedObject.syncStateFieldName) field is not an integer")
 
-		if entity.parentRelationshipName == nil {
+		if entity.parentRelationshipNames.isEmpty {
 			for relationship in entity.entity().relationshipsByName.values {
 				if !relationship.isToMany, let inverse = relationship.inverseRelationship, inverse.isToMany {
-					print("****** WARNING ********\nAdding an entity (\(entityName)) with no parentRelationshipName that appears to have a parent relationship to \(inverse.entity.name ?? "--")")
+					print("****** WARNING ********\nAdding an entity (\(entityName)) with no parentRelationshipNames that appears to have a parent relationship to \(inverse.entity.name ?? "--")")
 				}
 			}
 		}
@@ -169,10 +169,13 @@ open class SyncedContainer {
 							}
 							
 							for object in changedObjects {
-								guard let parentName = type(of: object).parentRelationshipName else { continue }
+								let parentNames = type(of: object).parentRelationshipNames
+								if parentNames.isEmpty { continue }
 								let record = object.localCache
-								if let parent = record.parent?.lookupObject(in: moc) {
-									object.setValue(parent, forKey: parentName)
+								for parentName in parentNames {
+									if let parent = record.parent?.lookupObject(in: moc), parent.entity == object.entity.relationshipsByName[parentName]?.entity {
+										object.setValue(parent, forKey: parentName)
+									}
 								}
 							}
 							

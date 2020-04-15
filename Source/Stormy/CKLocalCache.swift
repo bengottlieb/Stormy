@@ -76,7 +76,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	open var changedValues: [String: CKRecordValue] = [:]
 	open var originalRecord: CKRecord? { didSet { if let type = self.originalRecord?.recordType { self.typeName = type }}}
 	open var recordZone: CKRecordZone? { return Stormy.instance.zone(withID: self.recordID.zoneID) }
-	open var isDirty: Bool { return self.changedKeys.count > 0 || childrenChanged }
+	open var hasChanges: Bool { return self.changedKeys.count > 0 || childrenChanged }
 	open var existsOnServer: Bool { return self.originalRecord != nil }
 	public var isLoaded = false
 	public var syncState = CKLocalCache.SyncState.upToDate
@@ -146,12 +146,12 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 			return
 		}
 		
-		if !self.isDirty, !evenIfNotDirty { completion?(nil); return }
+		if !self.hasChanges, !evenIfNotDirty { completion?(nil); return }
 		
 		let allCaches = [self] + self.decendents.filter { $0.syncState != .upToDate }
-        let caches = allCaches.byRemovingDuplicates()
-        
-		let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { ($0.isDirty || evenIfNotDirty) ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
+		let caches = allCaches.byRemovingDuplicates()
+		
+		let op = CKModifyRecordsOperation(recordsToSave: caches.compactMap { ($0.hasChanges || evenIfNotDirty) ? $0.updatedRecord() : nil }, recordIDsToDelete: nil)
 		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
 			if Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) {
@@ -254,7 +254,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 			newRecord.parent = self.parent?.reference(action: .none)
 			newRecord[Stormy.childReferencesFieldName] = self.childReferences
 		}
-
+		
 		return newRecord
 	}
 	
@@ -310,13 +310,13 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 }
 
 extension Array where Element: Equatable {
-    func byRemovingDuplicates() -> [Element] {
-        var results: [Element] = []
-        
-        for item in self {
-            if !results.contains(item) { results.append(item) }
-        }
-        
-        return results
-    }
+	func byRemovingDuplicates() -> [Element] {
+		var results: [Element] = []
+		
+		for item in self {
+			if !results.contains(item) { results.append(item) }
+		}
+		
+		return results
+	}
 }
