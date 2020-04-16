@@ -176,8 +176,10 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		if let record = parent {
 			//self.parentReference = CKRecord.Reference(recordID: record.recordID, action: .none)
 			self.parent = parent
-			record.children.append(self)
-			record.childrenChanged = true
+			if !record.children.contains(self) {
+				record.children.append(self)
+				record.childrenChanged = true
+			}
 		} else {
 			if let index = self.parent?.children.firstIndex(of: self) {
 				self.parent?.children.remove(at: index)
@@ -281,6 +283,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 				self.changedKeys.insert(key)
 			} else if savedValue == nil {
 				self.changedKeys.insert(key)
+				self.changedValues.removeValue(forKey: key)
 			}
 		}
 	}
