@@ -193,6 +193,7 @@ open class SyncedContainer {
 							self.queue.resume()
 							if !newObjects.isEmpty { Stormy.Notifications.recordsCreatedViaPush.notify(newObjects.map { $0.objectID }) }
 							if !changedObjects.isEmpty { Stormy.Notifications.recordsModifiedViaPush.notify(changedObjects.map { $0.objectID }) }
+							if !changedObjects.isEmpty || !newObjects.isEmpty { Stormy.Notifications.recordsModifiedOrCreatedViaPush.notify((changedObjects + newObjects).map { $0.objectID }) }
 							if !deletedObjectIDs.isEmpty { Stormy.Notifications.recordsDeletedViaPush.notify(deletedObjectIDs) }
 						}
 					}

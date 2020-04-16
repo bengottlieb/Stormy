@@ -179,7 +179,7 @@ extension SyncableManagedObject {
 		return baseURL.appendingPathComponent(filename)
 	}
 	
-	@discardableResult open func load(into record: CKLocalCache) -> CKLocalCache {
+	@discardableResult open func load(into cache: CKLocalCache) -> CKLocalCache {
 		let attributes = self.entity.attributesByName
 		
 		for field in self.syncableFieldNames {
@@ -187,17 +187,17 @@ extension SyncableManagedObject {
 				do {
 					let url = self.tempURL(for: attr)
 					try data.write(to: url)
-					record[field] = url
+					cache[field] = url
 				} catch {
 					print("Problem writing a \(field) to a temporary file: \(error)")
 				}
 			} else {
-				record[field] = self.value(forKey: field) as? CKRecordValue
+				cache[field] = self.value(forKey: field) as? CKRecordValue
 			}
 		}
 		
-		record.syncState = self.syncState
-		record.isLoaded = true
-		return record
+		cache.syncState = self.syncState
+		cache.isLoaded = true
+		return cache
 	}
 }

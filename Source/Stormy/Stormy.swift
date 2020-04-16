@@ -24,6 +24,7 @@ public class Stormy {
 		static public let didFetchCloudKitUserRecordID = Notification.Name("stormy-didFetchCloudKitUserRecordID")
 		static public let recordsCreatedViaPush = Notification.Name("stormy-recordsCreatedViaPush")
 		static public let recordsModifiedViaPush = Notification.Name("stormy-recordsModifiedViaPush")
+		static public let recordsModifiedOrCreatedViaPush = Notification.Name("stormy-recordsModifiedOrCreatedViaPush")
 		static public let recordsDeletedViaPush = Notification.Name("stormy-recordsDeletedViaPush")
 	}
 	
