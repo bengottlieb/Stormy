@@ -4,6 +4,7 @@
         <attribute name="cloudKitRecordID_" optional="YES" attributeType="String"/>
         <attribute name="cloudKitSyncState_" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="openDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="restaurantName" optional="YES" attributeType="String"/>
         <relationship name="menuItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MenuItem" inverseName="menu" inverseEntity="MenuItem"/>
     </entity>
@@ -15,7 +16,7 @@
         <relationship name="menu" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Menu" inverseName="menuItems" inverseEntity="Menu"/>
     </entity>
     <elements>
-        <element name="Menu" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="Menu" positionX="-63" positionY="-18" width="128" height="133"/>
         <element name="MenuItem" positionX="-54" positionY="-9" width="128" height="118"/>
     </elements>
 </model>

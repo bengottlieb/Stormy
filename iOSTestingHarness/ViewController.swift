@@ -16,6 +16,7 @@ class ViewController: UIViewController {
 	@IBOutlet var restaurantNameField: UITextField!
 	@IBOutlet var menuItemNameField: UITextField!
 	@IBOutlet var menuItemPriceField: UITextField!
+	@IBOutlet var restaurantOpenDateTodaySwitch: UISwitch!
 
 	
 	override func viewDidLoad() {
@@ -24,8 +25,10 @@ class ViewController: UIViewController {
 	}
 	
 	var context: NSManagedObjectContext { return SyncedContainer.instance.container.viewContext }
+	var cachedMenu: Menu?
 	
 	var menu: Menu? {
+		if let cached = cachedMenu { return cached }
 		guard let name = self.restaurantNameField.text, !name.isEmpty else { return nil }
 		if let existing: Menu = context.fetchAny(matching: NSPredicate(format: "restaurantName == %@", name)) { return existing }
 		return nil
@@ -34,10 +37,12 @@ class ViewController: UIViewController {
 	@IBAction func createOrFetchRestaurant() {
 		guard self.menu == nil, let name = self.restaurantNameField.text, !name.isEmpty else { return }
 		
-		let menu: Menu = context.insertObject()
+		cachedMenu = context.insertObject()
 		
-		menu.restaurantName = name
-		menu.sync()
+		cachedMenu?.restaurantName = name
+		cachedMenu?.openDate = Date()
+		cachedMenu?.sync()
+		
 		
 	}
 	
@@ -57,6 +62,18 @@ class ViewController: UIViewController {
 			menuItem.sync()
 
 		}
+	}
+	
+	@IBAction func toggleRestaurantOpenDateToday() {
+		guard let menu = self.menu else { return }
+
+		if self.restaurantOpenDateTodaySwitch.isOn {
+			menu.openDate = Date()
+		} else {
+			menu.openDate = nil
+		}
+		
+		menu.sync()
 	}
 	
 	@IBAction func acceptShare() {

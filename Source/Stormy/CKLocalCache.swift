@@ -249,12 +249,21 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		let newRecord = self.originalRecord ?? CKRecord(recordType: self.typeName, recordID: self.recordID)
 		
 		for key in self.changedKeys {
-			newRecord[key] = self.changedValues[key]
+			if let current = newRecord[key], let new = self.changedValues[key] {
+				if !areEqual(current, new) {
+					newRecord[key] = self.changedValues[key]
+				}
+			} else if newRecord[key] == nil, self.changedValues[key] == nil {
+				//both nil, don't do anything
+			} else {
+				newRecord[key] = self.changedValues[key]
+			}
 		}
 		
 		if #available(OSX 10.12, iOS 10.0, *) {
-			newRecord.parent = self.parent?.reference(action: .none)
-			newRecord[Stormy.childReferencesFieldName] = self.childReferences
+			let parent = self.parent?.reference(action: .none)
+			if parent != newRecord.parent { newRecord.parent = parent }
+			if newRecord[Stormy.childReferencesFieldName] != self.childReferences { newRecord[Stormy.childReferencesFieldName] = self.childReferences }
 		}
 		
 		return newRecord

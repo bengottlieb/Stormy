@@ -85,6 +85,12 @@
                                     <action selector="createOrFetchMenuItem" destination="6nY-Qw-oPl" eventType="touchUpInside" id="ePh-bP-i6A"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="klI-yf-JcB">
+                                <rect key="frame" x="27" y="31" width="49" height="31"/>
+                                <connections>
+                                    <action selector="toggleRestaurantOpenDateToday" destination="6nY-Qw-oPl" eventType="valueChanged" id="yrs-qz-3qa"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -101,9 +107,11 @@
                             <constraint firstItem="qbG-Bd-eYC" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="UbU-Os-h8o"/>
                             <constraint firstItem="qbG-Bd-eYC" firstAttribute="top" secondItem="6L9-js-6LA" secondAttribute="bottom" constant="46" id="VgU-q7-qrv"/>
                             <constraint firstItem="NCi-f8-TeS" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="XS1-Sl-CCZ"/>
+                            <constraint firstItem="klI-yf-JcB" firstAttribute="centerY" secondItem="6L9-js-6LA" secondAttribute="centerY" id="YcA-Xt-AP9"/>
                             <constraint firstItem="UnP-OF-0qM" firstAttribute="top" secondItem="YB4-c1-fVI" secondAttribute="bottom" constant="15" id="aLA-rm-1MU"/>
                             <constraint firstItem="qbG-Bd-eYC" firstAttribute="centerX" secondItem="Zae-Ah-lND" secondAttribute="centerX" id="cak-yI-GNV"/>
                             <constraint firstItem="NCi-f8-TeS" firstAttribute="top" secondItem="qbG-Bd-eYC" secondAttribute="bottom" constant="8" id="jYz-mf-Tg6"/>
+                            <constraint firstItem="6L9-js-6LA" firstAttribute="leading" secondItem="klI-yf-JcB" secondAttribute="trailing" constant="27" id="mvh-fE-iOj"/>
                             <constraint firstItem="XGJ-Q1-9AX" firstAttribute="bottom" secondItem="UnP-OF-0qM" secondAttribute="bottom" constant="44" id="mw3-gr-pPT"/>
                             <constraint firstItem="UnX-Ib-meP" firstAttribute="centerY" secondItem="6L9-js-6LA" secondAttribute="centerY" id="oIO-Z9-zdI"/>
                             <constraint firstItem="XGJ-Q1-9AX" firstAttribute="trailing" secondItem="UnP-OF-0qM" secondAttribute="trailing" constant="74" id="tz0-PE-P77"/>
@@ -116,6 +124,7 @@
                         <outlet property="menuItemNameField" destination="qbG-Bd-eYC" id="ghi-v4-wDi"/>
                         <outlet property="menuItemPriceField" destination="NCi-f8-TeS" id="eC3-uV-KPR"/>
                         <outlet property="restaurantNameField" destination="6L9-js-6LA" id="kgw-Xe-7cC"/>
+                        <outlet property="restaurantOpenDateTodaySwitch" destination="klI-yf-JcB" id="ugJ-Zi-Kth"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wsm-5P-Fbh" userLabel="First Responder" sceneMemberID="firstResponder"/>
