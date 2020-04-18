@@ -21,7 +21,7 @@ extension SyncableManagedObject {
 		}
 
 		func append(_ object: SyncableManagedObject) {
-			self.consideredObjects.append(object)
+			if !self.consideredObjects.contains(object) { self.consideredObjects.append(object) }
 		}
 		
 		func prune() {

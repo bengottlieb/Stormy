@@ -84,7 +84,10 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	private var childrenChanged = false
 	public private(set) var parent: CKLocalCache?
 	private var children: [CKLocalCache] = []
-	private func reference(action: CKRecord_Reference_Action = .none) -> CKRecord.Reference { return CKRecord.Reference(recordID: self.recordID, action: action) }
+	private func reference(action: CKRecord_Reference_Action = .none) -> CKRecord.Reference {
+		print("Creating a reference to \(self.typeName) via \(action.rawValue)")
+		return CKRecord.Reference(recordID: self.recordID, action: action)
+	}
 	
 	fileprivate init(reference: CKRecord.Reference, in database: CKDatabase.Scope) {
 		self.recordID = reference.recordID
@@ -228,13 +231,17 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		return result
 	}
 	
+	var descendentIDs: [CKRecord.ID] {
+		self.children.flatMap { $0.descendentIDs } + [self.recordID]
+	}
+	
 	public func delete(ignoreOnServerState: Bool = true, completion: ((Error?) -> Void)? = nil) {
 		if !self.existsOnServer, !ignoreOnServerState {
 			completion?(nil)
 			return
 		}
 		
-		let op = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: [self.recordID])
+		let op = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: self.descendentIDs )
 		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
 			if !Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) { completion?(error) }
