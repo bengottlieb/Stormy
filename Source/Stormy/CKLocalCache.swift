@@ -85,7 +85,6 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	public private(set) var parent: CKLocalCache?
 	private var children: [CKLocalCache] = []
 	private func reference(action: CKRecord_Reference_Action = .none) -> CKRecord.Reference {
-		print("Creating a reference to \(self.typeName) via \(action.rawValue)")
 		return CKRecord.Reference(recordID: self.recordID, action: action)
 	}
 	
