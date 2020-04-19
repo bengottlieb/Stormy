@@ -10,7 +10,6 @@ import Foundation
 import CoreData
 import CloudKit
 
-
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 @objc open class SyncableManagedObject: NSManagedObject {
 	public static var cloudKitRecordIDFieldName = "cloudKitRecordID_"		/// should be a string
@@ -32,6 +31,12 @@ import CloudKit
 			return newID
 		}
 		set { self.setPrimitiveValue(newValue, forKey: SyncableManagedObject.cloudKitRecordIDFieldName )}
+	}
+	
+	open override func awakeFromInsert() {
+		super.awakeFromInsert()
+		self.setValue(UUID().uuidString, forKey: Self.cloudKitRecordIDFieldName)
+		self.setValue(CKLocalCache.SyncState.dirty.rawValue, forKey: Self.syncStateFieldName)
 	}
 	
 	open func save() {
@@ -135,6 +140,8 @@ extension SyncableManagedObject {
 	}
 	
 	public func sync(completion: ((Error?) -> Void)? = nil) {
+		precondition((self.value(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String)?.isEmpty == false,
+					 "Trying to sync a record with no CloudKit recordID: \(self)")
 		self.syncState = .dirty
 		try? self.managedObjectContext?.save()
 		

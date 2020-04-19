@@ -327,6 +327,10 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	}
 }
 
+extension CKLocalCache {
+	public enum SyncState: Int { case upToDate, dirty, syncing }
+}
+
 extension Array where Element: Equatable {
 	func byRemovingDuplicates() -> [Element] {
 		var results: [Element] = []
