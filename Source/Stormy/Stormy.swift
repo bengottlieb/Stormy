@@ -42,7 +42,9 @@ public class Stormy {
 	public var containerIdentifer: String!
 	public var authenticationState = AuthenticationState.notLoggedIn { didSet {
 		if self.authenticationState != oldValue, (self.authenticationState == .authenticated || self.authenticationState == .denied) {
-			NotificationCenter.default.post(name: Notifications.availabilityChanged, object: nil)
+			DispatchQueue.main.async {
+				NotificationCenter.default.post(name: Notifications.availabilityChanged, object: nil)
+			}
 		}
 	}}
 	public var isAvailable: Bool { return self.authenticationState == .authenticated }
@@ -59,9 +61,10 @@ public class Stormy {
 	static public var childReferencesFieldName = "child_refs"
 	
 	
-	let operationSemaphore = DispatchSemaphore(value: 1)
-	var queuedOperations: [(CKDatabase.Scope, Operation)] = []
-	var longRunningTaskCount = 0
+	private let operationSemaphore = DispatchSemaphore(value: 1)
+	private var queuedOperations: [(CKDatabase.Scope, Operation)] = []
+	private var longRunningTaskCount = 0
+	private var attemptConnection: (() -> Void)?
 	
 	func startLongRunningTask() {
 		self.longRunningTaskCount += 1
@@ -86,6 +89,10 @@ public class Stormy {
 		#endif
 	}
 	
+	@objc func didBecomeActive() {
+		if !self.isAvailable { self.attemptConnection?() }
+	}
+	
 	public func setup(identifier: String, zones: [String] = [], andConnect connectNow: Bool = true) {
 		self.containerIdentifer = identifier
 
@@ -94,36 +101,43 @@ public class Stormy {
 		self.privateDatabase = self.container.privateCloudDatabase
 		if #available(OSX 10.12, iOS 10.0, *) { self.sharedDatabase = self.container.sharedCloudDatabase }
 
+		NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
 		if self.authenticationState != .notLoggedIn && self.authenticationState != .tokenFailed { return }
-		self.authenticationState = .signingIn
-		self.container.accountStatus { status, error in
-			switch status {
-			case .available:
-				if !connectNow {
-					Stormy.instance.authenticationState = .authenticated
-					self.flushQueue()
-					return
-				}
-				self.setupZones(names: zones) { _ in
-					self.container.fetchUserRecordID() { id, err in
-						if id != self.userRecordID {
-							self.userRecordID = id
-							NotificationCenter.default.post(name: Notifications.didFetchCloudKitUserRecordID, object: nil)
-						}
-						if let error = err { print("Error fetching userRecordID: \(error)") }
-						Stormy.instance.authenticationState = (Stormy.instance.authenticationState == .tokenFailed) ? .tokenFailed : .authenticated
+
+		self.attemptConnection = { [weak self] in
+			guard let self = self, self.authenticationState != .signingIn else { return }
+			self.authenticationState = .signingIn
+			self.container.accountStatus { status, error in
+				switch status {
+				case .available:
+					self.attemptConnection = nil
+					if !connectNow {
+						Stormy.instance.authenticationState = .authenticated
 						self.flushQueue()
+						return
 					}
+					self.setupZones(names: zones) { _ in
+						self.container.fetchUserRecordID() { id, err in
+							if id != self.userRecordID {
+								self.userRecordID = id
+								NotificationCenter.default.post(name: Notifications.didFetchCloudKitUserRecordID, object: nil)
+							}
+							if let error = err { print("Error fetching userRecordID: \(error)") }
+							Stormy.instance.authenticationState = (Stormy.instance.authenticationState == .tokenFailed) ? .tokenFailed : .authenticated
+							self.flushQueue()
+						}
+					}
+					
+				case .couldNotDetermine: fallthrough
+				case .noAccount, .restricted: fallthrough
+				default:
+					self.authenticationState = .denied
+					print("No CloudKit Access.")
+					self.flushQueue()
 				}
-				
-			case .couldNotDetermine: fallthrough
-			case .noAccount, .restricted: fallthrough
-			default:
-				self.authenticationState = .denied
-				print("No CloudKit Access.")
-				self.flushQueue()
 			}
 		}
+		self.attemptConnection?()
 	}
 	
 	func flushQueue() {
