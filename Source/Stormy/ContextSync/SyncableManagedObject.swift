@@ -36,7 +36,7 @@ import CloudKit
 	open override func awakeFromInsert() {
 		super.awakeFromInsert()
 		self.setValue(UUID().uuidString, forKey: Self.cloudKitRecordIDFieldName)
-		self.setValue(CKLocalCache.SyncState.dirty.rawValue, forKey: Self.syncStateFieldName)
+		self.setValue(CKLocalCache.SyncState.upToDate.rawValue, forKey: Self.syncStateFieldName)
 	}
 	
 	open func save() {
