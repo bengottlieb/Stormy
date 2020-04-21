@@ -65,8 +65,11 @@ extension SyncableManagedObject {
 									record.syncState = .upToDate
 								}
 							}
-							try? context.save()
-							
+							do {
+								try context.save()
+							} catch {
+								print("Error while saving the sync context: \(error)")
+							}
 							cachedResults.forEach { SyncedContainer.instance.markRecordID($0.recordID, inProgress: false) }
 							completion?(nil)
 						}
