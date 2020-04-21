@@ -72,6 +72,9 @@ open class SyncedContainer {
 		Stormy.instance.recordIDTypeSeparator = "/"
 		self.queue.suspend()
 		self.container.loadPersistentStores { desc, error in
+			if let path = self.container.persistentStoreCoordinator.persistentStores.first?.url?.path {
+				print("Opened database at \(path)")
+			}
 			self.viewContext.automaticallyMergesChangesFromParent = true
 			self.queue.resume()
 		}
