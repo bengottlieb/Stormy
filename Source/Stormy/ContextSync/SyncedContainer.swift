@@ -29,6 +29,7 @@ open class SyncedContainer {
 	
 	public static var instance: SyncedContainer!
 	
+	public static var readOnlyCloudKit = false
 	public var state = State.offline { didSet { if state != oldValue { self.notifyAboutStateChange() }}}
 	public let container: NSPersistentContainer
 	public var viewContext: NSManagedObjectContext { return self.container.viewContext }
@@ -62,14 +63,15 @@ open class SyncedContainer {
 	
 	var queue = DispatchQueue(label: "SyncedContainerQueue")
 	
-	public static func setup(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil) {
-		self.instance = SyncedContainer(name: name, managedObjectModel: model, bundle: bundle, appGroupIdentifier: appGroupIdentifier)
+	public static func setup(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil, readOnly: Bool? = nil) {
+		self.instance = SyncedContainer(name: name, managedObjectModel: model, bundle: bundle, appGroupIdentifier: appGroupIdentifier, readOnly: readOnly)
 	}
 	
-	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil) {
+	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil, readOnly: Bool? = nil) {
 		AppGroupPersistentContainer.applicationGroupIdentifier = appGroupIdentifier
 		self.container = AppGroupPersistentContainer(name: name, managedObjectModel: model ?? NSManagedObjectModel(contentsOf: bundle.url(forResource: name, withExtension: "momd")!)!)
 		Stormy.instance.recordIDTypeSeparator = "/"
+		SyncedContainer.readOnlyCloudKit = readOnly ?? SyncedContainer.readOnlyCloudKit
 		self.queue.suspend()
 		self.container.loadPersistentStores { desc, error in
 			if let path = self.container.persistentStoreCoordinator.persistentStores.first?.url?.path {
