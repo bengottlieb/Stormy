@@ -40,6 +40,7 @@ import CloudKit
 	}
 	
 	open func save() {
+		if SyncedContainer.mutability.isReadOnlyForCoreData { return }
 		if self.hasChanges { self.syncState = .dirty }
 	}
 	
@@ -140,10 +141,12 @@ extension SyncableManagedObject {
 	}
 	
 	public func sync(completion: ((Error?) -> Void)? = nil) {
+		if SyncedContainer.mutability.isReadOnlyForCoreData { return }
+
 		precondition((self.value(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String)?.isEmpty == false,
 					 "Trying to sync a record with no CloudKit recordID: \(self)")
 		self.syncState = .dirty
-		try? self.managedObjectContext?.save()
+		if !SyncedContainer.mutability.isReadOnlyForCoreData { try? self.managedObjectContext?.save() }
 		
 		let graph = RelationshipGraph()
 		self.connectCachedRelationships(withGraph: graph)
@@ -158,6 +161,7 @@ extension SyncableManagedObject {
 	}
 	
 	public func deleteSynced(completion: ((Error?) -> Void)? = nil) {
+		if SyncedContainer.mutability.isReadOnlyForCoreData { return }
 		let db = self.recordID.databaseType ?? SyncedContainer.instance.defaultDatabaseType
 		let cache = db.cache.fetch(type: self.cloudKitRecordType, id: self.recordID)
 		

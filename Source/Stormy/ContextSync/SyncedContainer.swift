@@ -26,10 +26,14 @@ open class AppGroupPersistentContainer: NSPersistentContainer {
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 open class SyncedContainer {
 	public enum State: Int { case offline, ready, synchronizing }
+	public enum Mutability: Int { case normal, readOnlyCloud, readOnly
+		public var isReadOnlyForCloudOps: Bool { return self != .normal }
+		public var isReadOnlyForCoreData: Bool { return self == .readOnly }
+	}
 	
 	public static var instance: SyncedContainer!
 	
-	public static var readOnlyCloudKit = false
+	public static var mutability = Mutability.normal
 	public var state = State.offline { didSet { if state != oldValue { self.notifyAboutStateChange() }}}
 	public let container: NSPersistentContainer
 	public var viewContext: NSManagedObjectContext { return self.container.viewContext }
@@ -63,15 +67,15 @@ open class SyncedContainer {
 	
 	var queue = DispatchQueue(label: "SyncedContainerQueue")
 	
-	public static func setup(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil, readOnly: Bool? = nil) {
-		self.instance = SyncedContainer(name: name, managedObjectModel: model, bundle: bundle, appGroupIdentifier: appGroupIdentifier, readOnly: readOnly)
+	public static func setup(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil, mutability: Mutability? = nil) {
+		self.instance = SyncedContainer(name: name, managedObjectModel: model, bundle: bundle, appGroupIdentifier: appGroupIdentifier, mutability: mutability)
 	}
 	
-	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil, readOnly: Bool? = nil) {
+	public init(name: String, managedObjectModel model: NSManagedObjectModel? = nil, bundle: Bundle = .main, appGroupIdentifier: String? = nil, mutability: Mutability? = nil) {
 		AppGroupPersistentContainer.applicationGroupIdentifier = appGroupIdentifier
 		self.container = AppGroupPersistentContainer(name: name, managedObjectModel: model ?? NSManagedObjectModel(contentsOf: bundle.url(forResource: name, withExtension: "momd")!)!)
 		Stormy.instance.recordIDTypeSeparator = "/"
-		SyncedContainer.readOnlyCloudKit = readOnly ?? SyncedContainer.readOnlyCloudKit
+		SyncedContainer.mutability = mutability ?? SyncedContainer.mutability
 		self.queue.suspend()
 		self.container.loadPersistentStores { desc, error in
 			if let path = self.container.persistentStoreCoordinator.persistentStores.first?.url?.path {

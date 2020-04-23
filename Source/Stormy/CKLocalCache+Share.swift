@@ -43,7 +43,7 @@ extension CKLocalCache {
 		if self.database != .private { completion(nil, Stormy.StormyError.sharesMustBePrivate); return }
 		if self.recordZone == nil { completion(nil, Stormy.StormyError.sharesMustHaveNonDefaultZone); return }
 
-		guard let record = self.originalRecord, !SyncedContainer.readOnlyCloudKit else {
+		guard let record = self.originalRecord, !SyncedContainer.mutability.isReadOnlyForCloudOps else {
 			self.save(evenIfNotDirty: true) { error in
 				if error != nil || !self.existsOnServer {
 					completion(nil, error)
@@ -70,7 +70,7 @@ extension CKLocalCache {
 	}
 
 	public func share(with userID: CKRecord.ID, completion: ((URL?, Error?) -> Void)? = nil) {
-		if self.database != .private || SyncedContainer.readOnlyCloudKit { completion?(nil, Stormy.StormyError.sharesMustBePrivate); return }
+		if self.database != .private || SyncedContainer.mutability.isReadOnlyForCloudOps { completion?(nil, Stormy.StormyError.sharesMustBePrivate); return }
 		if self.recordZone == nil { completion?(nil, Stormy.StormyError.sharesMustHaveNonDefaultZone); return }
 		
 		guard let record = self.originalRecord else {
@@ -111,7 +111,7 @@ extension CKLocalCache {
 	
 	public func unshare(with userID: CKRecord.ID, completion: ((Error?) -> Void)? = nil) {
 		guard self.database == .private, self.recordZone != nil else { completion?(nil); return }		// not shared, we're done
-		if SyncedContainer.readOnlyCloudKit { completion?(nil); return }				// read only cloudkit
+		if SyncedContainer.mutability.isReadOnlyForCloudOps { completion?(nil); return }				// read only cloudkit
 		guard let record = self.originalRecord else {
 			self.reloadFromServer() { error in
 				if error != nil || !self.existsOnServer { completion?(error); return }

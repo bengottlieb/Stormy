@@ -143,7 +143,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	}
 	
 	open func save(reloadingFirst: Bool = true, evenIfNotDirty: Bool = false, completion: ((Error?) -> Void)? = nil) {
-		if SyncedContainer.readOnlyCloudKit {
+		if SyncedContainer.mutability.isReadOnlyForCloudOps {
 			completion?(nil)
 			return
 		}
@@ -239,7 +239,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	}
 	
 	public func delete(ignoreOnServerState: Bool = true, completion: ((Error?) -> Void)? = nil) {
-		if (!self.existsOnServer && !ignoreOnServerState) || SyncedContainer.readOnlyCloudKit {
+		if (!self.existsOnServer && !ignoreOnServerState) || SyncedContainer.mutability.isReadOnlyForCloudOps {
 			completion?(nil)
 			return
 		}

@@ -31,7 +31,7 @@ extension SyncableManagedObject {
 		var count: Int { return self.consideredObjects.count }
 		
 		func sync(completion: ((Error?) -> Void)?) {
-			guard let context = self.managedObjectContext, !SyncedContainer.readOnlyCloudKit else {
+			guard let context = self.managedObjectContext, !SyncedContainer.mutability.isReadOnlyForCloudOps else {
 				completion?(nil)
 				return
 			}
