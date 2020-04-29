@@ -33,7 +33,7 @@ extension SyncedContainer {
 					finalError = err
 				}
 				if let cache = database.cache.fetch(record: record) {
-					self.container.performBackgroundTask() { moc in
+					self.performInBackground() { moc in
 						let object = moc.object(ofType: cache.typeName, withID: cache.recordID)
 						object.read(from: cache)
 						fetchedRecords.append(cache)
@@ -43,7 +43,7 @@ extension SyncedContainer {
 			}
 			
 			op.fetchRecordsCompletionBlock = { records, error in
-				self.container.performBackgroundTask() { moc in
+				self.performInBackground() { moc in
 					for cached in fetchedRecords {
 						if let object = moc.lookupObject(ofType: cached.typeName, withID: cached.recordID) {
 							let parentNames = type(of: object).parentRelationshipNames
@@ -81,7 +81,7 @@ extension SyncedContainer {
 			self.fetchAllIDs(forRecordType: type, in: typeInfo.database) { remoteIDs, error in
 				if let err = error { finalError = err }
 				
-				self.container.performBackgroundTask() { moc in
+				self.performInBackground() { moc in
 					let request = NSFetchRequest<SyncableManagedObject>(entityName: type)
 					
 					if let records = try? request.execute() {

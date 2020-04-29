@@ -37,7 +37,7 @@ extension SyncedContainer {
 	static let pendingRecordNamesKey = "syncPendingRecordNames"
 	
 	func checkForUnsyncedObjects() {
-		self.container.performBackgroundTask { moc in
+		self.performInBackground { moc in
 			let pending = self.syncPendingRecordNames
 			for name in pending {
 				if let id = CKRecord.ID(unsyncedRecordName: name) {
@@ -58,7 +58,7 @@ extension SyncedContainer {
 		}
 		
 		set {
-			self.container.performBackgroundTask { moc in
+			self.performInBackground { moc in
 				var metadata = moc.persistentStoreCoordinator?.persistentStores.first?.metadata ?? [:]
 				
 				metadata[SyncedContainer.pendingRecordNamesKey] = newValue

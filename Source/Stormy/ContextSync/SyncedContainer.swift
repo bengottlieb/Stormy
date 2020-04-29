@@ -147,6 +147,15 @@ open class SyncedContainer {
 		DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerStateChanged, object: self) }
 	}
 	
+	func performInBackground(block: @escaping (NSManagedObjectContext) -> Void) {
+		self.container.performBackgroundTask { moc in
+			moc.mergePolicy = NSOverwriteMergePolicy
+			//			self.lastRefreshed = Date()
+			//			Notifications.didRefresh.notify()
+			block(moc)
+		}
+	}
+	
 	public func pullChanges(completion: (() -> Void)? = nil) {
 		DispatchQueue.global(qos: .userInitiated).async {
 			self.state = .synchronizing
@@ -166,7 +175,7 @@ open class SyncedContainer {
 						var newObjects: [SyncableManagedObject] = []
 						var deletedObjectIDs: [NSManagedObjectID] = []
 						
-						self.container.performBackgroundTask { moc in
+						self.performInBackground { moc in
 							for record in changes.records {
 								let object = moc.object(ofType: record.typeName, withID: record.recordID)
 								object.read(from: record)
