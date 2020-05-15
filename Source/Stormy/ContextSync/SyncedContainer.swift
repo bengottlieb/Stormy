@@ -126,18 +126,20 @@ open class SyncedContainer {
 		self.queue.async {
 			self.zoneNames = Array(Set(self.syncedObjects.values.compactMap({ $0.zoneName })))
 			
-			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames, andConnect: andConnect) 
-			Stormy.instance.queue {
-				if includingSubscriptions {
-					#if os(iOS)
-					var dbs: Set<CKDatabase.Scope> = []
-					for obj in self.syncedObjects.values { dbs.insert(obj.database) }
-					self.setupSubscriptions(on: Array(dbs)) { error in
+			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames, andConnect: andConnect) { isSignedIn in
+				if !isSignedIn { return }
+				Stormy.instance.queue {
+					if includingSubscriptions {
+						#if os(iOS)
+						var dbs: Set<CKDatabase.Scope> = []
+						for obj in self.syncedObjects.values { dbs.insert(obj.database) }
+						self.setupSubscriptions(on: Array(dbs)) { error in
+							syncCompletion()
+						}
+						#endif
+					} else {
 						syncCompletion()
 					}
-					#endif
-				} else {
-					syncCompletion()
 				}
 			}
 		}
