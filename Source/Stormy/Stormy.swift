@@ -101,7 +101,10 @@ public class Stormy {
 		self.privateDatabase = self.container.privateCloudDatabase
 		if #available(OSX 10.12, iOS 10.0, *) { self.sharedDatabase = self.container.sharedCloudDatabase }
 
-		NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+		#if os(iOS)
+			NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+		#endif
+		
 		if self.authenticationState != .notLoggedIn && self.authenticationState != .tokenFailed {
 			completion(false)
 			return
