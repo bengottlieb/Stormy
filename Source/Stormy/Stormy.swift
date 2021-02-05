@@ -93,7 +93,7 @@ public class Stormy {
 		if !self.isAvailable { self.attemptConnection?() }
 	}
 	
-	public func setup(identifier: String, zones: [String] = [], andConnect connectNow: Bool = true) {
+	public func setup(identifier: String, zones: [String] = [], andConnect connectNow: Bool = true, completion: @escaping (Bool) -> Void) {
 		self.containerIdentifer = identifier
 
 		self.container = CKContainer(identifier: self.containerIdentifer)
@@ -101,11 +101,20 @@ public class Stormy {
 		self.privateDatabase = self.container.privateCloudDatabase
 		if #available(OSX 10.12, iOS 10.0, *) { self.sharedDatabase = self.container.sharedCloudDatabase }
 
-		NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-		if self.authenticationState != .notLoggedIn && self.authenticationState != .tokenFailed { return }
+		#if os(iOS)
+			NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+		#endif
+		
+		if self.authenticationState != .notLoggedIn && self.authenticationState != .tokenFailed {
+			completion(false)
+			return
+		}
 
 		self.attemptConnection = { [weak self] in
-			guard let self = self, self.authenticationState != .signingIn else { return }
+			guard let self = self, self.authenticationState != .signingIn else {
+				completion(false)
+				return
+			}
 			self.authenticationState = .signingIn
 			self.container.accountStatus { status, error in
 				switch status {
@@ -114,6 +123,7 @@ public class Stormy {
 					if !connectNow {
 						Stormy.instance.authenticationState = .authenticated
 						self.flushQueue()
+						completion(true)
 						return
 					}
 					self.setupZones(names: zones) { _ in
@@ -125,6 +135,7 @@ public class Stormy {
 							if let error = err { print("Error fetching userRecordID: \(error)") }
 							Stormy.instance.authenticationState = (Stormy.instance.authenticationState == .tokenFailed) ? .tokenFailed : .authenticated
 							self.flushQueue()
+							completion(true)
 						}
 					}
 					
@@ -134,6 +145,7 @@ public class Stormy {
 					self.authenticationState = .denied
 					print("No CloudKit Access.")
 					self.flushQueue()
+					completion(false)
 				}
 			}
 		}
