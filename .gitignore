@@ -69,3 +69,5 @@ fastlane/test_output
 /iOS Framework
 /Mac Framework
 >>>>>>> initial code commit
+/.swiftpm
+/Package.resolved
