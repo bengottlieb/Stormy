@@ -165,6 +165,7 @@ open class SyncedContainer {
 			for zoneName in self.zoneNames {
 				let zone = Stormy.instance.zone(named: zoneName)
 				let token = Stormy.instance.serverFetchTokens[zone.zoneID]
+				print("Starting fetch with \(token == nil ? "no token" : "a token")")
 				self.queue.suspend()
 				
 				Stormy.instance.fetchChanges(in: zone, database: .private, since: token, fetching: nil) { result in
@@ -176,6 +177,7 @@ open class SyncedContainer {
 						var changedObjects: [SyncableManagedObject] = []
 						var newObjects: [SyncableManagedObject] = []
 						var deletedObjectIDs: [NSManagedObjectID] = []
+						print("Got changes: \(changes.records.count)")
 						
 						self.performInBackground { moc in
 							for record in changes.records {
@@ -209,7 +211,7 @@ open class SyncedContainer {
 							}
 							
 							Stormy.instance.serverFetchTokens[zone.zoneID] = changes.tokenData
-							try! moc.save()
+							try? moc.save()
 							self.queue.resume()
 							if !newObjects.isEmpty { Stormy.Notifications.recordsCreatedViaPush.notify(newObjects.map { $0.objectID }) }
 							if !changedObjects.isEmpty { Stormy.Notifications.recordsModifiedViaPush.notify(changedObjects.map { $0.objectID }) }
