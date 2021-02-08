@@ -131,11 +131,13 @@ open class SyncedContainer {
 				Stormy.instance.queue {
 					if includingSubscriptions {
 						#if os(iOS)
-						var dbs: Set<CKDatabase.Scope> = []
-						for obj in self.syncedObjects.values { dbs.insert(obj.database) }
-						self.setupSubscriptions(on: Array(dbs)) { error in
-							syncCompletion()
-						}
+							var dbs: Set<CKDatabase.Scope> = []
+							for obj in self.syncedObjects.values { dbs.insert(obj.database) }
+							self.setupSubscriptions(on: Array(dbs)) { error in
+								syncCompletion()
+							}
+						#else
+						syncCompletion()
 						#endif
 					} else {
 						syncCompletion()
@@ -158,13 +160,13 @@ open class SyncedContainer {
 		}
 	}
 	
-	public func pullChanges(completion: (() -> Void)? = nil) {
+	public func pullChanges(refetchAll: Bool = false, completion: (() -> Void)? = nil) {
 		DispatchQueue.global(qos: .userInitiated).async {
 			self.state = .synchronizing
 			
 			for zoneName in self.zoneNames {
 				let zone = Stormy.instance.zone(named: zoneName)
-				let token = Stormy.instance.serverFetchTokens[zone.zoneID]
+				let token = refetchAll ? nil : Stormy.instance.serverFetchTokens[zone.zoneID]
 				print("Starting fetch with \(token == nil ? "no token" : "a token")")
 				self.queue.suspend()
 				

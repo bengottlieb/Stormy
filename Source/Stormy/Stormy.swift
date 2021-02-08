@@ -59,7 +59,11 @@ public class Stormy {
 	public var serverFetchTokens = UserDefaultsBackedDictionary<CKRecordZone.ID, Data>() { id in Stormy.serverFetchTokenKey + id.string }
 
 	static public var childReferencesFieldName = "child_refs"
-	
+	public func resetServerFetchTokens() {
+		for zone in Stormy.instance.recordZones {
+			serverFetchTokens.removeValue(forKey: zone.zoneID)
+		}
+	}
 	
 	private let operationSemaphore = DispatchSemaphore(value: 1)
 	private var queuedOperations: [(CKDatabase.Scope, Operation)] = []
