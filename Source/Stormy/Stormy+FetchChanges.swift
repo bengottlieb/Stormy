@@ -25,7 +25,7 @@ extension Stormy {
 			var token: CKServerChangeToken?
 			
 			if let data = tokenData ?? Stormy.instance.serverFetchTokens[zone.zoneID] {
-				if #available(OSX 10.13, OSXApplicationExtension 10.13, iOS 13.0, iOSApplicationExtension 13.0, *) {
+				if #available(OSXApplicationExtension 10.13, iOS 13.0, iOSApplicationExtension 13.0, *) {
 					token = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data)
 				} else {
 					token = NSKeyedUnarchiver.unarchiveObject(with: data) as? CKServerChangeToken
