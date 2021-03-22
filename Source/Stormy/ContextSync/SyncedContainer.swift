@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import CloudKit
+import Studio
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 open class AppGroupPersistentContainer: NSPersistentContainer {
@@ -164,6 +165,11 @@ open class SyncedContainer {
 	}
 	
 	public func pullChangesInAllZones(refetchAll: Bool = false, completion: (() -> Void)? = nil) {
+        if Stormy.instance.authenticationState != .authenticated {
+            logg("Failed to pullChangesInAllZones: user not authenticated")
+            completion?()
+            return
+        }
 		DispatchQueue.global(qos: .userInitiated).async {
 			self.state = .synchronizing
 			
