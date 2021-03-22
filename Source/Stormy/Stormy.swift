@@ -94,7 +94,7 @@ public class Stormy {
 	}
 	
 	@objc func didBecomeActive() {
-		if !self.isAvailable { self.attemptConnection?() }
+        if self.authenticationState != .signingIn, !self.isAvailable { self.attemptConnection?() }
 	}
 	
 	public func setup(identifier: String, zones: [String] = [], andConnect connectNow: Bool = true, completion: @escaping (Bool) -> Void) {

@@ -114,7 +114,7 @@ open class SyncedContainer {
 			self.state = .ready
 			DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerInitialSetupComplete, object: self) }
 			if !self.isInExtension {
-				self.pullChanges() {
+				self.pullChangesInAllZones() {
 					DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerInitialSyncComplete, object: self) }
 					self.checkForUnsyncedObjects()
 					completion?()
@@ -127,7 +127,10 @@ open class SyncedContainer {
 			self.zoneNames = Array(Set(self.syncedObjects.values.compactMap({ $0.zoneName })))
 			
 			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames, andConnect: andConnect) { isSignedIn in
-				if !isSignedIn { return }
+				if !isSignedIn {
+                    completion?()
+                    return
+                }
 				Stormy.instance.queue {
 					if includingSubscriptions {
 						#if os(iOS)
@@ -160,7 +163,7 @@ open class SyncedContainer {
 		}
 	}
 	
-	public func pullChanges(refetchAll: Bool = false, completion: (() -> Void)? = nil) {
+	public func pullChangesInAllZones(refetchAll: Bool = false, completion: (() -> Void)? = nil) {
 		DispatchQueue.global(qos: .userInitiated).async {
 			self.state = .synchronizing
 			

@@ -10,13 +10,17 @@ import Foundation
 import CloudKit
 
 extension Stormy {
-	public struct FetchedChanges {
+    public struct FetchedChanges: CustomStringConvertible {
 		let semaphore = DispatchSemaphore(value: 1)
 		public var records: [CKLocalCache] = []
 		public var deletedIDs: [CKRecord.ID] = []
 		public var tokenData: Data?
 		
 		init() { }
+        
+        public var description: String {
+            "Fetched Changes: \(records.count) records, \(deletedIDs.count) deleted"
+        }
 		
 		
 		mutating func add(_ record: CKLocalCache?) {
