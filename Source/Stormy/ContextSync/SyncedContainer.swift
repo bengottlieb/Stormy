@@ -108,7 +108,7 @@ open class SyncedContainer {
 		self.syncedObjects[entityName] = EntityInfo(entity: entity, zoneName: zoneName, database: database)
 	}
 	
-	public func setupCloud(identifier: String, includingSubscriptions: Bool = true, andConnect: Bool = true, completion: (() -> Void)? = nil) {
+	public func setupCloud(identifier: String, includingSubscriptions: Bool = true, andConnect: Bool = true, completion: ((Bool) -> Void)? = nil) {
 		assert(self.syncedObjects.count > 0, "Please register entities before setting up the cloud identifier.")
 		
 		let syncCompletion = {
@@ -118,7 +118,7 @@ open class SyncedContainer {
 				self.pullChangesInAllZones() {
 					DispatchQueue.main.async { NotificationCenter.default.post(name: Notifications.containerInitialSyncComplete, object: self) }
 					self.checkForUnsyncedObjects()
-					completion?()
+					completion?(true)
 				}
 			}
 		}
@@ -129,7 +129,7 @@ open class SyncedContainer {
 			
 			Stormy.instance.setup(identifier: identifier, zones: self.zoneNames, andConnect: andConnect) { isSignedIn in
 				if !isSignedIn {
-                    completion?()
+                    completion?(false)
                     return
                 }
 				Stormy.instance.queue {

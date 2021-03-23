@@ -97,7 +97,7 @@ public class Stormy {
         if self.authenticationState != .signingIn, !self.isAvailable { self.attemptConnection?() }
 	}
 	
-	public func setup(identifier: String, zones: [String] = [], andConnect connectNow: Bool = true, completion: @escaping (Bool) -> Void) {
+    public func setup(identifier: String, zones: [String] = [], andConnect connectNow: Bool = true, andContainer: Bool = false, completion: @escaping (Bool) -> Void) {
 		self.containerIdentifer = identifier
 
 		self.container = CKContainer(identifier: self.containerIdentifer)
@@ -127,7 +127,11 @@ public class Stormy {
 					if !connectNow {
 						Stormy.instance.authenticationState = .authenticated
 						self.flushQueue()
-						completion(true)
+                        if andContainer {
+                            SyncedContainer.instance.setupCloud(identifier: identifier, includingSubscriptions: true, andConnect: connectNow, completion: completion)
+                        } else {
+                            completion(true)
+                        }
 						return
 					}
 					self.setupZones(names: zones) { _ in
@@ -139,7 +143,11 @@ public class Stormy {
 							if let error = err { print("Error fetching userRecordID: \(error)") }
 							Stormy.instance.authenticationState = (Stormy.instance.authenticationState == .tokenFailed) ? .tokenFailed : .authenticated
 							self.flushQueue()
-							completion(true)
+                            if andContainer {
+                                SyncedContainer.instance.setupCloud(identifier: identifier, includingSubscriptions: true, andConnect: connectNow, completion: completion)
+                            } else {
+                                completion(true)
+                            }
 						}
 					}
 					
