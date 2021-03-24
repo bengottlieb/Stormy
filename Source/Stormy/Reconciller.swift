@@ -44,7 +44,7 @@ public class Reconciller {
     
     func fetchRemoteRecords(continuing cursor: CKQueryOperation.Cursor? = nil) {
         let query = CKQuery(recordType: cloudKitRecordType, predicate: NSPredicate(value: true))
-        let op = cursor == nil ? CKQueryOperation(query: query) : CKQueryOperation(query: query)
+		  let op = cursor == nil ? CKQueryOperation(query: query) : CKQueryOperation(cursor: cursor!)
         
         op.recordFetchedBlock = { record in
             self.cloudKitRecords.append(record)
