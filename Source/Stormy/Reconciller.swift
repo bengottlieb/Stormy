@@ -8,7 +8,7 @@
 import Foundation
 import CloudKit
 import CoreData
-import Suite
+import Studio
 
 public typealias RecordsAreEqual = (CKRecord, NSManagedObject) -> Bool
 
@@ -48,6 +48,7 @@ public class Reconciller {
         
         op.recordFetchedBlock = { record in
             self.cloudKitRecords.append(record)
+				if self.cloudKitRecords.count % 10 == 0 { print("Fetched \(self.cloudKitRecords.count) Records")}
         }
         op.queryCompletionBlock = { cursor, error in
             if let err = error {
