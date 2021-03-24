@@ -46,6 +46,7 @@ public class Reconciller {
         let query = CKQuery(recordType: cloudKitRecordType, predicate: NSPredicate(value: true))
 		  let op = cursor == nil ? CKQueryOperation(query: query) : CKQueryOperation(cursor: cursor!)
         
+		op.qualityOfService = .userInitiated
         op.recordFetchedBlock = { record in
             self.cloudKitRecords.append(record)
 				if self.cloudKitRecords.count % 10 == 0 { print("Fetched \(self.cloudKitRecords.count) Records")}
