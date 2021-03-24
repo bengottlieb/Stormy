@@ -18,6 +18,18 @@ extension CKRecordZone.ID: StringConvertible {
 	public var string: String { return self.zoneName }
 }
 
+@available(OSX 10.15, iOS 13.0, tvOS 13, watchOS 6, *)
+extension Stormy: ObservableObject {
+}
+
+extension Stormy {
+    func objectChanged() {
+        if #available(iOS 13.0, *) {
+            objectWillChange.send()
+        }
+    }
+}
+
 public class Stormy {
 	public struct Notifications {
 		static public let availabilityChanged = Notification.Name("stormy-availabilityChanged")
@@ -41,10 +53,13 @@ public class Stormy {
 	public var sharedDatabase: CKDatabase?
 	public var containerIdentifer: String!
 	public var authenticationState = AuthenticationState.notLoggedIn { didSet {
-		if self.authenticationState != oldValue, (self.authenticationState == .authenticated || self.authenticationState == .denied) {
-			DispatchQueue.main.async {
-				NotificationCenter.default.post(name: Notifications.availabilityChanged, object: nil)
-			}
+        if self.authenticationState != oldValue {
+            objectChanged()
+            if (self.authenticationState == .authenticated || self.authenticationState == .denied) {
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: Notifications.availabilityChanged, object: nil)
+                }
+            }
 		}
 	}}
 	public var isAvailable: Bool { return self.authenticationState == .authenticated }
@@ -52,7 +67,7 @@ public class Stormy {
 	public var enabled = false
 	public var autoFetchZones = true
 	public var recordZones: [CKRecordZone] = []
-	public var userRecordID: CKRecord.ID?
+    public var userRecordID: CKRecord.ID? { didSet { objectChanged() }}
 	public var recordIDTypeSeparator: String?		// if this is set, a record ID consists of the record name + recordIDTypeSeparator + a unique ID- ex: Book/12356
 
 	public static var serverFetchTokenKey = "stormy_serverFetchTokenData"
