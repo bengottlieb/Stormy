@@ -10,12 +10,11 @@ import CloudKit
 import CoreData
 import Suite
 
+public typealias RecordsAreEqual = (CKRecord, NSManagedObject) -> Bool
+
 public class Reconciller {
     let cloudKitRecordType: String
-    let cloudKitFieldName: String
-
     let managedObjectRecordType: String
-    let managedObjectFieldName: String
 
     let context: NSManagedObjectContext
     let database: CKDatabase
@@ -23,15 +22,19 @@ public class Reconciller {
     var cloudKitRecords: [CKRecord] = []
     var managedObjects: [NSManagedObject] = []
     var error: Error?
+    var unpairedCloudKitRecords: [CKRecord] = []
+    var unpairedManagedObjects: [NSManagedObject] = []
+    
+	var compareRecords: RecordsAreEqual
+    
 
     enum Phase: String { case cloud, compare }
-    public init(cloudType: String, cloudIDField: String, entityName name: String, localIDField: String, context moc: NSManagedObjectContext, database db: CKDatabase) {
+	public init(cloudType: String, entityName name: String, context moc: NSManagedObjectContext, database db: CKDatabase, comparison: @escaping RecordsAreEqual) {
         cloudKitRecordType = cloudType
         managedObjectRecordType = name
         context = moc
         database = db
-        cloudKitFieldName = cloudIDField
-        managedObjectFieldName = localIDField
+		compareRecords = comparison
     }
     
     public func start() {
@@ -60,10 +63,30 @@ public class Reconciller {
     }
     
     func findMismatches() {
+        for record in cloudKitRecords {
+            if managedObject(matching: record) != nil { continue }
+            unpairedCloudKitRecords.append(record)
+        }
+
+        for object in managedObjects {
+            if cloudRecord(matching: object) != nil { continue }
+            unpairedManagedObjects.append(object)
+        }
         
+        print("Found \(unpairedCloudKitRecords.count) unpaired \(cloudKitRecordType) and \(unpairedManagedObjects.count) unpaired \(managedObjectRecordType)")
     }
     
-    
+	func cloudRecord(matching object: NSManagedObject) -> CKRecord? {
+        cloudKitRecords.first { record in
+			compareRecords(record, object)
+        }
+    }
+     
+	func managedObject(matching record: CKRecord) -> NSManagedObject? {
+        managedObjects.first { object in
+			compareRecords(record, object)
+		}
+    }
     
     func finish(phase: Phase, with error: Error? = nil) {
         self.error = error
