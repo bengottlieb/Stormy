@@ -24,7 +24,7 @@ extension Stormy: ObservableObject {
 
 extension Stormy {
     func objectChanged() {
-        if #available(iOS 13.0, *) {
+        if #available(OSX 10.15, iOS 13.0, tvOS 13, watchOS 6, *) {
             objectWillChange.send()
         }
     }
@@ -138,9 +138,9 @@ public class Stormy {
 			self.container.accountStatus { status, error in
 				switch status {
 				case .available:
-					self.attemptConnection = nil
 					if !connectNow {
 						Stormy.instance.authenticationState = .authenticated
+                        if self.isAvailable { self.attemptConnection = nil }
 						self.flushQueue()
                         if andContainer {
                             SyncedContainer.instance.setupCloud(identifier: identifier, includingSubscriptions: true, andConnect: connectNow, completion: completion)
@@ -157,6 +157,7 @@ public class Stormy {
 							}
 							if let error = err { print("Error fetching userRecordID: \(error)") }
 							Stormy.instance.authenticationState = (Stormy.instance.authenticationState == .tokenFailed) ? .tokenFailed : .authenticated
+                            if self.isAvailable { self.attemptConnection = nil }
 							self.flushQueue()
                             if andContainer {
                                 SyncedContainer.instance.setupCloud(identifier: identifier, includingSubscriptions: true, andConnect: connectNow, completion: completion)
