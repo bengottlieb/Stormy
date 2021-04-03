@@ -141,49 +141,58 @@ extension SyncableManagedObject {
 	}
 	
 	public func sync(completion: ((Error?) -> Void)? = nil) {
-		if SyncedContainer.mutability.isReadOnlyForCoreData { return }
+        DispatchQueue.main.async {
+            if SyncedContainer.mutability.isReadOnlyForCoreData { return }
 
-		precondition((self.value(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String)?.isEmpty == false,
-					 "Trying to sync a record with no CloudKit recordID: \(self)")
-		self.syncState = .dirty
-		if !SyncedContainer.mutability.isReadOnlyForCoreData { try? self.managedObjectContext?.save() }
-		
-		let graph = RelationshipGraph()
-		self.connectCachedRelationships(withGraph: graph)
-		graph.prune()
-		
-		if graph.count == 0 {
-			completion?(nil)
-			return
-		}
-		
-		graph.sync(completion: completion)
+            precondition((self.value(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String)?.isEmpty == false,
+                         "Trying to sync a record with no CloudKit recordID: \(self)")
+            self.syncState = .dirty
+            if !SyncedContainer.mutability.isReadOnlyForCoreData { try? self.managedObjectContext?.save() }
+            
+            let graph = RelationshipGraph()
+            self.connectCachedRelationships(withGraph: graph)
+            
+            if graph.count == 0 {
+                completion?(nil)
+                return
+            }
+            
+            graph.queue()
+        }
 	}
 	
-	public func deleteSynced(completion: ((Error?) -> Void)? = nil) {
+    public func deleteSynced(andSave: Bool = true, completion: ((Error?) -> Void)? = nil) {
 		if SyncedContainer.mutability.isReadOnlyForCoreData { return }
 		let db = self.recordID.databaseType ?? SyncedContainer.instance.defaultDatabaseType
 		let cache = db.cache.fetch(type: self.cloudKitRecordType, id: self.recordID)
 		
 		if let moc = self.managedObjectContext {
 			moc.delete(self)
-			do {
-				try moc.save()
-			} catch {
-				completion?(error)
-			}
+            if andSave {
+                do {
+                    try moc.save()
+                } catch {
+                    completion?(error)
+                }
+            }
 		}
 		
 		cache.delete(completion: completion)
 	}
 	
-	open var syncableFieldNames: [String] {
-		return self.entity.attributesByName.values.compactMap { attr in
-			if self.isDeviceOnlyAttribute(attr) || attr.name == SyncableManagedObject.cloudKitRecordIDFieldName || attr.name == SyncableManagedObject.syncStateFieldName { return nil }
-			return attr.name
-		}
-	}
-	
+    open var syncableFieldNames: [String] {
+        return self.entity.attributesByName.values.compactMap { attr in
+            if self.isDeviceOnlyAttribute(attr) || attr.name == SyncableManagedObject.cloudKitRecordIDFieldName || attr.name == SyncableManagedObject.syncStateFieldName { return nil }
+            return attr.name
+        }
+    }
+    
+    open var syncableRelationshipNames: [String] {
+        return self.entity.relationshipsByName.values.compactMap { rel in
+            rel.isToMany ? nil : rel.name
+        }
+    }
+    
 	open func tempURL(for attribute: NSAttributeDescription) -> URL {
 		let filename = attribute.name + "-" + self.uniqueID + ".dat"
 		let baseURL = URL(fileURLWithPath: NSTemporaryDirectory())
@@ -206,9 +215,26 @@ extension SyncableManagedObject {
 				cache[field] = self.value(forKey: field) as? CKRecordValue
 			}
 		}
+        
+        for relationshipName in syncableRelationshipNames {
+            let myValue = self.value(forKey: relationshipName) as? SyncableManagedObject
+            let cacheValue = cache[relationshipName] as? CKRecord.Reference
+            
+            if myValue == nil, cacheValue != nil {
+                cache.changedKeys.insert(relationshipName)
+            } else if myValue != nil, cacheValue != nil {
+                cache.changedKeys.insert(relationshipName)
+            } else if myValue?.isSame(as: cacheValue) == false {
+                cache.changedKeys.insert(relationshipName)
+            }
+        }
 		
 		cache.syncState = self.syncState
 		cache.isLoaded = true
 		return cache
 	}
+    
+    func isSame(as relationship: CKRecord.Reference?) -> Bool {
+        recordID == relationship?.recordID
+    }
 }
