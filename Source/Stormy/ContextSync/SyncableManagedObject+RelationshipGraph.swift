@@ -97,9 +97,9 @@ extension SyncableManagedObject {
 					for record in self.consideredObjects {
 						if let cache = cachedResults[record.recordID] {
 							record.load(into: cache)
-							if let updated = cache.updatedRecord() { saved.append(updated) }
+                            if let updated = cache.updatedRecord(using: record) { saved.append(updated) }
 						} else {
-							if let updated = record.localCache.updatedRecord() { saved.append(updated) }
+                            if let updated = record.localCache.updatedRecord(using: record) { saved.append(updated) }
 						}
 					}
 					

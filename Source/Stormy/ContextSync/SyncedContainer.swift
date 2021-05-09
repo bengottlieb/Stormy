@@ -97,10 +97,10 @@ open class SyncedContainer {
 		let syncStatusType = entity.entity().attributesByName[SyncableManagedObject.syncStateFieldName]?.attributeType
 		assert(syncStatusType == .integer16AttributeType || syncStatusType == .integer32AttributeType || syncStatusType == .integer64AttributeType, "Trying to register \(entity), but its \(SyncableManagedObject.syncStateFieldName) field is not an integer")
 
-		if entity.parentRelationshipNames.isEmpty {
+        if entity.parentRelationshipNames.isEmpty && entity.pertinentRelationshipNames.isEmpty {
 			for relationship in entity.entity().relationshipsByName.values {
 				if !relationship.isToMany, let inverse = relationship.inverseRelationship, inverse.isToMany {
-					print("****** WARNING ********\nAdding an entity (\(entityName)) with no parentRelationshipNames that appears to have a parent relationship to \(inverse.entity.name ?? "--")")
+					print("****** WARNING ********\nAdding an entity (\(entityName)) with no parentRelationshipNames and no pertinentRelationshipNames that appears to have a relationship to \(inverse.entity.name ?? "--")")
 				}
 			}
 		}
@@ -191,22 +191,27 @@ open class SyncedContainer {
 						print("Got changes: \(changes.records.count)")
 						
 						self.performInBackground { moc in
-							for record in changes.records {
-								let object = moc.object(ofType: record.typeName, withID: record.recordID)
-								object.read(from: record)
-								if object.isInserted {
-									newObjects.append(object)
-								} else {
-									changedObjects.append(object)
-								}
-							}
-							
+                            for record in changes.records {
+                                let object = moc.object(ofType: record.typeName, withID: record.recordID)
+                                object.read(from: record)
+                                if object.isInserted {
+                                    newObjects.append(object)
+                                } else {
+                                    changedObjects.append(object)
+                                }
+                            }
+
+                            for record in changes.records {
+                                let object = moc.object(ofType: record.typeName, withID: record.recordID)
+                                object.read(from: record)
+                            }
+
 							for object in changedObjects {
-								let parentNames = type(of: object).parentRelationshipNames
+                                let parentNames = type(of: object).parentRelationshipNames + type(of: object).pertinentRelationshipNames
 								if parentNames.isEmpty { continue }
 								let record = object.localCache
 								for parentName in parentNames {
-									if let parent = record.parent?.lookupObject(in: moc), parent.entity == object.entity.relationshipsByName[parentName]?.entity {
+                                    if let parent = record.parent?.lookupObject(named: parentName, in: moc), parent.entity == object.entity.relationshipsByName[parentName]?.entity {
 										object.setValue(parent, forKey: parentName)
 									}
 								}
@@ -252,8 +257,12 @@ extension CKLocalCache {
 		return nil
 	}
 	
-	public func lookupObject(in moc: NSManagedObjectContext) -> SyncableManagedObject? {
-		if let type = self.typeName { return moc.lookupObject(ofType: type, withID: self.recordID) }
+    public func lookupObject(named name: String, in moc: NSManagedObjectContext) -> SyncableManagedObject? {
+        guard
+            let entity = moc.persistentStoreCoordinator?.managedObjectModel.entitiesByName[self.typeName],
+            let relationship = entity.relationshipsByName[name]
+        else { return nil }
+        if let type = relationship.destinationEntity?.name { return moc.lookupObject(ofType: type, withID: self.recordID) }
 		return nil
 	}
 }
@@ -274,6 +283,11 @@ extension NSManagedObjectContext {
 			return nil
 		}
 	}
+
+    public func lookupObject(from reference: CKRecord.Reference) -> SyncableManagedObject? {
+        guard let typeName = reference.recordID.typeName else { return nil }
+        return lookupObject(ofType: typeName, withID: reference.recordID)
+    }
 	
 	public func object(ofType entityName: String, withID id: CKRecord.ID) -> SyncableManagedObject {
 		if let object = self.lookupObject(ofType: entityName, withID: id) { return object }

@@ -122,7 +122,7 @@ class ViewController: UIViewController {
 			let childID = CKRecord.ID(recordName: "CHILD - \(Int(Date().timeIntervalSinceReferenceDate) % 100000)", zoneID: Stormy.instance.recordZones.first!.zoneID)
 			let child = CKDatabase.Scope.private.cache.fetch(type: "CHILD_RECORD", id: childID)
 			child["c_value"] = Int16.random(in: 0...1000)
-			child.setParent(record)
+            child.setParent(record, for: "c_value")
 		
 			record["p_value"] = Int16.random(in: 0...1000)
 			record.save(reloadingFirst: false) { error in

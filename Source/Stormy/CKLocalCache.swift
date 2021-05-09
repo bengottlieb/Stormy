@@ -186,7 +186,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		Stormy.instance.queue(operation: op, in: self.database)
 	}
 	
-	open func setParent(_ parent: CKLocalCache?) {
+    open func setParent(_ parent: CKLocalCache?, for key: String) {
 		if let record = parent {
 			//self.parentReference = CKRecord.Reference(recordID: record.recordID, action: .none)
 			self.parent = parent
@@ -262,8 +262,14 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	}
 	
 	
-	open func updatedRecord() -> CKRecord? {
+    open func updatedRecord(using managed: SyncableManagedObject? = nil) -> CKRecord? {
 		if self.typeName == nil { return nil }
+//        var pertinentFields: [String]!
+//        
+//        if let mgd = managed { pertinentFields = type(of: mgd).pertinentRelationshipNames }
+//        if pertinentFields == nil { pertinentFields = SyncableManagedObject.pertinentNames(for: self.typeName, in: managed?.moc ?? SyncedContainer.instance.viewContext) }
+//        if pertinentFields == nil { return nil }
+//        
 		let newRecord = self.originalRecord ?? CKRecord(recordType: self.typeName, recordID: self.recordID)
 		
 		for key in self.changedKeys {
@@ -273,7 +279,9 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 				}
 			} else if newRecord[key] == nil, self.changedValues[key] == nil {
 				//both nil, don't do anything
-			} else {
+            } else if let value = self.changedValues[key] as? CKRecord.Reference {
+                newRecord[key] = value
+            } else {
 				newRecord[key] = self.changedValues[key]
 			}
 		}

@@ -48,8 +48,16 @@ import CloudKit
 		return NSPredicate(format: "%K == %@", SyncableManagedObject.cloudKitRecordIDFieldName, id.recordID ?? id.recordName)
 	}
 	
-	open class var parentRelationshipNames: [String] { return [] }
-	
+    static func pertinentNames(for entityName: String, in moc: NSManagedObjectContext) -> [String]? {
+        guard let entities = moc.persistentStoreCoordinator?.managedObjectModel.entitiesByName else { return nil }
+        guard let className = entities[entityName]?.managedObjectClassName else { return nil }
+        guard let type = NSClassFromString(className) as? SyncableManagedObject.Type else { return nil }
+        return type.pertinentRelationshipNames
+    }
+    
+    open class var parentRelationshipNames: [String] { return [] }
+    open class var pertinentRelationshipNames: [String] { return [] }
+
 	open func willSync(withCache: CKLocalCache) {}
 	
 	open var localCache: CKLocalCache {
@@ -82,6 +90,16 @@ import CloudKit
 				self.setValue(value, forKey: field)
 			}
 		}
+        
+        for relationshipName in syncableRelationshipNames {
+            if
+                let relationship = record[relationshipName] as? CKRecord.Reference,
+                let record = self.moc?.lookupObject(from: relationship)
+            {
+                self.setValue(record, forKey: relationshipName)
+            }
+        }
+        
 		self.uniqueID = record.recordID.recordID ?? record.recordID.recordName
 		if let parent = record.parent { self.loadParent(from: parent) }
 	}
@@ -123,7 +141,7 @@ extension SyncableManagedObject {
 		
 		for parentName in Self.parentRelationshipNames {
 			if let parent = self.value(forKey: parentName) as? SyncableManagedObject {
-				self.localCache.setParent(parent.localCache)
+                self.localCache.setParent(parent.localCache, for: parentName)
 				if parent.syncState == .dirty { graph.append(parent) }
 				break
 			}
@@ -141,11 +159,12 @@ extension SyncableManagedObject {
 	}
 	
 	public func sync(completion: ((Error?) -> Void)? = nil) {
+        precondition((self.value(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String)?.isEmpty == false,
+                     "Trying to sync a record with no CloudKit recordID: \(self)")
+
         DispatchQueue.main.async {
             if SyncedContainer.mutability.isReadOnlyForCoreData { return }
 
-            precondition((self.value(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String)?.isEmpty == false,
-                         "Trying to sync a record with no CloudKit recordID: \(self)")
             self.syncState = .dirty
             if !SyncedContainer.mutability.isReadOnlyForCoreData { try? self.managedObjectContext?.save() }
             
@@ -222,10 +241,13 @@ extension SyncableManagedObject {
             
             if myValue == nil, cacheValue != nil {
                 cache.changedKeys.insert(relationshipName)
-            } else if myValue != nil, cacheValue != nil {
+                cache.changedValues.removeValue(forKey: relationshipName)
+            } else if let newValue = myValue, cacheValue != nil {
                 cache.changedKeys.insert(relationshipName)
-            } else if myValue?.isSame(as: cacheValue) == false {
+                cache.changedValues[relationshipName] = CKRecord.Reference(recordID: newValue.recordID, action: .none)
+            } else if let newValue = myValue, !newValue.isSame(as: cacheValue) {
                 cache.changedKeys.insert(relationshipName)
+                cache.changedValues[relationshipName] = CKRecord.Reference(recordID: newValue.recordID, action: .none)
             }
         }
 		
