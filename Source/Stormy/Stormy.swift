@@ -25,7 +25,9 @@ extension Stormy: ObservableObject {
 extension Stormy {
     func objectChanged() {
         if #available(OSX 10.15, iOS 13.0, tvOS 13, watchOS 6, *) {
-            objectWillChange.send()
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
         }
     }
 }

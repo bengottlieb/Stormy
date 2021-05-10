@@ -162,12 +162,12 @@ extension SyncableManagedObject {
         precondition((self.value(forKey: SyncableManagedObject.cloudKitRecordIDFieldName) as? String)?.isEmpty == false,
                      "Trying to sync a record with no CloudKit recordID: \(self)")
 
+        self.syncState = .dirty
+        if !SyncedContainer.mutability.isReadOnlyForCoreData { try? self.managedObjectContext?.save() }
+
         DispatchQueue.main.async {
             if SyncedContainer.mutability.isReadOnlyForCoreData { return }
 
-            self.syncState = .dirty
-            if !SyncedContainer.mutability.isReadOnlyForCoreData { try? self.managedObjectContext?.save() }
-            
             let graph = RelationshipGraph()
             self.connectCachedRelationships(withGraph: graph)
             
