@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.4
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "Stormy",
 	 platforms: [
-				 .macOS(.v10_13),
-				 .iOS(.v10),
+				 .macOS(.v11),
+				 .iOS(.v13),
 				 .watchOS(.v5)
 		  ],
     products: [
@@ -25,6 +25,6 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
 		.target(
 			name: "Stormy",
-			dependencies: ["Studio"]),
+			dependencies: [.product(name: "Studio", package: "Suite")]),
     ]
 )
