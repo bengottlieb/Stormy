@@ -79,6 +79,7 @@ extension SyncableManagedObject {
 		
 		func sync(completion: ((Error?) -> Void)? = nil) {
             self.prune()
+				if self.consideredObjects.isEmpty { completion?(nil); return }
             print("Syncing \(consideredObjects.count) objects")
             if self === Self.current { Self.current = nil }
             add(completion: completion)

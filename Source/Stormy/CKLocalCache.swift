@@ -30,6 +30,7 @@ extension CKDatabase.Scope {
 		}
 		
 		public func fetch(type: String, id: CKRecord.ID) -> CKLocalCache {
+			print("Fetching record for \(id)")
 			if let existing = self.cache[id]?.cache { return existing }
 			
 			let recordCache = CKLocalCache(type: type, id: id, in: self.type)
