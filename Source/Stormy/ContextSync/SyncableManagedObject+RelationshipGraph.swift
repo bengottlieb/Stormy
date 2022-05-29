@@ -20,6 +20,8 @@ extension SyncableManagedObject {
             return current
         }
         
+		  var isSyncInProgress = false
+		  var resyncAtEnd = false
         var startTimer: Timer?
         func add(graph: RelationshipGraph) {
             consideredObjects += graph.consideredObjects
@@ -31,10 +33,20 @@ extension SyncableManagedObject {
         }
         
         func callCompletions(with error: Error?) {
-            
+			  print("Completing Sync")
+			  let complete: [(Error?) -> Void] = completions
+			  completions = []
+			  resyncAtEnd = false
+			  isSyncInProgress = false
+			  complete.forEach { $0(error) }
         }
         
         func queue(completion: ((Error?) -> Void)? = nil) {
+			  if isSyncInProgress {
+				  resyncAtEnd = true
+				  return
+			  }
+			  isSyncInProgress = true
             if self !== Self.current {
                 print("Queuing \(consideredObjects.count) objects")
                 Self.currentGraph.add(graph: self)
@@ -44,7 +56,9 @@ extension SyncableManagedObject {
             }
             startTimer?.invalidate()
             DispatchQueue.main.async {
+					print("Retting timer")
                 self.startTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+						 print("Staring sync")
                     self.sync()
                 }
             }
@@ -53,7 +67,7 @@ extension SyncableManagedObject {
 		var consideredObjects: [SyncableManagedObject] = []
 		var managedObjectContext: NSManagedObjectContext? { return self.consideredObjects.first?.managedObjectContext }
 		var scope: CKDatabase.Scope
-        var completions: [(Error) -> Void] = []
+        var completions: [(Error?) -> Void] = []
 		
 		init(scope: CKDatabase.Scope = .private) {
 			self.scope = scope
@@ -78,11 +92,13 @@ extension SyncableManagedObject {
 		var count: Int { return self.consideredObjects.count }
 		
 		func sync(completion: ((Error?) -> Void)? = nil) {
-            self.prune()
-				if self.consideredObjects.isEmpty { completion?(nil); return }
+			print("Starting sync")
+			add(completion: completion)
+
+			self.prune()
+				if self.consideredObjects.isEmpty { callCompletions(with: nil); return }
             print("Syncing \(consideredObjects.count) objects")
             if self === Self.current { Self.current = nil }
-            add(completion: completion)
 			guard let context = self.managedObjectContext, !SyncedContainer.mutability.isReadOnlyForCloudOps else {
                 callCompletions(with: nil)
 				return
@@ -92,6 +108,7 @@ extension SyncableManagedObject {
 			
 			self.consideredObjects.forEach { SyncedContainer.instance.markRecordID($0.recordID, inProgress: true) }
 			Stormy.instance.fetch(ids: recordIDs, in: self.scope) { cachedResults, error in
+				print("Saving \(cachedResults.count)")
 				context.perform {
 					var saved: [CKRecord] = []
 					
@@ -105,7 +122,12 @@ extension SyncableManagedObject {
 					}
 					
 					let op = CKModifyRecordsOperation(recordsToSave: saved, recordIDsToDelete: nil)
+					print("Saving \(saved.map { $0.recordID })")
 					op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
+						if let nsError = (error as? NSError), nsError.code == 2, nsError.domain == CKErrorDomain, let underlying = nsError.userInfo["NSUnderlyingError"] as? NSError {
+							
+							print(underlying)
+						}
                         if Stormy.shouldReturn(after: error, operation: op, in: self.scope, completion: { err in self.callCompletions(with: err) }) {
 							Stormy.instance.completeLongRunningTask()
 							return

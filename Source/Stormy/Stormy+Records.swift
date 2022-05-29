@@ -8,6 +8,7 @@
 
 import Foundation
 import CloudKit
+import Studio
 
 protocol CloudKitIdentifiable { }
 
@@ -38,20 +39,34 @@ extension Stormy {
 		self.fetchAll(recordType, in: database, matching: predicate, limit: 1, completion: completion)
 	}
 	
+	@available(iOS 15.0, *)
 	public func fetch(_ id: CKRecord.ID? = nil, ids: [CKRecord.ID] = [], in database: CKDatabase.Scope = .private, completion: (([CKLocalCache], Error?) -> Void)? = nil) {
 		if id == nil && ids.count == 0 { completion?([], nil); return }
 		self.startLongRunningTask()
 		var idsToFetch = ids
 		if let id = id { idsToFetch.append(id) }
+		var foundRecords: ThreadsafeArray<CKRecord> = []
 		
 		let op = CKFetchRecordsOperation(recordIDs: idsToFetch)
-		op.fetchRecordsCompletionBlock = { results, error in
-			if Stormy.shouldReturn(after: error, operation: op, in: database, completion: { err in completion?([], err) }) { return }
-			if let values = results?.values {
-				let found = Array(values).compactMap { database.cache.fetch(record: $0) }
-				completion?(found, error)
-			} else {
-				completion?([], error)
+		
+		op.perRecordResultBlock = { recordID, result in
+			switch result {
+			case .failure(let error):
+				print("Failed to fetch \(recordID): \(error)")
+				
+			case .success(let record):
+				foundRecords.append(record)
+			}
+		}
+		
+		op.fetchRecordsResultBlock = { result in
+			switch result {
+			case .failure(let error):
+				if Stormy.shouldReturn(after: error, operation: op, in: database, completion: { err in completion?([], err) }) { return }
+				
+			case .success:
+				let found = foundRecords.compactMap { database.cache.fetch(record: $0) }
+				completion?(found, nil)
 			}
 			self.completeLongRunningTask()
 		}
