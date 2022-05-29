@@ -30,8 +30,7 @@ extension CKDatabase.Scope {
 		}
 		
 		public func fetch(type: String, id: CKRecord.ID) -> CKLocalCache {
-			print("Fetching record for \(id)")
-			if let existing = self.cache[id]?.cache { return existing }
+            if let cached = self.cache[id], let existing = cached.cache { return existing }
 			
 			let recordCache = CKLocalCache(type: type, id: id, in: self.type)
 			self.cache[id] = Shared(cache: recordCache)
@@ -254,6 +253,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 		}
 		
 		let op = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: self.descendentIDs )
+        print("Deleting \(self.descendentIDs.count) records")
 		Stormy.instance.startLongRunningTask()
 		op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
 			if !Stormy.shouldReturn(after: error, operation: op, in: self.database, completion: completion) { completion?(error) }
