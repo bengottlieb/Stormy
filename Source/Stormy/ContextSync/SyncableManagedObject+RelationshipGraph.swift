@@ -48,7 +48,7 @@ extension SyncableManagedObject {
 			  }
 			  isSyncInProgress = true
             if self !== Self.current {
-                print("Queuing \(consideredObjects.count) objects")
+                //print("Queuing \(consideredObjects.count) objects")
                 Self.currentGraph.add(graph: self)
                 Self.currentGraph.add(completion: completion)
                 Self.currentGraph.queue()
@@ -56,9 +56,8 @@ extension SyncableManagedObject {
             }
             startTimer?.invalidate()
             DispatchQueue.main.async {
-					print("Retting timer")
                 self.startTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-						 print("Staring sync")
+                    print("Starting sync, \(self.consideredObjects.count)")
                     self.sync()
                 }
             }
@@ -92,11 +91,10 @@ extension SyncableManagedObject {
 		var count: Int { return self.consideredObjects.count }
 		
 		func sync(completion: ((Error?) -> Void)? = nil) {
-			print("Starting sync")
 			add(completion: completion)
 
 			self.prune()
-				if self.consideredObjects.isEmpty { callCompletions(with: nil); return }
+            if self.consideredObjects.isEmpty { callCompletions(with: nil); return }
             print("Syncing \(consideredObjects.count) objects")
             if self === Self.current { Self.current = nil }
 			guard let context = self.managedObjectContext, !SyncedContainer.mutability.isReadOnlyForCloudOps else {
@@ -123,31 +121,48 @@ extension SyncableManagedObject {
 					
 					let op = CKModifyRecordsOperation(recordsToSave: saved, recordIDsToDelete: nil)
 					print("Saving \(saved.map { $0.recordID })")
-					op.modifyRecordsCompletionBlock = { saved, recordIDs, error in
-						if let nsError = (error as? NSError), nsError.code == 2, nsError.domain == CKErrorDomain, let underlying = nsError.userInfo["NSUnderlyingError"] as? NSError {
-							
-							print(underlying)
-						}
-                        if Stormy.shouldReturn(after: error, operation: op, in: self.scope, completion: { err in self.callCompletions(with: err) }) {
-							Stormy.instance.completeLongRunningTask()
-							return
-						}
-						
-						context.perform {
-							for cache in cachedResults {
-								if let record = self.consideredObjects[cache.recordID] {
-									record.syncState = .upToDate
-								}
-							}
-							do {
-								try context.save()
-							} catch {
-								print("Error while saving the sync context: \(error)")
-							}
-							cachedResults.forEach { SyncedContainer.instance.markRecordID($0.recordID, inProgress: false) }
-                            self.callCompletions(with: nil)
-						}
-
+                    
+                    var savedRecords: [CKRecord] = []
+                    
+                    op.perRecordSaveBlock = { recordID, result in
+                        switch result {
+                        case .failure(let error):
+                            print("Failed to save record \(recordID): \(error)")
+                            
+                        case .success(let record):
+                            savedRecords.append(record)
+                        }
+                    }
+                    
+                    op.modifyRecordsResultBlock = { result in
+                        switch result {
+                        case .failure(let error):
+                            let nsError = (error as NSError)
+                            if nsError.code == 2, nsError.domain == CKErrorDomain, let underlying = nsError.userInfo["NSUnderlyingError"] as? NSError {
+                                
+                                print(underlying)
+                            }
+                            if Stormy.shouldReturn(after: error, operation: op, in: self.scope, completion: { err in self.callCompletions(with: err) }) {
+                                Stormy.instance.completeLongRunningTask()
+                                return
+                            }
+                            
+                        case .success:
+                            context.perform {
+                                for cache in cachedResults {
+                                    if let record = self.consideredObjects[cache.recordID] {
+                                        record.syncState = .upToDate
+                                    }
+                                }
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("Error while saving the sync context: \(error)")
+                                }
+                                cachedResults.forEach { SyncedContainer.instance.markRecordID($0.recordID, inProgress: false) }
+                                self.callCompletions(with: nil)
+                            }
+                        }
 					}
 					
 					Stormy.instance.queue(operation: op, in: self.scope)

@@ -24,41 +24,60 @@ extension CKDatabase.Scope {
 
 extension CKDatabase.Scope {
 	public class Cache {
+        let queue = DispatchQueue(label: "CKDatabase-Cache-Queue")
 		var type: CKDatabase.Scope
 		init(type: CKDatabase.Scope) {
 			self.type = type
 		}
-		
-		public func fetch(type: String, id: CKRecord.ID) -> CKLocalCache {
-            if let cached = self.cache[id], let existing = cached.cache { return existing }
-			
-			let recordCache = CKLocalCache(type: type, id: id, in: self.type)
-			self.cache[id] = Shared(cache: recordCache)
-			return recordCache
+
+        public func fetch(type: String, id: CKRecord.ID) -> CKLocalCache {
+            queue.sync {
+                if let cached = self.cache[id], let existing = cached.cache { return existing }
+                
+                let recordCache = CKLocalCache(type: type, id: id, in: self.type)
+                self.cache[id] = Shared(cache: recordCache)
+                return recordCache
+            }
 		}
 		
-		public func fetch(record: CKRecord?) -> CKLocalCache? {
-			guard let record = record else { return nil }
-			if let existing = self.cache[record.recordID]?.cache {
-				existing.originalRecord = record
-				existing.updateFromOriginal()
-				return existing
-			}
-			
-			let recordCache = CKLocalCache(record: record, in: self.type)
-			self.cache[record.recordID] = Shared(cache: recordCache)
-			return recordCache
+        public func fetch(record: CKRecord?, sync: Bool = true) -> CKLocalCache? {
+            if sync {
+                return queue.sync { syncFetch(record: record) }
+            } else {
+                return syncFetch(record: record)
+            }
+		}
+        
+        private func syncFetch(record: CKRecord?) -> CKLocalCache? {
+            guard let record = record else { return nil }
+            if let existing = self.cache[record.recordID]?.cache {
+                existing.originalRecord = record
+                existing.updateFromOriginal()
+                return existing
+            }
+            
+            let recordCache = CKLocalCache(record: record, in: self.type)
+            self.cache[record.recordID] = Shared(cache: recordCache)
+            return recordCache
+        }
+		
+        public func fetch(reference: CKRecord.Reference, sync: Bool = true) -> CKLocalCache {
+            if sync {
+                return queue.sync { syncFetch(reference: reference) }
+            } else {
+                return syncFetch(reference: reference)
+            }
+        }
+        
+        private func syncFetch(reference: CKRecord.Reference) -> CKLocalCache {
+            if let existing = self.cache[reference.recordID]?.cache { return existing }
+            
+            let recordCache = CKLocalCache(reference: reference, in: self.type)
+            self.cache[reference.recordID] = Shared(cache: recordCache)
+            return recordCache
 		}
 		
-		public func fetch(reference: CKRecord.Reference) -> CKLocalCache {
-			if let existing = self.cache[reference.recordID]?.cache { return existing }
-			
-			let recordCache = CKLocalCache(reference: reference, in: self.type)
-			self.cache[reference.recordID] = Shared(cache: recordCache)
-			return recordCache
-		}
-		
-		var cache: [CKRecord.ID: Shared] = [:]
+		private var cache: [CKRecord.ID: Shared] = [:]
 		
 		struct Shared {
 			weak var cache: CKLocalCache?
@@ -84,7 +103,7 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 	private var childrenChanged = false
 	public private(set) var parent: CKLocalCache?
 	private var children: [CKLocalCache] = []
-	private func reference(action: CKRecord_Reference_Action = .none) -> CKRecord.Reference {
+    private func reference(action: CKRecord.ReferenceAction = .none) -> CKRecord.Reference {
 		return CKRecord.Reference(recordID: self.recordID, action: action)
 	}
 	
@@ -117,11 +136,11 @@ open class CKLocalCache: CustomStringConvertible, Equatable {
 			self.changedKeys = []
 		}
 		if #available(OSX 10.12, iOS 10.0, *), let ref = original.parent {
-            self.parent = database.cache.fetch(reference: ref)
+            self.parent = database.cache.fetch(reference: ref, sync: false)
         }
         
 		if !self.childrenChanged, let kids = original[Stormy.childReferencesFieldName] as? [CKRecord.Reference] {
-			self.children = kids.map { self.database.cache.fetch(reference: $0) }
+			self.children = kids.map { self.database.cache.fetch(reference: $0, sync: false) }
 		}
 	}
 	

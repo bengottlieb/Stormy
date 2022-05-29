@@ -188,7 +188,7 @@ open class SyncedContainer {
 						var changedObjects: [SyncableManagedObject] = []
 						var newObjects: [SyncableManagedObject] = []
 						var deletedObjectIDs: [NSManagedObjectID] = []
-                        print("Got changes: \(changes.records.count), deleted: \(changes.deletedIDs.count)")
+                        print("Got changes: \(changes.records.map { $0.recordID.recordName }), deleted: \(changes.deletedIDs.map { $0.recordName })")
 						
 						self.performInBackground { moc in
                             for record in changes.records {
