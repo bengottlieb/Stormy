@@ -39,9 +39,29 @@ import CloudKit
 		self.setValue(CKLocalCache.SyncState.upToDate.rawValue, forKey: Self.syncStateFieldName)
 	}
 	
-	open func save() {
+	public func save() {
 		if SyncedContainer.mutability.isReadOnlyForCoreData { return }
 		if self.hasChanges { self.syncState = .dirty }
+	}
+	
+	public func replaceOnCloud(completion: ((Error?) -> Void)?) {
+		self.load(into: self.localCache)
+		self.localCache.save(reloadingFirst: false, evenIfNotDirty: true) { error in
+			completion?(error)
+		}
+	}
+	
+	public func reloadFromCloud(completion: ((Error?) -> Void)?) {
+		self.localCache.reloadFromServer { error in
+			if let error {
+				completion?(error)
+				return
+			}
+			
+			self.read(from: self.localCache)
+			self.save()
+			completion?(nil)
+		}
 	}
 	
 	open class func predicate(for id: CKRecord.ID) -> NSPredicate {
@@ -199,26 +219,26 @@ extension SyncableManagedObject {
 		cache.delete(completion: completion)
 	}
 	
-    open var syncableFieldNames: [String] {
+    public var syncableFieldNames: [String] {
         return self.entity.attributesByName.values.compactMap { attr in
             if self.isDeviceOnlyAttribute(attr) || attr.name == SyncableManagedObject.cloudKitRecordIDFieldName || attr.name == SyncableManagedObject.syncStateFieldName { return nil }
             return attr.name
         }
     }
     
-    open var syncableRelationshipNames: [String] {
+    public var syncableRelationshipNames: [String] {
         return self.entity.relationshipsByName.values.compactMap { rel in
             rel.isToMany ? nil : rel.name
         }
     }
     
-	open func tempURL(for attribute: NSAttributeDescription) -> URL {
+	public func tempURL(for attribute: NSAttributeDescription) -> URL {
 		let filename = attribute.name + "-" + self.uniqueID + ".dat"
 		let baseURL = URL(fileURLWithPath: NSTemporaryDirectory())
 		return baseURL.appendingPathComponent(filename)
 	}
 	
-	@discardableResult open func load(into cache: CKLocalCache) -> CKLocalCache {
+	@discardableResult public func load(into cache: CKLocalCache) -> CKLocalCache {
 		let attributes = self.entity.attributesByName
 		
 		for field in self.syncableFieldNames {
