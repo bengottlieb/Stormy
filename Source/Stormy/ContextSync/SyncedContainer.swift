@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 import CloudKit
-import Studio
+import Suite
 
 @available(OSX 10.12, OSXApplicationExtension 10.12, iOS 10.0, iOSApplicationExtension 10.0, *)
 open class AppGroupPersistentContainer: NSPersistentContainer {

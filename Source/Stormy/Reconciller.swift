@@ -8,7 +8,7 @@
 import Foundation
 import CloudKit
 import CoreData
-import Studio
+import Suite
 
 public typealias RecordsAreEqual = (CKRecord, NSManagedObject) -> Bool
 

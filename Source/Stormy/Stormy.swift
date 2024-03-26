@@ -8,7 +8,7 @@
 
 import Foundation
 import CloudKit
-import Studio
+import Suite
 
 #if canImport(UIKit)
 import UIKit

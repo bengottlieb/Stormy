@@ -8,7 +8,7 @@
 
 import Foundation
 import CloudKit
-import Studio
+import Suite
 
 protocol CloudKitIdentifiable { }
 
